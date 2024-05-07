@@ -5,8 +5,12 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+<<<<<<< HEAD
   OneToMany,
   JoinColumn,
+=======
+  DeleteDateColumn,
+>>>>>>> origin/main
 } from 'typeorm';
 import { Vacancy } from './vacancy.entity';
 
@@ -15,13 +19,13 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 64, nullable: false })
+  @Column({ type: 'varchar', length: 64, nullable: false })
   name: string;
 
-  @Column({ length: 100, nullable: false, unique: true })
+  @Column({ type: 'varchar', length: 100, nullable: false, unique: true })
   email: string;
 
-  @Column({ length: 64, nullable: false, select: false })
+  @Column({ type: 'varchar', length: 64, nullable: false, select: false })
   password: string;
 
   @Column({
@@ -31,7 +35,7 @@ export class User {
   })
   role: UserRoleEnum;
 
-  @Column({ default: true })
+  @Column({ type: 'boolean', default: true })
   isActive: boolean;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
@@ -44,7 +48,12 @@ export class User {
   })
   updateAt: Date;
 
+<<<<<<< HEAD
   @OneToMany(() => Vacancy, (vacancy) => vacancy.user)
   @JoinColumn()
   vacancy: Vacancy;
+=======
+  @DeleteDateColumn()
+  deleteAt: Date;
+>>>>>>> origin/main
 }
