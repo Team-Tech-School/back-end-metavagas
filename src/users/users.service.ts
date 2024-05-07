@@ -4,9 +4,10 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
-import { User, CreateUserDto } from '../Database/entities';
+import { User } from '../Database/entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateUserDto } from 'src/auth/Config/dtos';
 
 @Injectable()
 export class UsersService {
@@ -44,6 +45,23 @@ export class UsersService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  async getUserBy(email: string) {
+    try {
+      return await this.userRepository.findOne({
+        where: { email },
+        select: {
+          email: true,
+          id: true,
+          password: true,
+          role: true,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, error.status);
     }
   }
 }

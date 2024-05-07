@@ -5,13 +5,14 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { UserRoleEnum } from '../../../../Config';
+import { UserRoleEnum } from '../../enums/userRoleEnum';
 
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   name: string;
 
+  @IsString()
   @IsEmail()
   email: string;
 
