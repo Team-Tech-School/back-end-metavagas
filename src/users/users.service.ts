@@ -15,22 +15,18 @@ export class UsersService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
-  async create(payload: CreateUserDto) {
+  async create(payload: CreateUserDto): Promise<User> {
     try {
-      try {
-        if (await this.IsEmailExists(payload.email)) {
-          throw new BadRequestException(
-            `An user with this email: ${payload.email} already exists.`,
-          );
-        }
+      if (await this.IsEmailExists(payload.email)) {
+        throw new BadRequestException(
+          `An user with this email: ${payload.email} already exists.`,
+        );
+      } else {
         const newUser = this.userRepository.create(payload);
 
         await this.userRepository.save(newUser);
 
         return newUser;
-      } catch (error) {
-        console.log(error);
-        throw new HttpException(error.message, error.status);
       }
     } catch (err) {
       throw new HttpException(

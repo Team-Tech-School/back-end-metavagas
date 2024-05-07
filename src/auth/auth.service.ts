@@ -18,7 +18,7 @@ export class AuthService {
   ) {}
   async register(createAuthDto: CreateUserDto) {
     try {
-      return this.userService.create(createAuthDto);
+      return await this.userService.create(createAuthDto);
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
