@@ -5,12 +5,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-<<<<<<< HEAD
   OneToMany,
   JoinColumn,
-=======
   DeleteDateColumn,
->>>>>>> origin/main
 } from 'typeorm';
 import { Vacancy } from './vacancy.entity';
 
@@ -35,9 +32,6 @@ export class User {
   })
   role: UserRoleEnum;
 
-  @Column({ type: 'boolean', default: true })
-  isActive: boolean;
-
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createAt: Date;
 
@@ -48,12 +42,10 @@ export class User {
   })
   updateAt: Date;
 
-<<<<<<< HEAD
+  @DeleteDateColumn()
+  deleteAt: Date;
+
   @OneToMany(() => Vacancy, (vacancy) => vacancy.user)
   @JoinColumn()
   vacancy: Vacancy;
-=======
-  @DeleteDateColumn()
-  deleteAt: Date;
->>>>>>> origin/main
 }
