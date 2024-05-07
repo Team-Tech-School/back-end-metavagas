@@ -4,7 +4,7 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
-import { User, CreateUserDto } from '../entities';
+import { User, CreateUserDto } from '../Database/entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
