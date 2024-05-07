@@ -5,6 +5,7 @@ import {
 } from '@nestjs/typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { User } from './entities';
+import { Vacancy } from './entities/vacancy.entity';
 
 export default <TypeOrmModuleAsyncOptions>{
   inject: [ConfigService],
@@ -19,8 +20,8 @@ export default <TypeOrmModuleAsyncOptions>{
       username: configService.get('DB_USERNAME'),
       password: configService.get('DB_PASSWORD'),
       database: configService.get('DB_NAME'),
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      syncronize: true,
+      entities: [User, Vacancy],
+      synchronize: true,
     };
   },
 };

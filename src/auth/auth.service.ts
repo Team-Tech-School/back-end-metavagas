@@ -4,8 +4,8 @@ import { UsersService } from '../users';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService) {}
-  register(createAuthDto: CreateUserDto) {
+  constructor(private readonly userService: UsersService) {}
+  async register(createAuthDto: CreateUserDto) {
     try {
       return this.userService.create(createAuthDto);
     } catch (error) {

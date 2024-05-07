@@ -5,9 +5,12 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
+  JoinColumn,
 } from 'typeorm';
+import { Vacancy } from './vacancy.entity';
 
-@Entity()
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -40,4 +43,8 @@ export class User {
     onUpdate: 'CURRENT_TIMESTAMP',
   })
   updateAt: Date;
+
+  @OneToMany(() => Vacancy, (vacancy) => vacancy.user)
+  @JoinColumn()
+  vacancy: Vacancy;
 }
