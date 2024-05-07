@@ -4,7 +4,12 @@ import { User } from '../Database/entities';
 import { ApiBearerAuth, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger';
 import { LoginDto } from './Config/dtos';
 import { CreateUserDto } from './Config/dtos';
-import { CreateUserDoc, UserCreatedDoc } from '../Docs';
+import {
+  CreateUserDoc,
+  LoginDoc,
+  LoginResponseDoc,
+  UserCreatedDoc,
+} from '../Docs';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -19,6 +24,12 @@ export class AuthController {
     console.log(createAuthDto);
     return this.authService.register(createAuthDto);
   }
+  @ApiBody({
+    type: LoginDoc,
+  })
+  @ApiResponse({
+    type: LoginResponseDoc,
+  })
   @Post('login')
   async login(@Body() data: LoginDto) {
     return await this.authService.login(data);

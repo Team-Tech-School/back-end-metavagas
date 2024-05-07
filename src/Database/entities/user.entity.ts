@@ -6,14 +6,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  JoinColumn,
   DeleteDateColumn,
   BeforeInsert,
   BeforeUpdate,
 } from 'typeorm';
 import { Vacancy } from './vacancy.entity';
 import { BadRequestException } from '@nestjs/common';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 @Entity('users')
 export class User {
