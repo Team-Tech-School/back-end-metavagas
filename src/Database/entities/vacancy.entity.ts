@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 
 import { User } from '../entities';
+import { Company } from './company.entity';
 
 @Entity('vacancy')
 export class Vacancy {
@@ -33,12 +34,6 @@ export class Vacancy {
   @Column({ type: 'varchar', length: 64, nullable: false })
   level: string;
 
-  @Column({ nullable: false })
-  companyId: string;
-
-  @Column({ type: 'int', nullable: false })
-  advertiserId: string;
-
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createAt: Date;
 
@@ -49,7 +44,11 @@ export class Vacancy {
   })
   updateAt: Date;
 
+  @ManyToOne(() => Company, (company) => company.vacancy)
+  @JoinColumn()
+  company: Company[];
+
   @ManyToOne(() => User, (user) => user.vacancy)
   @JoinColumn()
-  user: User[];
+  advertiser: string;
 }
