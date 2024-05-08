@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Vacancy } from './vacancy.entity';
+import { Vacancy } from './index';
 
 @Entity('companys')
 export class Company {

@@ -12,9 +12,10 @@ import {
   JoinTable,
   JoinColumn,
 } from 'typeorm';
-import { Vacancy } from './vacancy.entity';
 import { BadRequestException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+
+import { Vacancy } from './index';
 
 @Entity('users')
 export class User {
