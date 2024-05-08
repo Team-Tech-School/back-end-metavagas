@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 
 import { User } from '../entities';
+import { Company } from './company.entity';
 
 @Entity('vacancy')
 export class Vacancy {
@@ -33,8 +34,9 @@ export class Vacancy {
   @Column({ type: 'varchar', length: 64, nullable: false })
   level: string;
 
-  @Column({ nullable: false })
-  companyId: string;
+  @ManyToOne(() => Company, (company) => company.vacancy)
+  @JoinColumn()
+  companyId: Company[];
 
   @Column({ type: 'int', nullable: false })
   advertiserId: string;
