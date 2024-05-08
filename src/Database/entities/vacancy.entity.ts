@@ -5,13 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinTable,
   JoinColumn,
-  ManyToMany,
 } from 'typeorm';
 
-import { Technology, User } from '../entities';
-import { Company } from './company.entity';
+import { Company, User, VacancyToTechnology } from './index';
 
 @Entity('vacancy')
 export class Vacancy {
@@ -56,7 +53,9 @@ export class Vacancy {
   @JoinColumn()
   advertiser: User[];
 
-  @ManyToMany(() => Technology)
-  @JoinTable()
-  vacancies: Technology[];
+  @ManyToOne(
+    () => VacancyToTechnology,
+    (vacancyToTechnology) => vacancyToTechnology.vacancy,
+  )
+  vacancyToTechnology: VacancyToTechnology[];
 }
