@@ -41,10 +41,10 @@ export class Vacancy {
   @Column({ nullable: false })
   advertiserId: string;
 
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ default: new Date() })
   createAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ default: new Date() })
   updateAt: Date;
 
   @ManyToOne(() => Company, (company) => company.vacancy)
