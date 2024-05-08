@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn,
+  JoinTable,
 } from 'typeorm';
 
 import { User } from '../entities';
@@ -33,6 +33,12 @@ export class Vacancy {
 
   @Column({ type: 'varchar', length: 64, nullable: false })
   level: string;
+
+  @Column({ nullable: false })
+  companyId: string;
+
+  @Column({ nullable: false })
+  advertiserId: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createAt: Date;

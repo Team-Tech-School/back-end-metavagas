@@ -4,9 +4,10 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
-import { User, CreateUserDto } from '../Database/entities';
+import { User } from '../Database/entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateUserDto } from 'src/auth/Config/dtos';
 
 @Injectable()
 export class UsersService {
@@ -14,22 +15,18 @@ export class UsersService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
-  async create(payload: CreateUserDto) {
+  async create(payload: CreateUserDto): Promise<User> {
     try {
-      try {
-        if (await this.IsEmailExists(payload.email)) {
-          throw new BadRequestException(
-            `An user with this email: ${payload.email} already exists.`,
-          );
-        }
+      if (await this.IsEmailExists(payload.email)) {
+        throw new BadRequestException(
+          `An user with this email: ${payload.email} already exists.`,
+        );
+      } else {
         const newUser = this.userRepository.create(payload);
 
         await this.userRepository.save(newUser);
 
         return newUser;
-      } catch (error) {
-        console.log(error);
-        throw new HttpException(error.message, error.status);
       }
     } catch (err) {
       throw new HttpException(
@@ -44,6 +41,23 @@ export class UsersService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  async getUserBy(email: string) {
+    try {
+      return await this.userRepository.findOne({
+        where: { email },
+        select: {
+          email: true,
+          id: true,
+          password: true,
+          role: true,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, error.status);
     }
   }
 }
