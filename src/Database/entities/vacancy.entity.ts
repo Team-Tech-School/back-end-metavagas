@@ -34,13 +34,6 @@ export class Vacancy {
   @Column({ type: 'varchar', length: 64, nullable: false })
   level: string;
 
-  @ManyToOne(() => Company, (company) => company.vacancy)
-  @JoinColumn()
-  companyId: Company[];
-
-  @Column({ type: 'int', nullable: false })
-  advertiserId: string;
-
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createAt: Date;
 
@@ -51,7 +44,11 @@ export class Vacancy {
   })
   updateAt: Date;
 
+  @ManyToOne(() => Company, (company) => company.vacancy)
+  @JoinColumn()
+  company: Company[];
+
   @ManyToOne(() => User, (user) => user.vacancy)
   @JoinColumn()
-  user: User[];
+  advertiser: string;
 }
