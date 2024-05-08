@@ -10,6 +10,7 @@ import {
   BeforeInsert,
   BeforeUpdate,
   JoinTable,
+  JoinColumn,
 } from 'typeorm';
 import { Vacancy } from './vacancy.entity';
 import { BadRequestException } from '@nestjs/common';
@@ -48,7 +49,7 @@ export class User {
   @OneToMany(() => Vacancy, (vacancy) => vacancy.advertiser)
   @JoinColumn()
   vacancy: Vacancy;
-  
+
   @OneToMany(() => Vacancy, (vacancy) => vacancy.user)
   @JoinTable()
   advertiser: Vacancy[];
