@@ -7,9 +7,10 @@ import {
   ManyToOne,
   JoinTable,
   JoinColumn,
+  ManyToMany,
 } from 'typeorm';
 
-import { User } from '../entities';
+import { Technology, User } from '../entities';
 import { Company } from './company.entity';
 
 @Entity('vacancy')
@@ -54,4 +55,8 @@ export class Vacancy {
   @ManyToOne(() => User, (user) => user.vacancy)
   @JoinColumn()
   advertiser: User[];
+
+  @ManyToMany(() => Technology)
+  @JoinTable()
+  vacancies: Technology[];
 }
