@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 
 import { User } from '../entities';
+import { Company } from './company.entity';
 
 @Entity('vacancy')
 export class Vacancy {
@@ -42,13 +43,14 @@ export class Vacancy {
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createAt: Date;
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
+  @UpdateDateColumn()
   updateAt: Date;
 
-  @ManyToOne(() => User, (user) => user.advertiserId)
-  user: User;
+  @ManyToOne(() => Company, (company) => company.vacancy)
+  @JoinColumn()
+  company: Company[];
+
+  @ManyToOne(() => User, (user) => user.vacancy)
+  @JoinColumn()
+  advertiser: User[];
 }

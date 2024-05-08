@@ -45,9 +45,13 @@ export class User {
   @DeleteDateColumn()
   deleteAt: Date;
 
+  @OneToMany(() => Vacancy, (vacancy) => vacancy.advertiser)
+  @JoinColumn()
+  vacancy: Vacancy;
+  
   @OneToMany(() => Vacancy, (vacancy) => vacancy.user)
   @JoinTable()
-  advertiserId: Vacancy[];
+  advertiser: Vacancy[];
 
   @BeforeInsert()
   @BeforeUpdate()
