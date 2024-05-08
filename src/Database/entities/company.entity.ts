@@ -37,7 +37,7 @@ export class Company {
   @DeleteDateColumn()
   deleteAt: Date;
 
-  @OneToMany(() => Vacancy, (vacancy) => vacancy.companyId)
+  @OneToMany(() => Vacancy, (vacancy) => vacancy.company)
   @JoinColumn()
   vacancy: Vacancy;
 }
