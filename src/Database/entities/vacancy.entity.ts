@@ -50,5 +50,5 @@ export class Vacancy {
 
   @ManyToOne(() => User, (user) => user.vacancy)
   @JoinColumn()
-  advertiser: User[];
+  advertiserId: User[];
 }
