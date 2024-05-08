@@ -42,7 +42,7 @@ export class Vacancy {
 
   @ManyToOne(() => Company, (company) => company.vacancy)
   @JoinColumn()
-  companyId: Company[];
+  company: Company[];
 
   @ManyToOne(() => User, (user) => user.vacancy)
   @JoinColumn()
