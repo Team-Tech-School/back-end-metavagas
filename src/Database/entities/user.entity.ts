@@ -50,10 +50,6 @@ export class User {
   @JoinColumn()
   vacancy: Vacancy;
 
-  @OneToMany(() => Vacancy, (vacancy) => vacancy.user)
-  @JoinTable()
-  advertiser: Vacancy[];
-
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
