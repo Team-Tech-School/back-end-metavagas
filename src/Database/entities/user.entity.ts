@@ -9,6 +9,7 @@ import {
   DeleteDateColumn,
   BeforeInsert,
   BeforeUpdate,
+  JoinTable,
 } from 'typeorm';
 import { Vacancy } from './vacancy.entity';
 import { BadRequestException } from '@nestjs/common';
@@ -44,8 +45,9 @@ export class User {
   @DeleteDateColumn()
   deleteAt: Date;
 
-  @OneToMany(() => Vacancy, (vacancy) => vacancy.candidate)
-  vacancy: Vacancy[];
+  @OneToMany(() => Vacancy, (vacancy) => vacancy.user)
+  @JoinTable()
+  advertiserId: Vacancy[];
 
   @BeforeInsert()
   @BeforeUpdate()

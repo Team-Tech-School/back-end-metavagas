@@ -49,6 +49,6 @@ export class Vacancy {
   })
   updateAt: Date;
 
-  @ManyToOne(() => User, (user) => user.vacancy)
-  candidate: User;
+  @ManyToOne(() => User, (user) => user.advertiserId)
+  user: User;
 }
