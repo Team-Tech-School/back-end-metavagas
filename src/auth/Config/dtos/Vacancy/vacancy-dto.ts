@@ -2,6 +2,7 @@ import {
   IsEmail,
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -10,17 +11,25 @@ import { UserRoleEnum } from '../../enums/userRoleEnum';
 export class CreateVacancyDto {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  vacancyRole: string;
 
-  @IsString()
-  @IsEmail()
-  email: string;
+  @IsNumber()
+  @IsNotEmpty()
+  wage: number;
 
   @IsString()
   @IsNotEmpty()
-  password: string;
+  location: string;
 
-  @IsEnum(UserRoleEnum)
-  @IsOptional()
-  role?: UserRoleEnum;
+  @IsString()
+  @IsNotEmpty()
+  vacancyType: string;
+
+  @IsString()
+  @IsNotEmpty()
+  vacancyDescription: string;
+
+  @IsString()
+  @IsNotEmpty()
+  level: string;
 }

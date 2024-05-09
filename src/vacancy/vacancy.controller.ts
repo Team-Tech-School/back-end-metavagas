@@ -14,14 +14,14 @@ import { CreateVacancyDto, UpdateVacancyDto } from 'src/auth/Config';
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
 
-  // @Post()
-  // create(@Body() createVacancyDto: CreateVacancyDto) {
-  //   return this.vacancyService.create(createVacancyDto);
-  // }
+  @Post('/vacancy/create')
+  async create(@Body() createVacancyDto: CreateVacancyDto) {
+    return this.vacancyService.createVacancy(createVacancyDto);
+  }
 
   @Get()
   findAll() {
-    return this.vacancyService.findAll();
+    return this.vacancyService.findAllList();
   }
 
   // @Get(':id')

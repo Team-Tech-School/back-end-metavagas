@@ -1,26 +1,6 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import {} from 'class-validator';
 import { UserRoleEnum } from '../../enums/userRoleEnum';
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateUserDto } from '../Auth/create-user.dto';
 
-export class CreateVacancyDto {
-  @IsString()
-  @IsNotEmpty()
-  name: string;
-
-  @IsString()
-  @IsEmail()
-  email: string;
-
-  @IsString()
-  @IsNotEmpty()
-  password: string;
-
-  @IsEnum(UserRoleEnum)
-  @IsOptional()
-  role?: UserRoleEnum;
-}
+export class UpdateVcancyDto extends PartialType(CreateUserDto) {}
