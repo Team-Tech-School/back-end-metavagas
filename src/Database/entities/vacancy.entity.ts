@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  JoinTable,
   JoinColumn,
 } from 'typeorm';
 
@@ -34,14 +35,16 @@ export class Vacancy {
   @Column({ type: 'varchar', length: 64, nullable: false })
   level: string;
 
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ nullable: false })
+  companyId: string;
+
+  @Column({ nullable: false })
+  advertiserId: string;
+
+  @CreateDateColumn({ default: new Date() })
   createAt: Date;
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
+  @UpdateDateColumn({ default: new Date() })
   updateAt: Date;
 
   @ManyToOne(() => Company, (company) => company.vacancy)
