@@ -31,13 +31,17 @@ export class CompanyService {
     }
   }
 
-  // COLOCAR UM TRYCATCH
   async update(id: number, payload: UpdateCompanyDto) {
-    await this.idPicker(id);
+    try {
+      await this.idPicker(id);
 
-    await this.companyRepository.update(id, payload);
+      await this.companyRepository.update(id, payload);
 
-    return await this.idPicker(id);
+      return await this.idPicker(id);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async findAll(name?: string) {
