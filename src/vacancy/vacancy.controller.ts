@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { VacancyService } from './vacancy.service';
 import { CreateVacancyDto, UpdateVacancyDto } from 'src/auth/Config';
 
