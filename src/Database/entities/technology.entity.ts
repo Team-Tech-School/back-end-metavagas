@@ -3,9 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { VacancyToTechnology } from './index';
 
 @Entity('technology')
 export class Technology {
@@ -26,4 +29,10 @@ export class Technology {
 
   @DeleteDateColumn()
   deleteAt: Date;
+
+  @OneToMany(
+    () => VacancyToTechnology,
+    (vacancyToTechnology) => vacancyToTechnology.technology,
+  )
+  vacancyToTechnology: VacancyToTechnology[];
 }
