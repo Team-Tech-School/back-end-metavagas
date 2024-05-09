@@ -8,6 +8,8 @@ import {
   ParseIntPipe,
   HttpCode,
   HttpStatus,
+  Get,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -40,5 +42,10 @@ export class CompanyController {
     @Body() payload: UpdateCompanyDto,
   ) {
     return await this.companyService.update(id, payload);
+  }
+
+  @Get()
+  async findAll(@Query('name') name?: string) {
+    return await this.companyService.findAll(name);
   }
 }
