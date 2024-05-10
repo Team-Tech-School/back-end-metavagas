@@ -56,7 +56,9 @@ export class VacancyService {
 
   async findAllList() {
     try {
-      return await this.vacancyRepository.find();
+      return await this.vacancyRepository.find({
+        relations: { advertiser: true, company: true },
+      });
     } catch (err) {
       console.log(err);
 
