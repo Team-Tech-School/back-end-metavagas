@@ -28,6 +28,7 @@ export default <TypeOrmModuleAsyncOptions>{
       database: configService.get('DB_NAME'),
       entities: [User, Vacancy, Technology, Company, VacancyToTechnology],
       synchronize: true,
+      logging: true,
     };
   },
 };

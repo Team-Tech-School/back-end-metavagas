@@ -6,9 +6,13 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  ManyToMany,
+  JoinTable,
+  OneToMany,
+  OneToOne,
 } from 'typeorm';
 
-import { Company, User, VacancyToTechnology } from './index';
+import { Company, Technology, User, VacancyToTechnology } from './index';
 
 @Entity('vacancy')
 export class Vacancy {
@@ -53,9 +57,8 @@ export class Vacancy {
   @JoinColumn()
   advertiser: User[];
 
-  @ManyToOne(
-    () => VacancyToTechnology,
-    (vacancyToTechnology) => vacancyToTechnology.vacancy,
-  )
-  vacancyToTechnology: VacancyToTechnology[];
+  // @OneToMany(() => VacancyToTechnology, (type) => type.vacancy)
+  // vacancy: VacancyToTechnology[];
+  @ManyToMany((type) => Technology, (technology) => technology.vacancies)
+  technologies: Technology[];
 }

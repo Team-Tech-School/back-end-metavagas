@@ -1,8 +1,12 @@
 import {
   Column,
   Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -13,15 +17,19 @@ export class VacancyToTechnology {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'int' })
-  vacancyId: number;
+  // @ManyToOne(() => Vacancy, (vacancy) => vacancy.id)
+  // @JoinColumn({ name: 'vacancyId' })
+  // vacancy: Vacancy[];
 
-  @Column({ type: 'int' })
-  technologyId: number;
+  // @ManyToOne(() => Technology, (technology) => technology.id)
+  // @JoinColumn({ name: 'technologyId' })
+  // technology: Technology[];
 
-  @OneToMany(() => Vacancy, (vacancy) => vacancy.vacancyToTechnology)
-  vacancy: Vacancy;
-
-  @ManyToOne(() => Technology, (technology) => technology.vacancyToTechnology)
+  @ManyToOne((type) => Technology)
+  @JoinColumn()
   technology: Technology;
+
+  @ManyToOne((type) => Vacancy)
+  @JoinColumn()
+  vacancy: Vacancy;
 }

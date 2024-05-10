@@ -17,10 +17,10 @@ import { AuthGuard, RoleGuard, UserRoleEnum } from 'src/auth/Config';
 export class TechnologysController {
   constructor(private readonly technologysService: TechnologysService) {}
 
-  @UseGuards(AuthGuard, RoleGuard)
-  @Roles(UserRoleEnum.admin)
-  @HttpCode(HttpStatus.ACCEPTED)
-  @Post()
+  // @UseGuards(AuthGuard, RoleGuard)
+  // @Roles(UserRoleEnum.admin)
+  // @HttpCode(HttpStatus.ACCEPTED)
+  @Post('/create')
   async create(@Body() payload: CreateTechnologyDto) {
     return await this.technologysService.create(payload);
   }

@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { CompanyModule } from './companys/company.module';
 import { VacancyModule } from './vacancy/vacancy.module';
 import { TechnologysModule } from './technologys/technologys.module';
+import { TechnologysVacanciesModule } from './technologys_vacancies/technologys_vacancies.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -15,6 +16,7 @@ import { TechnologysModule } from './technologys/technologys.module';
     CompanyModule,
     VacancyModule,
     TechnologysModule,
+    TechnologysVacanciesModule,
   ],
 })
 export class AppModule {}

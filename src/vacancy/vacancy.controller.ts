@@ -13,7 +13,7 @@ export class VacancyController {
 
   @Get()
   findAll() {
-    return this.vacancyService.findAllList();
+    return this.vacancyService.findListVacancies();
   }
 
   // @Get(':id')
