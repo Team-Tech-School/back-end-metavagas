@@ -33,10 +33,16 @@ export class CreateVacancyDto {
   @IsNotEmpty({ message: 'level is required' })
   level: string;
 
-  @IsString({ message: 'The company name must be a string' })
+  @IsString({ message: 'company must be a string' })
   @IsNotEmpty({
     message:
       "The name of the company is necessary to create the vacancy, if you can't find your company it must be created first!",
   })
   companyId: string;
+
+  @IsString({ message: 'advertiser must be a string' })
+  @IsNotEmpty({
+    message: 'id not found! Please add a valid advertiser!',
+  })
+  advertiserId: string;
 }

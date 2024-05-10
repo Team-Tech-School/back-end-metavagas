@@ -7,9 +7,9 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CreateCompanyDto } from '../auth/Config/dtos/companys/create-company.dto';
+import { CreateCompanyDto } from '../auth/Config';
 import { Company } from 'src/Database/entities';
-import { UpdateCompanyDto } from 'src/Docs';
+import { UpdateCompanyDto } from '../auth/Config';
 
 @Injectable()
 export class CompanyService {
@@ -62,11 +62,9 @@ export class CompanyService {
   async idPicker(id: number) {
     try {
       const company = await this.companyRepository.findOne({ where: { id } });
-
       if (!company) {
-        throw new NotFoundException(`Not found, try again.`);
+        throw new NotFoundException(`The company not located.`);
       }
-
       return company;
     } catch (error) {
       console.log(error);
