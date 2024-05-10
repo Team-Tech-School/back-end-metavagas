@@ -20,11 +20,11 @@ export class CompanyService {
 
   async create(payload: CreateCompanyDto) {
     try {
-      const newComany = this.companyRepository.create(payload);
+      const newCompany = this.companyRepository.create(payload);
 
-      await this.companyRepository.save(newComany);
+      await this.companyRepository.save(newCompany);
 
-      return newComany;
+      return newCompany;
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);

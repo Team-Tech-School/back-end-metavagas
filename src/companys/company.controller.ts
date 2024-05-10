@@ -23,16 +23,16 @@ import { UpdateCompanyDto } from 'src/Docs';
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
-  @UseGuards(AuthGuard, RoleGuard)
-  @Roles(UserRoleEnum.admin)
+  // @UseGuards(AuthGuard, RoleGuard)
+  // @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
-  @Post()
+  @Post('/create')
   async create(@Body() createCompanyDto: CreateCompanyDto) {
     return await this.companyService.create(createCompanyDto);
   }
 
-  @UseGuards(AuthGuard, RoleGuard)
-  @Roles(UserRoleEnum.admin)
+  // @UseGuards(AuthGuard, RoleGuard)
+  // @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Patch(':id')
   async update(
