@@ -29,8 +29,8 @@ export class CompanyController {
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Post()
-  async create(@Body() createCompanyDto: CreateCompanyDto) {
-    return await this.companyService.create(createCompanyDto);
+  async create(@Body() payload: CreateCompanyDto) {
+    return await this.companyService.create(payload);
   }
 
   @UseGuards(AuthGuard, RoleGuard)
