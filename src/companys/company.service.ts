@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 
 import { CreateCompanyDto } from '../auth/Config/dtos/companys/create-company.dto';
 import { Company } from 'src/Database/entities';
-import { UpdateCompanyDto } from 'src/Docs';
+import { UpdateCompanyDto } from '../auth/Config/dtos';
 
 @Injectable()
 export class CompanyService {
