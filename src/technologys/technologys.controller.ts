@@ -5,6 +5,7 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  Get,
 } from '@nestjs/common';
 
 import { TechnologysService } from './technologys.service';
@@ -22,5 +23,11 @@ export class TechnologysController {
   @Post()
   async create(@Body() payload: CreateTechnologyDto) {
     return await this.technologysService.create(payload);
+  }
+
+  @HttpCode(HttpStatus.ACCEPTED)
+  @Get()
+  async findAll() {
+    return await this.technologysService.findAll();
   }
 }

@@ -24,4 +24,13 @@ export class TechnologysService {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
+  async findAll() {
+    try {
+      return await this.technologyRepository.find();
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
 }
