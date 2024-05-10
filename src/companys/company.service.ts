@@ -64,7 +64,7 @@ export class CompanyService {
       const company = await this.companyRepository.findOne({ where: { id } });
 
       if (!company) {
-        throw new NotFoundException(`An user with this id:${id} not found`);
+        throw new NotFoundException(`Not found, try again.`);
       }
 
       return company;

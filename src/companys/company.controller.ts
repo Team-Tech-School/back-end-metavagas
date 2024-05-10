@@ -44,8 +44,15 @@ export class CompanyController {
     return await this.companyService.update(id, payload);
   }
 
+  @HttpCode(HttpStatus.ACCEPTED)
   @Get()
   async findAll(@Query('name') name?: string) {
     return await this.companyService.findAll(name);
+  }
+
+  @HttpCode(HttpStatus.ACCEPTED)
+  @Get(':id')
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.companyService.idPicker(id);
   }
 }
