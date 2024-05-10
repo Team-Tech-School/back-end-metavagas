@@ -7,6 +7,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Vacancy } from 'src/Database/entities';
 import { CreateVacancyDto, UpdateVacancyDto } from 'src/auth/Config';
+import { CompanyService } from 'src/companys/company.service';
+import { UsersService } from 'src/users';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -14,12 +16,29 @@ export class VacancyService {
   constructor(
     @InjectRepository(Vacancy)
     private readonly vacancyRepository: Repository<Vacancy>,
+    private readonly companyService: CompanyService,
+    private readonly advertiserService: UsersService,
   ) {}
   async createVacancy(data: CreateVacancyDto) {
     try {
       if (await this.vacancyExists(data.vacancyRole)) {
         throw new BadRequestException(
-          `A subject with this name: ${data.vacancyRole} already exists.`,
+          `A vacancy with this name: ${data.vacancyRole} already exists.`,
+        );
+      }
+      try {
+        await this.companyService.idPicker(+data.companyId);
+      } catch (e) {
+        throw new BadRequestException(
+          `A company with this id: ${data.companyId} does not exist.`,
+        );
+      }
+
+      try {
+        await this.advertiserService.getUserById(+data.advertiserId);
+      } catch (e) {
+        throw new BadRequestException(
+          `ID: ${data.advertiserId} advertiser does not exist.`,
         );
       }
 

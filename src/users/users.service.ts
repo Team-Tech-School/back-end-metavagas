@@ -3,6 +3,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { User } from '../Database/entities';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -58,6 +59,19 @@ export class UsersService {
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, error.status);
+    }
+  }
+
+  async getUserById(id: number) {
+    try {
+      const advertiser = await this.userRepository.findOne({ where: { id } });
+      if (!advertiser) {
+        throw new NotFoundException(`advertiser not located.`);
+      }
+      return advertiser;
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 }

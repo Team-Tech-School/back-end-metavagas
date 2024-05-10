@@ -14,10 +14,11 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 
 import { CompanyService } from './company.service';
-import { CreateCompanyDto } from '../auth/Config/dtos';
 import { AuthGuard, RoleGuard, UserRoleEnum } from 'src/auth/Config';
 import { Roles } from 'src/auth/Config/decorators/roles.decorator';
 import { UpdateCompanyDto } from '../auth/Config/dtos';
+import { CreateCompanyDto } from '../auth/Config';
+import { UpdateCompanyDto } from '../auth/Config';
 
 @ApiTags('Company')
 @UseGuards()
@@ -25,16 +26,20 @@ import { UpdateCompanyDto } from '../auth/Config/dtos';
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
-  @UseGuards(AuthGuard, RoleGuard)
-  @Roles(UserRoleEnum.admin)
+  // @UseGuards(AuthGuard, RoleGuard)
+  // @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Post()
   async create(@Body() payload: CreateCompanyDto) {
     return await this.companyService.create(payload);
+=======
+  @Post('/create')
+  async create(@Body() createCompanyDto: CreateCompanyDto) {
+    return await this.companyService.create(createCompanyDto);
   }
 
-  @UseGuards(AuthGuard, RoleGuard)
-  @Roles(UserRoleEnum.admin)
+  // @UseGuards(AuthGuard, RoleGuard)
+  // @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Patch(':id')
   async update(
