@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CreateCompanyDto } from '../Docs/companys/create-company.dto';
+import { CreateCompanyDto } from '../auth/Config/dtos/companys/create-company.dto';
 import { Company } from 'src/Database/entities';
 import { UpdateCompanyDto } from 'src/Docs';
 
@@ -32,11 +32,31 @@ export class CompanyService {
   }
 
   async update(id: number, payload: UpdateCompanyDto) {
-    await this.idPicker(id);
+    try {
+      await this.idPicker(id);
 
-    await this.companyRepository.update(id, payload);
+      await this.companyRepository.update(id, payload);
 
-    return await this.idPicker(id);
+      return await this.idPicker(id);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async findAll(name?: string) {
+    try {
+      if (name) {
+        return await this.companyRepository.find({
+          where: { name },
+        });
+      }
+
+      return await this.companyRepository.find();
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   async idPicker(id: number) {
@@ -44,7 +64,7 @@ export class CompanyService {
       const company = await this.companyRepository.findOne({ where: { id } });
 
       if (!company) {
-        throw new NotFoundException(`An user with this id:${id} not found`);
+        throw new NotFoundException(`Not found, try again.`);
       }
 
       return company;

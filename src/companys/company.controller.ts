@@ -8,11 +8,13 @@ import {
   ParseIntPipe,
   HttpCode,
   HttpStatus,
+  Get,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { CompanyService } from './company.service';
-import { CreateCompanyDto } from '../Docs/companys/create-company.dto';
+import { CreateCompanyDto } from '../auth/Config/dtos/companys/create-company.dto';
 import { AuthGuard, RoleGuard, UserRoleEnum } from 'src/auth/Config';
 import { Roles } from 'src/auth/Config/decorators/roles.decorator';
 import { UpdateCompanyDto } from 'src/Docs';
@@ -40,5 +42,17 @@ export class CompanyController {
     @Body() payload: UpdateCompanyDto,
   ) {
     return await this.companyService.update(id, payload);
+  }
+
+  @HttpCode(HttpStatus.ACCEPTED)
+  @Get()
+  async findAll(@Query('name') name?: string) {
+    return await this.companyService.findAll(name);
+  }
+
+  @HttpCode(HttpStatus.ACCEPTED)
+  @Get(':id')
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.companyService.idPicker(id);
   }
 }
