@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CreateCompanyDto } from '../Docs/companys/create-company.dto';
+import { CreateCompanyDto } from '../auth/Config/dtos/companys/create-company.dto';
 import { Company } from 'src/Database/entities';
 import { UpdateCompanyDto } from 'src/Docs';
 

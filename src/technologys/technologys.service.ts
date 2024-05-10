@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { CreateTechnologyDto } from '../Docs/technologys/create-technology.dto';
+import { CreateTechnologyDto } from '../auth/Config/dtos/technologys/create-technology.dto';
 
 @Injectable()
 export class TechnologysService {

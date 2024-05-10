@@ -1,7 +1,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
 
 import { TechnologysService } from './technologys.service';
-import { CreateTechnologyDto } from '../Docs/technologys/create-technology.dto';
+import { CreateTechnologyDto } from '../auth/Config/dtos/technologys/create-technology.dto';
 
 @Controller('technologys')
 export class TechnologysController {
