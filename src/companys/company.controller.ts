@@ -14,6 +14,9 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 
 import { CompanyService } from './company.service';
+import { AuthGuard, RoleGuard, UserRoleEnum } from 'src/auth/Config';
+import { Roles } from 'src/auth/Config/decorators/roles.decorator';
+import { UpdateCompanyDto } from '../auth/Config/dtos';
 import { CreateCompanyDto } from '../auth/Config';
 import { UpdateCompanyDto } from '../auth/Config';
 
@@ -26,6 +29,10 @@ export class CompanyController {
   // @UseGuards(AuthGuard, RoleGuard)
   // @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
+  @Post()
+  async create(@Body() payload: CreateCompanyDto) {
+    return await this.companyService.create(payload);
+=======
   @Post('/create')
   async create(@Body() createCompanyDto: CreateCompanyDto) {
     return await this.companyService.create(createCompanyDto);
