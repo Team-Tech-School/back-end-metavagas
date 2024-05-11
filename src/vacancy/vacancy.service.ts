@@ -3,14 +3,15 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Vacancy, VacancyToTechnology } from 'src/Database/entities';
+import { Company, Vacancy, VacancyToTechnology } from 'src/Database/entities';
 import { CreateVacancyDto, UpdateVacancyDto } from 'src/auth/Config';
 import { CompanyService } from 'src/companys/company.service';
 import { TechnologysVacanciesService } from '../technologys_vacancies/technologys_vacancies.service';
 import { UsersService } from 'src/users';
-import { Repository } from 'typeorm';
+import { Repository, getRepository } from 'typeorm';
 
 @Injectable()
 export class VacancyService {
@@ -67,11 +68,6 @@ export class VacancyService {
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
     }
   }
-
-  async findAllList() {
-    const buscar = await this.technologyVacanciesService.findAll();
-    return buscar;
-  }
   async vacancyExists(vacancyRole: string): Promise<boolean> {
     const vacancy = await this.vacancyRepository.exists({
       where: { vacancyRole },
@@ -82,15 +78,64 @@ export class VacancyService {
       return false;
     }
   }
-  // findOne(id: number) {
-  //   return `This action returns a #${id} vacancy`;
-  // }
+  async update(id: number, updateVacancyDto) {
+    try {
+      await this.getVacancyById(+id);
 
-  // update(id: number, updateVacancyDto: UpdateVacancyDto) {
-  //   return `This action updates a #${id} vacancy`;
-  // }
+      await this.vacancyRepository.update(id, updateVacancyDto);
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} vacancy`;
-  // }
+      return await this.getVacancyById(+id);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, error.status);
+    }
+  }
+
+  async getVacancyById(id: number) {
+    try {
+      const vacancy = await this.vacancyRepository.findOne({ where: { id } });
+      if (!vacancy) {
+        throw new NotFoundException(`vacancy not located.`);
+      }
+      return vacancy;
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async delete(id: number) {
+    try {
+      await this.getVacancyById(id);
+
+      await this.vacancyRepository.softDelete(id);
+
+      return { response: 'Vacancy deleted with success.' };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, error.status);
+    }
+  }
+
+  async findByVacancy(id: number): Promise<Vacancy> {
+    try {
+      const vacancy = await this.vacancyRepository.findOne({
+        where: { id },
+        relations: { advertiser: true, company: true },
+      });
+
+      // const nameAdvertiser = vacancy.advertiser.name;
+      // const nameCompany = vacancy.company.name;
+
+      return {
+        ...vacancy,
+        // advertiser: nameAdvertiser,
+        // company: nameCompany,
+      };
+    } catch (error) {
+      console.log(error);
+
+      throw new HttpException(error.message, error.status);
+    }
+  }
 }

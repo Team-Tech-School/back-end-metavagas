@@ -9,15 +9,15 @@ export class TechnologysVacanciesService {
     @InjectRepository(VacancyToTechnology)
     private readonly vacancy_TechnolyRepository: Repository<VacancyToTechnology>,
   ) {}
-  async findAll() {
-    try {
-      return this.vacancy_TechnolyRepository.find({
-        relations: { technology: true, vacancy: true },
-      });
-    } catch (err) {
-      console.log(err);
+  // async findAll() {
+  //   try {
+  //     return this.vacancy_TechnolyRepository.find({
+  //       relations: { technology: true, vacancy: true },
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
 
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
-    }
-  }
+  //     throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+  //   }
+  // }
 }

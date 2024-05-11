@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -6,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { CreateCompanyDto } from '../auth/Config';
 import { Company } from 'src/Database/entities';
 import { UpdateCompanyDto } from '../auth/Config';
@@ -15,19 +15,28 @@ import { UpdateCompanyDto } from '../auth/Config';
 export class CompanyService {
   constructor(
     @InjectRepository(Company)
-    private companyRepository: Repository<Company>,
+    private readonly companyRepository: Repository<Company>,
   ) {}
 
   async create(payload: CreateCompanyDto) {
     try {
-      const newCompany = this.companyRepository.create(payload);
+      await this.findAll(payload.name);
+      try {
+        const newCompany = this.companyRepository.create(payload);
 
-      await this.companyRepository.save(newCompany);
+        await this.companyRepository.save(newCompany);
 
-      return newCompany;
+        return newCompany;
+      } catch (err) {
+        throw new BadRequestException(
+          `The company of the name: ${payload.name} already exists.`,
+        );
+      }
     } catch (error) {
-      console.log(error);
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        error.message,
+        error?.status || HttpStatus.BAD_REQUEST,
+      );
     }
   }
 

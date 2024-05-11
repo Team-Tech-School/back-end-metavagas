@@ -14,8 +14,8 @@ export class TechnologysVacanciesController {
     private readonly technologysVacanciesService: TechnologysVacanciesService,
   ) {}
 
-  @Get()
-  findAll() {
-    return this.technologysVacanciesService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.technologysVacanciesService.findAll();
+  // }
 }

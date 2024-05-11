@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -14,14 +19,23 @@ export class TechnologysService {
 
   async create(payload: CreateTechnologyDto) {
     try {
-      const newTechnology = this.technologyRepository.create(payload);
+      await this.getByName(payload.tecName);
+      try {
+        const newTechnology = this.technologyRepository.create(payload);
 
-      await this.technologyRepository.save(newTechnology);
+        await this.technologyRepository.save(newTechnology);
 
-      return newTechnology;
+        return newTechnology;
+      } catch (err) {
+        throw new BadRequestException(
+          `The technology of the name: ${payload.tecName} already exists.`,
+        );
+      }
     } catch (error) {
-      console.log(error);
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        error.message,
+        error?.status || HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -31,6 +45,17 @@ export class TechnologysService {
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async getByName(tecName: string): Promise<boolean> {
+    const getBytecName = await this.technologyRepository.findOne({
+      where: { tecName },
+    });
+    if (getBytecName) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

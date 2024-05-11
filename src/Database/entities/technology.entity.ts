@@ -3,6 +3,8 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  JoinTable,
   ManyToMany,
   OneToMany,
   OneToOne,
@@ -32,8 +34,7 @@ export class Technology {
   @DeleteDateColumn()
   deleteAt: Date;
 
-  // @OneToMany(() => VacancyToTechnology, (type) => type.technology)
-  // technology: VacancyToTechnology[];
-  @ManyToMany((type) => Vacancy, (vacancy) => vacancy.technologies)
-  vacancies: Vacancy[];
+  @ManyToMany((type) => Vacancy)
+  @JoinTable()
+  vacancy: Vacancy;
 }

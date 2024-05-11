@@ -10,6 +10,7 @@ import {
   JoinTable,
   OneToMany,
   OneToOne,
+  DeleteDateColumn,
 } from 'typeorm';
 
 import { Company, Technology, User, VacancyToTechnology } from './index';
@@ -37,17 +38,20 @@ export class Vacancy {
   @Column({ type: 'varchar', length: 64, nullable: false })
   level: string;
 
-  @Column({ nullable: false })
-  companyId: string;
+  // @Column({ nullable: false })
+  // companyId: string;
 
-  @Column({ nullable: false })
-  advertiserId: string;
+  // @Column({ nullable: false })
+  // advertiserId: string;
 
   @CreateDateColumn({ default: new Date() })
   createAt: Date;
 
   @UpdateDateColumn({ default: new Date() })
   updateAt: Date;
+
+  @DeleteDateColumn()
+  deleteAt: Date;
 
   @ManyToOne(() => Company, (company) => company.vacancy)
   @JoinColumn()
@@ -59,6 +63,7 @@ export class Vacancy {
 
   // @OneToMany(() => VacancyToTechnology, (type) => type.vacancy)
   // vacancy: VacancyToTechnology[];
-  @ManyToMany((type) => Technology, (technology) => technology.vacancies)
-  technologies: Technology[];
+  @ManyToMany((type) => Technology)
+  @JoinTable()
+  technology: Technology;
 }

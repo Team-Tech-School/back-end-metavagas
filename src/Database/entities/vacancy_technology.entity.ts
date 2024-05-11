@@ -17,19 +17,11 @@ export class VacancyToTechnology {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @ManyToOne(() => Vacancy, (vacancy) => vacancy.id)
-  // @JoinColumn({ name: 'vacancyId' })
+  // @ManyToOne(() => Vacancy)
+  // @JoinColumn()
   // vacancy: Vacancy[];
 
-  // @ManyToOne(() => Technology, (technology) => technology.id)
-  // @JoinColumn({ name: 'technologyId' })
+  // @ManyToOne(() => Technology)
+  // @JoinColumn()
   // technology: Technology[];
-
-  @ManyToOne((type) => Technology)
-  @JoinColumn()
-  technology: Technology;
-
-  @ManyToOne((type) => Vacancy)
-  @JoinColumn()
-  vacancy: Vacancy;
 }

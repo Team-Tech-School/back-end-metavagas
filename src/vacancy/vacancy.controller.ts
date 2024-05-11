@@ -1,12 +1,30 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  ParseIntPipe,
+  HttpStatus,
+  HttpCode,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { VacancyService } from './vacancy.service';
-import { CreateVacancyDto, UpdateVacancyDto } from 'src/auth/Config';
+import {
+  CreateVacancyDto,
+  Roles,
+  UpdateVacancyDto,
+  UserRoleEnum,
+} from 'src/auth/Config';
+import { ApiResponse } from '@nestjs/swagger';
 
 @Controller()
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
 
-  @Post('/vacancy/create')
+  @Post('vacancy/create')
   async create(@Body() createVacancyDto: CreateVacancyDto) {
     return this.vacancyService.createVacancy(createVacancyDto);
   }
@@ -16,18 +34,27 @@ export class VacancyController {
     return this.vacancyService.findListVacancies();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.vacancyService.findOne(+id);
-  // }
+  // @ApiResponse({
+  //   type: CreateVacancyDto,
+  // })
+  // @Roles(UserRoleEnum.admin)
+  @Get(':id/vacancy')
+  async getByVacancyId(@Param('id', ParseIntPipe) id: number) {
+    return await this.vacancyService.findByVacancy(id);
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateVacancyDto: UpdateVacancyDto) {
-  //   return this.vacancyService.update(+id, updateVacancyDto);
-  // }
+  @Patch(':id/vacancy')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateVacancyDto: UpdateVacancyDto,
+  ) {
+    return this.vacancyService.update(+id, updateVacancyDto);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.vacancyService.remove(+id);
-  // }
+  // @Roles(UserRoleEnum.admin)
+  @HttpCode(HttpStatus.ACCEPTED)
+  @Delete(':id/vacancy')
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return await this.vacancyService.delete(id);
+  }
 }
