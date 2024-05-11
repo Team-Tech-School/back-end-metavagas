@@ -12,7 +12,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Vacancy, VacancyToTechnology } from './index';
+import { Vacancy } from './index';
 
 @Entity('technology')
 export class Technology {
@@ -34,7 +34,6 @@ export class Technology {
   @DeleteDateColumn()
   deleteAt: Date;
 
-  @ManyToMany((type) => Vacancy)
-  @JoinTable()
-  vacancy: Vacancy;
+  @OneToMany(() => Vacancy, (vacancy) => vacancy.technology)
+  vacancy: Vacancy[];
 }

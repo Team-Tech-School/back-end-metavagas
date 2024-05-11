@@ -13,7 +13,7 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 
-import { Company, Technology, User, VacancyToTechnology } from './index';
+import { Company, Technology, User } from './index';
 
 @Entity('vacancy')
 export class Vacancy {
@@ -38,11 +38,11 @@ export class Vacancy {
   @Column({ type: 'varchar', length: 64, nullable: false })
   level: string;
 
-  // @Column({ nullable: false })
-  // companyId: string;
+  @Column({ nullable: false })
+  companyId: string;
 
-  // @Column({ nullable: false })
-  // advertiserId: string;
+  @Column({ nullable: false })
+  advertiserId: string;
 
   @CreateDateColumn({ default: new Date() })
   createAt: Date;
@@ -55,15 +55,12 @@ export class Vacancy {
 
   @ManyToOne(() => Company, (company) => company.vacancy)
   @JoinColumn()
-  company: Company[];
+  company: Company;
 
   @ManyToOne(() => User, (user) => user.vacancy)
   @JoinColumn()
-  advertiser: User[];
+  advertiser: User;
 
-  // @OneToMany(() => VacancyToTechnology, (type) => type.vacancy)
-  // vacancy: VacancyToTechnology[];
-  @ManyToMany((type) => Technology)
-  @JoinTable()
-  technology: Technology;
+  @ManyToMany(() => Technology, (technology) => technology.vacancy)
+  technology: Technology[];
 }

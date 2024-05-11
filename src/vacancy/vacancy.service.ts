@@ -6,10 +6,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Company, Vacancy, VacancyToTechnology } from 'src/Database/entities';
-import { CreateVacancyDto, UpdateVacancyDto } from 'src/auth/Config';
+import { Vacancy } from 'src/Database/entities';
+import { CreateVacancyDto } from 'src/auth/Config';
 import { CompanyService } from 'src/companys/company.service';
-import { TechnologysVacanciesService } from '../technologys_vacancies/technologys_vacancies.service';
 import { UsersService } from 'src/users';
 import { Repository, getRepository } from 'typeorm';
 
@@ -20,7 +19,6 @@ export class VacancyService {
     private readonly vacancyRepository: Repository<Vacancy>,
     private readonly companyService: CompanyService,
     private readonly advertiserService: UsersService,
-    private readonly technologyVacanciesService: TechnologysVacanciesService,
   ) {}
   async createVacancy(data: CreateVacancyDto) {
     try {
