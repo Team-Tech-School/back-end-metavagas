@@ -115,20 +115,20 @@ export class VacancyService {
     }
   }
 
-  async findByVacancy(id: number): Promise<Vacancy> {
+  async findByVacancy(id: number) {
     try {
       const vacancy = await this.vacancyRepository.findOne({
         where: { id },
         relations: { advertiser: true, company: true },
       });
 
-      // const nameAdvertiser = vacancy.advertiser.name;
-      // const nameCompany = vacancy.company.name;
+      const nameAdvertiser = vacancy.advertiser.name;
+      const nameCompany = vacancy.company.name;
 
       return {
-        ...vacancy,
-        // advertiser: nameAdvertiser,
-        // company: nameCompany,
+        vacancy: { ...vacancy },
+        advertiser: { advertiser: nameAdvertiser },
+        company: { company: nameCompany },
       };
     } catch (error) {
       console.log(error);

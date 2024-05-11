@@ -20,11 +20,11 @@ import {
 } from 'src/auth/Config';
 import { ApiResponse } from '@nestjs/swagger';
 
-@Controller()
+@Controller('vacancy')
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
 
-  @Post('vacancy/create')
+  @Post()
   async create(@Body() createVacancyDto: CreateVacancyDto) {
     return this.vacancyService.createVacancy(createVacancyDto);
   }
@@ -34,16 +34,16 @@ export class VacancyController {
     return this.vacancyService.findListVacancies();
   }
 
-  // @ApiResponse({
-  //   type: CreateVacancyDto,
-  // })
-  // @Roles(UserRoleEnum.admin)
-  @Get(':id/vacancy')
+  @ApiResponse({
+    type: CreateVacancyDto,
+  })
+  @Roles(UserRoleEnum.admin)
+  @Get(':id')
   async getByVacancyId(@Param('id', ParseIntPipe) id: number) {
     return await this.vacancyService.findByVacancy(id);
   }
 
-  @Patch(':id/vacancy')
+  @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateVacancyDto: UpdateVacancyDto,
@@ -51,9 +51,9 @@ export class VacancyController {
     return this.vacancyService.update(+id, updateVacancyDto);
   }
 
-  // @Roles(UserRoleEnum.admin)
+  @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
-  @Delete(':id/vacancy')
+  @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
     return await this.vacancyService.delete(id);
   }
