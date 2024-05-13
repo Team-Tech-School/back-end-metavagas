@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -9,7 +15,7 @@ import { Technology } from 'src/Database/entities';
 export class TechnologysService {
   constructor(
     @InjectRepository(Technology)
-    private technologyRepository: Repository<Technology>,
+    private readonly technologyRepository: Repository<Technology>,
   ) {}
 
   async create(payload: CreateTechnologyDto) {
@@ -20,8 +26,9 @@ export class TechnologysService {
 
       return newTechnology;
     } catch (error) {
-      console.log(error);
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new BadRequestException(
+        `A technology with this name: ${payload.tecName} already exists.`,
+      );
     }
   }
 
@@ -31,6 +38,60 @@ export class TechnologysService {
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async getByName(tecName: string): Promise<boolean> {
+    const getBytecName = await this.technologyRepository.findOne({
+      where: { tecName },
+      relations: { vacancies: true },
+    });
+    if (getBytecName) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  async getTechnologyById(id: number) {
+    try {
+      const technology = await this.technologyRepository.findOne({
+        where: { id },
+      });
+      if (!technology) {
+        throw new NotFoundException(`technology not located.`);
+      }
+      return technology;
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async updateTechnologyById(
+    technologyId: number,
+    data: Partial<Technology>,
+  ): Promise<Technology> {
+    try {
+      await this.getTechnologyById(technologyId);
+
+      await this.technologyRepository.update(technologyId, data);
+
+      return await this.getTechnologyById(technologyId);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, error.status);
+    }
+  }
+  async delete(id: number) {
+    try {
+      await this.getTechnologyById(id);
+
+      await this.technologyRepository.softDelete(id);
+
+      return { response: 'Technology deleted with success.' };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, error.status);
     }
   }
 }

@@ -18,16 +18,17 @@ export class UsersService {
   ) {}
   async create(payload: CreateUserDto): Promise<User> {
     try {
-      if (await this.IsEmailExists(payload.email)) {
-        throw new BadRequestException(
-          `An user with this email: ${payload.email} already exists.`,
-        );
-      } else {
+      await this.IsEmailExists(payload.email);
+      try {
         const newUser = this.userRepository.create(payload);
 
         await this.userRepository.save(newUser);
 
         return newUser;
+      } catch (err) {
+        throw new BadRequestException(
+          `An user with this email: ${payload.email} already exists.`,
+        );
       }
     } catch (err) {
       throw new HttpException(
@@ -64,14 +65,63 @@ export class UsersService {
 
   async getUserById(id: number) {
     try {
-      const advertiser = await this.userRepository.findOne({ where: { id } });
-      if (!advertiser) {
-        throw new NotFoundException(`advertiser not located.`);
+      const user = await this.userRepository.findOne({ where: { id } });
+      if (!user) {
+        throw new NotFoundException(`user not located.`);
       }
-      return advertiser;
+      return user;
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+  async updateUserById(userId: number, userData: Partial<User>): Promise<User> {
+    try {
+      await this.getUserById;
+
+      await this.userRepository.update(userId, userData);
+
+      return await this.getUserById(userId);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, error.status);
+    }
+  }
+  async delete(id: number) {
+    try {
+      await this.getUserById(id);
+
+      await this.userRepository.softDelete(id);
+
+      return { response: 'User deleted with success.' };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, error.status);
+    }
+  }
+  async listUsers() {
+    try {
+      return await this.userRepository.find();
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, error.status);
+    }
+  }
+
+  async profile(id: number) {
+    try {
+      return await this.userRepository.findOne({
+        where: { id },
+        select: {
+          password: false,
+        },
+        relations: {
+          vacancy: true,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, error.status);
     }
   }
 }

@@ -3,10 +3,11 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Vacancy } from 'src/Database/entities';
-import { CreateVacancyDto, UpdateVacancyDto } from 'src/auth/Config';
+import { CreateVacancyDto } from 'src/auth/Config';
 import { CompanyService } from 'src/companys/company.service';
 import { UsersService } from 'src/users';
 import { Repository } from 'typeorm';
@@ -54,16 +55,17 @@ export class VacancyService {
     }
   }
 
-  async findAllList() {
-    try {
-      return await this.vacancyRepository.find();
-    } catch (err) {
-      console.log(err);
+  // async findListVacancies() {
+  //   try {
+  //     return await this.vacancyRepository.find({
+  //       relations: { advertiser: true, company: true, technologies: true },
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
 
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
-    }
-  }
-
+  //     throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+  //   }
+  // }
   async vacancyExists(vacancyRole: string): Promise<boolean> {
     const vacancy = await this.vacancyRepository.exists({
       where: { vacancyRole },
@@ -74,15 +76,94 @@ export class VacancyService {
       return false;
     }
   }
-  // findOne(id: number) {
-  //   return `This action returns a #${id} vacancy`;
-  // }
+  async update(id: number, updateVacancyDto) {
+    try {
+      await this.getVacancyById(+id);
 
-  // update(id: number, updateVacancyDto: UpdateVacancyDto) {
-  //   return `This action updates a #${id} vacancy`;
-  // }
+      await this.vacancyRepository.update(id, updateVacancyDto);
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} vacancy`;
-  // }
+      return await this.getVacancyById(+id);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, error.status);
+    }
+  }
+
+  async getVacancyById(id: number) {
+    try {
+      const vacancy = await this.vacancyRepository.findOne({ where: { id } });
+      if (!vacancy) {
+        throw new NotFoundException(`vacancy not located.`);
+      }
+      return vacancy;
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async delete(id: number) {
+    try {
+      await this.getVacancyById(id);
+
+      await this.vacancyRepository.softDelete(id);
+
+      return { response: 'Vacancy deleted with success.' };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, error.status);
+    }
+  }
+
+  async searchVacancies(
+    tecName: string,
+    vacancyRole: string,
+    minSalary: number,
+    maxSalary: number,
+    vacancyType: string,
+    location: string,
+    page = 1,
+    limit = 10,
+  ): Promise<{ vacancies: Vacancy[]; total: number }> {
+    const query = this.vacancyRepository.createQueryBuilder('vacancy');
+    if (tecName) {
+      query.leftJoinAndSelect('vacancy.technologies', 'technology');
+      query.where(
+        'vacancy.vacancyRole || vacancy.vacancyDescription ILIKE :tecName',
+        { tecName: `%${tecName}%` },
+      );
+      query.orWhere('technology.tecName ILIKE :tecName', {
+        tecName: `%${tecName}%`,
+      });
+    }
+    if (vacancyRole) {
+      query.andWhere('vacancy.vacancyRole ILIKE :vacancyRole', {
+        vacancyRole: `%${vacancyRole}%`,
+      });
+      console.log(vacancyRole);
+    }
+    if (minSalary) {
+      query.andWhere('vacancy.wage >= :minSalary', { minSalary });
+    }
+    if (maxSalary) {
+      query.andWhere('vacancy.wage <= :maxSalary', { maxSalary });
+    }
+    if (vacancyType) {
+      query.andWhere('vacancy.vacancyType LIKE :vacancyType', {
+        vacancyType: `%${vacancyType}%`,
+      });
+    }
+    if (location) {
+      query.andWhere('vacancy.location ILIKE :location', {
+        location: `%${location}%`,
+      });
+    }
+
+    const [vacancies, total] = await query
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
+
+    return { vacancies, total };
+  }
 }

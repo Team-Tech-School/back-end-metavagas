@@ -3,12 +3,17 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-import { VacancyToTechnology } from './index';
+import { Vacancy } from './index';
+import { Vacancies_Technologies } from './technology_vacancy.entity';
 
 @Entity('technology')
 export class Technology {
@@ -30,9 +35,6 @@ export class Technology {
   @DeleteDateColumn()
   deleteAt: Date;
 
-  @OneToMany(
-    () => VacancyToTechnology,
-    (vacancyToTechnology) => vacancyToTechnology.technology,
-  )
-  vacancyToTechnology: VacancyToTechnology[];
+  @ManyToMany(() => Vacancy, (vacancy) => vacancy.technologies)
+  vacancies: Vacancy[];
 }

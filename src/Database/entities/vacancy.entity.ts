@@ -6,9 +6,14 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  ManyToMany,
+  DeleteDateColumn,
+  JoinTable,
 } from 'typeorm';
 
-import { Company, User, VacancyToTechnology } from './index';
+import { Company, Technology, User } from './index';
+import { Vacancies_Technologies } from './technology_vacancy.entity';
+import { BadRequestException } from '@nestjs/common';
 
 @Entity('vacancy')
 export class Vacancy {
@@ -45,17 +50,18 @@ export class Vacancy {
   @UpdateDateColumn({ default: new Date() })
   updateAt: Date;
 
+  @DeleteDateColumn()
+  deleteAt: Date;
+
   @ManyToOne(() => Company, (company) => company.vacancy)
   @JoinColumn()
-  company: Company[];
+  company: Company;
 
   @ManyToOne(() => User, (user) => user.vacancy)
   @JoinColumn()
-  advertiser: User[];
+  advertiser: User;
 
-  @ManyToOne(
-    () => VacancyToTechnology,
-    (vacancyToTechnology) => vacancyToTechnology.vacancy,
-  )
-  vacancyToTechnology: VacancyToTechnology[];
+  @ManyToMany(() => Technology, (technology) => technology.vacancies)
+  @JoinTable()
+  technologies: Technology[];
 }
