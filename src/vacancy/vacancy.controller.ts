@@ -20,7 +20,7 @@ import {
 } from 'src/auth/Config';
 import { ApiResponse } from '@nestjs/swagger';
 
-@Controller('vacancy')
+@Controller('vacancy/')
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
 
@@ -28,19 +28,31 @@ export class VacancyController {
   async create(@Body() createVacancyDto: CreateVacancyDto) {
     return this.vacancyService.createVacancy(createVacancyDto);
   }
-
   @Get()
-  findAll() {
-    return this.vacancyService.findListVacancies();
+  async findAllVacancies(
+    @Query('tecName') tecName?: string,
+    @Query('vacancyRole') vacancyRole?: string,
+    @Query('minSalary') minSalary?: number,
+    @Query('maxSalary') maxSalary?: number,
+    @Query('vacancyType') vacancyType?: string,
+    @Query('location') location?: string,
+  ) {
+    return await this.vacancyService.searchVacancies(
+      tecName,
+      vacancyRole,
+      minSalary,
+      maxSalary,
+      vacancyType,
+      location,
+    );
   }
-
   @ApiResponse({
     type: CreateVacancyDto,
   })
   @Roles(UserRoleEnum.admin)
   @Get(':id')
   async getByVacancyId(@Param('id', ParseIntPipe) id: number) {
-    return await this.vacancyService.findByVacancy(id);
+    return await this.vacancyService.getVacancyById(id);
   }
 
   @Patch(':id')

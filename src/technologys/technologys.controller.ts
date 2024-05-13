@@ -19,14 +19,14 @@ import { AuthGuard, RoleGuard, UserRoleEnum } from 'src/auth/Config';
 import { ApiResponse } from '@nestjs/swagger';
 import { Technology } from 'src/Database/entities';
 
-@Controller('technologys')
-export class TechnologysController {
-  constructor(private readonly technologysService: TechnologysService) {}
+@Controller('technology')
+export class TechnologyController {
+  constructor(private technologysService: TechnologysService) {}
 
-  @UseGuards(AuthGuard, RoleGuard)
-  @Roles(UserRoleEnum.admin)
-  @HttpCode(HttpStatus.ACCEPTED)
-  @Post('/create')
+  // @UseGuards(AuthGuard, RoleGuard)
+  // @Roles(UserRoleEnum.admin)
+  // @HttpCode(HttpStatus.ACCEPTED)
+  @Post()
   async create(@Body() payload: CreateTechnologyDto) {
     return await this.technologysService.create(payload);
   }

@@ -15,27 +15,19 @@ import { Technology } from 'src/Database/entities';
 export class TechnologysService {
   constructor(
     @InjectRepository(Technology)
-    private technologyRepository: Repository<Technology>,
+    private readonly technologyRepository: Repository<Technology>,
   ) {}
 
   async create(payload: CreateTechnologyDto) {
     try {
-      await this.getByName(payload.tecName);
-      try {
-        const newTechnology = this.technologyRepository.create(payload);
+      const newTechnology = this.technologyRepository.create(payload);
 
-        await this.technologyRepository.save(newTechnology);
+      await this.technologyRepository.save(newTechnology);
 
-        return newTechnology;
-      } catch (err) {
-        throw new BadRequestException(
-          `The technology of the name: ${payload.tecName} already exists.`,
-        );
-      }
+      return newTechnology;
     } catch (error) {
-      throw new HttpException(
-        error.message,
-        error?.status || HttpStatus.BAD_REQUEST,
+      throw new BadRequestException(
+        `A technology with this name: ${payload.tecName} already exists.`,
       );
     }
   }
@@ -52,6 +44,7 @@ export class TechnologysService {
   async getByName(tecName: string): Promise<boolean> {
     const getBytecName = await this.technologyRepository.findOne({
       where: { tecName },
+      relations: { vacancies: true },
     });
     if (getBytecName) {
       return true;
@@ -59,7 +52,6 @@ export class TechnologysService {
       return false;
     }
   }
-
   async getTechnologyById(id: number) {
     try {
       const technology = await this.technologyRepository.findOne({

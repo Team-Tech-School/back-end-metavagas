@@ -10,7 +10,7 @@ import { Vacancy } from 'src/Database/entities';
 import { CreateVacancyDto } from 'src/auth/Config';
 import { CompanyService } from 'src/companys/company.service';
 import { UsersService } from 'src/users';
-import { Repository, getRepository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class VacancyService {
@@ -55,17 +55,17 @@ export class VacancyService {
     }
   }
 
-  async findListVacancies() {
-    try {
-      return await this.vacancyRepository.find({
-        relations: { advertiser: true, company: true },
-      });
-    } catch (err) {
-      console.log(err);
+  // async findListVacancies() {
+  //   try {
+  //     return await this.vacancyRepository.find({
+  //       relations: { advertiser: true, company: true, technologies: true },
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
 
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
-    }
-  }
+  //     throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+  //   }
+  // }
   async vacancyExists(vacancyRole: string): Promise<boolean> {
     const vacancy = await this.vacancyRepository.exists({
       where: { vacancyRole },
@@ -115,25 +115,55 @@ export class VacancyService {
     }
   }
 
-  async findByVacancy(id: number) {
-    try {
-      const vacancy = await this.vacancyRepository.findOne({
-        where: { id },
-        relations: { advertiser: true, company: true },
+  async searchVacancies(
+    tecName: string,
+    vacancyRole: string,
+    minSalary: number,
+    maxSalary: number,
+    vacancyType: string,
+    location: string,
+    page = 1,
+    limit = 10,
+  ): Promise<{ vacancies: Vacancy[]; total: number }> {
+    const query = this.vacancyRepository.createQueryBuilder('vacancy');
+    if (tecName) {
+      query.leftJoinAndSelect('vacancy.technologies', 'technology');
+      query.where(
+        'vacancy.vacancyRole || vacancy.vacancyDescription ILIKE :tecName',
+        { tecName: `%${tecName}%` },
+      );
+      query.orWhere('technology.tecName ILIKE :tecName', {
+        tecName: `%${tecName}%`,
       });
-
-      const nameAdvertiser = vacancy.advertiser.name;
-      const nameCompany = vacancy.company.name;
-
-      return {
-        vacancy: { ...vacancy },
-        advertiser: { advertiser: nameAdvertiser },
-        company: { company: nameCompany },
-      };
-    } catch (error) {
-      console.log(error);
-
-      throw new HttpException(error.message, error.status);
     }
+    if (vacancyRole) {
+      query.andWhere('vacancy.vacancyRole ILIKE :vacancyRole', {
+        vacancyRole: `%${vacancyRole}%`,
+      });
+      console.log(vacancyRole);
+    }
+    if (minSalary) {
+      query.andWhere('vacancy.wage >= :minSalary', { minSalary });
+    }
+    if (maxSalary) {
+      query.andWhere('vacancy.wage <= :maxSalary', { maxSalary });
+    }
+    if (vacancyType) {
+      query.andWhere('vacancy.vacancyType LIKE :vacancyType', {
+        vacancyType: `%${vacancyType}%`,
+      });
+    }
+    if (location) {
+      query.andWhere('vacancy.location ILIKE :location', {
+        location: `%${location}%`,
+      });
+    }
+
+    const [vacancies, total] = await query
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getManyAndCount();
+
+    return { vacancies, total };
   }
 }

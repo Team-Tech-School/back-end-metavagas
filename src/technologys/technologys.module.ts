@@ -1,13 +1,15 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { TechnologysService } from './technologys.service';
-import { TechnologysController } from './technologys.controller';
+import { TechnologyController } from './technologys.controller';
 import { Technology } from 'src/Database/entities';
 
+@Global()
 @Module({
   imports: [TypeOrmModule.forFeature([Technology])],
-  controllers: [TechnologysController],
+  controllers: [TechnologyController],
   providers: [TechnologysService],
+  exports: [TechnologysService],
 })
 export class TechnologysModule {}

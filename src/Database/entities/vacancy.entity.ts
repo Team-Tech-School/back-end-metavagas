@@ -7,13 +7,13 @@ import {
   ManyToOne,
   JoinColumn,
   ManyToMany,
-  JoinTable,
-  OneToMany,
-  OneToOne,
   DeleteDateColumn,
+  JoinTable,
 } from 'typeorm';
 
 import { Company, Technology, User } from './index';
+import { Vacancies_Technologies } from './technology_vacancy.entity';
+import { BadRequestException } from '@nestjs/common';
 
 @Entity('vacancy')
 export class Vacancy {
@@ -61,6 +61,7 @@ export class Vacancy {
   @JoinColumn()
   advertiser: User;
 
-  @ManyToMany(() => Technology, (technology) => technology.vacancy)
-  technology: Technology[];
+  @ManyToMany(() => Technology, (technology) => technology.vacancies)
+  @JoinTable()
+  technologies: Technology[];
 }
