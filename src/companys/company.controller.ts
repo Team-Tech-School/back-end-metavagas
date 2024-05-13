@@ -25,8 +25,8 @@ import { UpdateCompanyDto } from '../auth/Config';
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
-  // @UseGuards(AuthGuard, RoleGuard)
-  // @Roles(UserRoleEnum.admin)
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Post('/create')
   async create(@Body() payload: CreateCompanyDto) {

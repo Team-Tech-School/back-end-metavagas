@@ -58,10 +58,13 @@ export class CompanyService {
       if (name) {
         return await this.companyRepository.find({
           where: { name },
+          relations: { vacancy: true },
         });
       }
 
-      return await this.companyRepository.find();
+      return await this.companyRepository.find({
+        relations: { vacancy: true },
+      });
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
@@ -70,7 +73,10 @@ export class CompanyService {
 
   async idPicker(id: number) {
     try {
-      const company = await this.companyRepository.findOne({ where: { id } });
+      const company = await this.companyRepository.findOne({
+        where: { id },
+        relations: { vacancy: true },
+      });
       if (!company) {
         throw new NotFoundException(`The company not located.`);
       }
