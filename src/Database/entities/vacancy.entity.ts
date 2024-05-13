@@ -6,9 +6,14 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  ManyToMany,
+  DeleteDateColumn,
+  JoinTable,
 } from 'typeorm';
 
-import { User } from '../entities';
+import { Company, Technology, User } from './index';
+import { Vacancies_Technologies } from './technology_vacancy.entity';
+import { BadRequestException } from '@nestjs/common';
 
 @Entity('vacancy')
 export class Vacancy {
@@ -36,20 +41,27 @@ export class Vacancy {
   @Column({ nullable: false })
   companyId: string;
 
-  @Column({ type: 'int', nullable: false })
+  @Column({ nullable: false })
   advertiserId: string;
 
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ default: new Date() })
   createAt: Date;
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
+  @UpdateDateColumn({ default: new Date() })
   updateAt: Date;
+
+  @DeleteDateColumn()
+  deleteAt: Date;
+
+  @ManyToOne(() => Company, (company) => company.vacancy)
+  @JoinColumn()
+  company: Company;
 
   @ManyToOne(() => User, (user) => user.vacancy)
   @JoinColumn()
-  user: User[];
+  advertiser: User;
+
+  @ManyToMany(() => Technology, (technology) => technology.vacancies)
+  @JoinTable()
+  technologies: Technology[];
 }

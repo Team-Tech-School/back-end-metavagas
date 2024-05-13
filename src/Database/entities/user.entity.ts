@@ -1,4 +1,4 @@
-import { UserRoleEnum } from 'src/Config';
+import { UserRoleEnum } from 'src/auth/Config';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,10 +6,16 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  JoinColumn,
   DeleteDateColumn,
+  BeforeInsert,
+  BeforeUpdate,
+  JoinTable,
+  JoinColumn,
 } from 'typeorm';
-import { Vacancy } from './vacancy.entity';
+import { BadRequestException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+
+import { Vacancy } from './index';
 
 @Entity('users')
 export class User {
@@ -28,24 +34,31 @@ export class User {
   @Column({
     type: 'enum',
     enum: UserRoleEnum,
-    default: UserRoleEnum.CANDIDATE,
+    default: UserRoleEnum.candidate,
   })
   role: UserRoleEnum;
 
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ default: new Date() })
   createAt: Date;
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
-  })
+  @UpdateDateColumn({ default: new Date() })
   updateAt: Date;
 
   @DeleteDateColumn()
   deleteAt: Date;
 
-  @OneToMany(() => Vacancy, (vacancy) => vacancy.user)
+  @OneToMany(() => Vacancy, (vacancy) => vacancy.advertiser)
   @JoinColumn()
   vacancy: Vacancy;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    try {
+      this.password = await bcrypt.hash(this.password, 10);
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException('Error with password hash.');
+    }
+  }
 }
