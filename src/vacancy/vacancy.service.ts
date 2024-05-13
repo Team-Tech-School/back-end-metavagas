@@ -126,8 +126,8 @@ export class VacancyService {
     limit = 10,
   ): Promise<{ vacancies: Vacancy[]; total: number }> {
     const query = this.vacancyRepository.createQueryBuilder('vacancy');
+    query.leftJoinAndSelect('vacancy.technologies', 'technology');
     if (tecName) {
-      query.leftJoinAndSelect('vacancy.technologies', 'technology');
       query.where(
         'vacancy.vacancyRole || vacancy.vacancyDescription ILIKE :tecName',
         { tecName: `%${tecName}%` },
