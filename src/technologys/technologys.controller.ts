@@ -23,9 +23,9 @@ import { Technology } from 'src/Database/entities';
 export class TechnologyController {
   constructor(private technologysService: TechnologysService) {}
 
-  // @UseGuards(AuthGuard, RoleGuard)
-  // @Roles(UserRoleEnum.admin)
-  // @HttpCode(HttpStatus.ACCEPTED)
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles(UserRoleEnum.admin)
+  @HttpCode(HttpStatus.ACCEPTED)
   @Post()
   async create(@Body() payload: CreateTechnologyDto) {
     return await this.technologysService.create(payload);
@@ -40,8 +40,6 @@ export class TechnologyController {
   @ApiResponse({
     type: CreateTechnologyDto,
   })
-  @UseGuards(AuthGuard, RoleGuard)
-  @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Get(':id')
   async getByTechnologyId(@Param('id', ParseIntPipe) id: number) {
