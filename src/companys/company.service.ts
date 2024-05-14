@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { CreateCompanyDto } from '../auth/Config';
 import { Company } from 'src/Database/entities';
 import { UpdateCompanyDto } from '../auth/Config';
@@ -27,12 +28,14 @@ export class CompanyService {
         await this.companyRepository.save(newCompany);
 
         return newCompany;
-      } catch (err) {
+      } catch (error) {
+        console.log(error);
         throw new BadRequestException(
           `The company of the name: ${payload.name} already exists.`,
         );
       }
     } catch (error) {
+      console.log(error);
       throw new HttpException(
         error.message,
         error?.status || HttpStatus.BAD_REQUEST,
@@ -77,9 +80,11 @@ export class CompanyService {
         where: { id },
         relations: { vacancy: true },
       });
+
       if (!company) {
         throw new NotFoundException(`The company not located.`);
       }
+
       return company;
     } catch (error) {
       console.log(error);

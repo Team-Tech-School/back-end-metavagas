@@ -33,8 +33,8 @@ export class CompanyController {
     return await this.companyService.create(payload);
   }
 
-  // @UseGuards(AuthGuard, RoleGuard)
-  // @Roles(UserRoleEnum.admin)
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Patch(':id')
   async update(
