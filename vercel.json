@@ -1,15 +1,3 @@
 {
-    "version": 2,
-    "builds": [
-        {
-            "src": "src/main.ts",
-            "dest": "dist/main.js"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "src/main.ts"
-        }
-    ]
+  "framework": "nestjs"
 }
