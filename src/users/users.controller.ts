@@ -8,16 +8,16 @@ import {
   Param,
   ParseIntPipe,
   Patch,
-  Req,
   UseGuards,
 } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
+
 import { UsersService } from './users.service';
-import { User } from '.';
 import { UserRoleEnum, AuthGuard } from 'src/auth/Config';
 import { Roles } from 'src/auth/Config/decorators/roles.decorator';
-import { ApiResponse } from '@nestjs/swagger';
 import { UserCreatedDoc } from 'src/Docs';
 import { CurrentUser } from '../auth/Config';
+import { User } from '../Database/entities/index';
 
 @Controller('users')
 export class UsersController {
