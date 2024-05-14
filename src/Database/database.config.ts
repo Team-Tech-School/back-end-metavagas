@@ -16,11 +16,13 @@ export default <TypeOrmModuleAsyncOptions>{
   ): Promise<TypeOrmModuleOptions> => {
     return <PostgresConnectionOptions>{
       type: 'postgres',
-      host: configService.get('DB_HOST' || 'DATABASE_URL'),
+      host: configService.get(
+        'DB_HOST' || 'DATABASE_URL' || 'POSTGRES_HOST' || 'POSTGRES_URL',
+      ),
       port: +configService.get('DB_PORT'),
-      username: configService.get('DB_USERNAME'),
-      password: configService.get('DB_PASSWORD'),
-      database: configService.get('DB_NAME'),
+      username: configService.get('DB_USERNAME' || 'POSTGRES_USER'),
+      password: configService.get('DB_PASSWORD' || 'POSTGRES_PASSWORD'),
+      database: configService.get('DB_NAME' || 'POSTGRES_DATABASE'),
       entities: [User, Vacancy, Technology, Company],
       synchronize: true,
       logging: true,
