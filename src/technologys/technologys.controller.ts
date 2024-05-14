@@ -40,8 +40,6 @@ export class TechnologyController {
   @ApiResponse({
     type: CreateTechnologyDto,
   })
-  @UseGuards(AuthGuard, RoleGuard)
-  @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Get(':id')
   async getByTechnologyId(@Param('id', ParseIntPipe) id: number) {
