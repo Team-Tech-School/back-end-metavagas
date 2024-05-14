@@ -6,12 +6,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { Technology, Vacancy } from 'src/Database/entities';
 import { CreateVacancyDto } from 'src/auth/Config';
 import { CompanyService } from 'src/companys/company.service';
 import { TechnologysService } from 'src/technologys/technologys.service';
 import { UsersService } from 'src/users';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class VacancyService {
@@ -22,6 +23,7 @@ export class VacancyService {
     private readonly advertiserService: UsersService,
     private readonly technologyRepository: TechnologysService,
   ) {}
+
   async createVacancy(data: CreateVacancyDto) {
     try {
       if (await this.vacancyExists(data.vacancyRole)) {
@@ -29,9 +31,10 @@ export class VacancyService {
           `A vacancy with this name: ${data.vacancyRole} already exists.`,
         );
       }
+
       try {
         await this.companyService.idPicker(+data.companyId);
-      } catch (e) {
+      } catch (error) {
         throw new BadRequestException(
           `A company with this id: ${data.companyId} does not exist.`,
         );
@@ -39,7 +42,7 @@ export class VacancyService {
 
       try {
         await this.advertiserService.getUserById(+data.advertiserId);
-      } catch (e) {
+      } catch (error) {
         throw new BadRequestException(
           `ID: ${data.advertiserId} advertiser does not exist.`,
         );
@@ -52,32 +55,22 @@ export class VacancyService {
       return newVacancy;
     } catch (error) {
       console.log(error);
-
       throw new HttpException(error.message, error.status);
     }
   }
-
-  // async findListVacancies() {
-  //   try {
-  //     return await this.vacancyRepository.find({
-  //       relations: { advertiser: true, company: true, technologies: true },
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-  //   }
-  // }
 
   async vacancyExists(vacancyRole: string): Promise<boolean> {
     const vacancy = await this.vacancyRepository.exists({
       where: { vacancyRole },
     });
+
     if (vacancy) {
       return true;
     } else {
       return false;
     }
   }
+
   async update(id: number, updateVacancyDto) {
     try {
       await this.getVacancyById(+id);
@@ -94,9 +87,11 @@ export class VacancyService {
   async getVacancyById(id: number) {
     try {
       const vacancy = await this.vacancyRepository.findOne({ where: { id } });
+
       if (!vacancy) {
         throw new NotFoundException(`vacancy not located.`);
       }
+
       return vacancy;
     } catch (error) {
       console.log(error);

@@ -11,6 +11,8 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
+
 import { VacancyService } from './vacancy.service';
 import {
   CreateVacancyDto,
@@ -18,7 +20,6 @@ import {
   UpdateVacancyDto,
   UserRoleEnum,
 } from 'src/auth/Config';
-import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('vacancy/')
 export class VacancyController {
