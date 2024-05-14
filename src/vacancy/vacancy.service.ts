@@ -57,17 +57,6 @@ export class VacancyService {
     }
   }
 
-  // async findListVacancies() {
-  //   try {
-  //     return await this.vacancyRepository.find({
-  //       relations: { advertiser: true, company: true, technologies: true },
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //     throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-  //   }
-  // }
-
   async vacancyExists(vacancyRole: string): Promise<boolean> {
     const vacancy = await this.vacancyRepository.exists({
       where: { vacancyRole },
