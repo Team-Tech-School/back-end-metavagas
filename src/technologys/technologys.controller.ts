@@ -23,9 +23,9 @@ import { Technology } from 'src/Database/entities';
 export class TechnologyController {
   constructor(private technologysService: TechnologysService) {}
 
-  // @UseGuards(AuthGuard, RoleGuard)
-  // @Roles(UserRoleEnum.admin)
-  // @HttpCode(HttpStatus.ACCEPTED)
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles(UserRoleEnum.admin)
+  @HttpCode(HttpStatus.ACCEPTED)
   @Post()
   async create(@Body() payload: CreateTechnologyDto) {
     return await this.technologysService.create(payload);

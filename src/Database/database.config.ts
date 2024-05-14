@@ -16,7 +16,7 @@ export default <TypeOrmModuleAsyncOptions>{
   ): Promise<TypeOrmModuleOptions> => {
     return <PostgresConnectionOptions>{
       type: 'postgres',
-      host: configService.get('DB_HOST'),
+      host: configService.get('DB_HOST' || 'DATABASE_URL'),
       port: +configService.get('DB_PORT'),
       username: configService.get('DB_USERNAME'),
       password: configService.get('DB_PASSWORD'),
