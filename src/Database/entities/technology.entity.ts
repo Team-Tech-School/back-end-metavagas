@@ -3,17 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
-  JoinTable,
   ManyToMany,
-  OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { Vacancy } from './index';
-import { Vacancies_Technologies } from './technology_vacancy.entity';
 
 @Entity('technology')
 export class Technology {

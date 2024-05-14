@@ -12,8 +12,6 @@ import {
 } from 'typeorm';
 
 import { Company, Technology, User } from './index';
-import { Vacancies_Technologies } from './technology_vacancy.entity';
-import { BadRequestException } from '@nestjs/common';
 
 @Entity('vacancy')
 export class Vacancy {

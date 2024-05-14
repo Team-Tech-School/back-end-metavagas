@@ -1,4 +1,3 @@
-import { UserRoleEnum } from 'src/auth/Config';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -9,13 +8,13 @@ import {
   DeleteDateColumn,
   BeforeInsert,
   BeforeUpdate,
-  JoinTable,
   JoinColumn,
 } from 'typeorm';
 import { BadRequestException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { Vacancy } from './index';
+import { UserRoleEnum } from 'src/auth/Config';
 
 @Entity('users')
 export class User {
