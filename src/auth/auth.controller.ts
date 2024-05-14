@@ -1,7 +1,8 @@
 import { Controller, Post, Body, HttpStatus, HttpCode } from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger';
+
 import { AuthService } from './auth.service';
 import { User } from '../Database/entities';
-import { ApiBearerAuth, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger';
 import { LoginDto } from './Config/dtos';
 import { CreateUserDto } from './Config/dtos';
 import {
@@ -25,6 +26,7 @@ export class AuthController {
     console.log(createAuthDto);
     return this.authService.register(createAuthDto);
   }
+
   @ApiBody({
     type: LoginDoc,
   })

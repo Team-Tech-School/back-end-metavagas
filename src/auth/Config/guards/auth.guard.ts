@@ -17,6 +17,7 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+
     const token = this.getTokenFromHeader(request);
 
     if (!token) {
@@ -31,7 +32,6 @@ export class AuthGuard implements CanActivate {
       request['user'] = tokenPayload;
     } catch (error) {
       console.log(error);
-
       throw new UnauthorizedException('Not valid token.');
     }
 

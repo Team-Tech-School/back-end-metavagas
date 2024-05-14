@@ -1,12 +1,4 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
-import { UserRoleEnum } from '../../enums/userRoleEnum';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateVacancyDto {
   @IsString({ message: 'Job vacancy is mandatory' })
