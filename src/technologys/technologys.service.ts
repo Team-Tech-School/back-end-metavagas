@@ -46,20 +46,24 @@ export class TechnologysService {
       where: { tecName },
       relations: { vacancies: true },
     });
+
     if (getBytecName) {
       return true;
     } else {
       return false;
     }
   }
+
   async getTechnologyById(id: number) {
     try {
       const technology = await this.technologyRepository.findOne({
         where: { id },
       });
+
       if (!technology) {
         throw new NotFoundException(`technology not located.`);
       }
+
       return technology;
     } catch (error) {
       console.log(error);
