@@ -6,9 +6,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Vacancy } from 'src/Database/entities';
+import { Technology, Vacancy } from 'src/Database/entities';
 import { CreateVacancyDto } from 'src/auth/Config';
 import { CompanyService } from 'src/companys/company.service';
+import { TechnologysService } from 'src/technologys/technologys.service';
 import { UsersService } from 'src/users';
 import { Repository } from 'typeorm';
 
@@ -19,6 +20,7 @@ export class VacancyService {
     private readonly vacancyRepository: Repository<Vacancy>,
     private readonly companyService: CompanyService,
     private readonly advertiserService: UsersService,
+    private readonly technologyRepository: TechnologysService,
   ) {}
   async createVacancy(data: CreateVacancyDto) {
     try {
@@ -132,6 +134,8 @@ export class VacancyService {
       .leftJoinAndSelect('vacancy.company', 'company')
       .leftJoinAndSelect('vacancy.advertiser', 'advertiser');
 
+    const technologies = await this.technologyRepository.findAll();
+
     if (tecName) {
       query.where(
         'vacancy.vacancyRole || vacancy.vacancyDescription ILIKE :tecName',
@@ -169,10 +173,23 @@ export class VacancyService {
       });
     }
 
-    const [vacancies, total] = await query
+    // eslint-disable-next-line prefer-const
+    let [vacancies, total] = await query
       .skip((page - 1) * limit)
       .take(limit)
       .getManyAndCount();
+
+    vacancies = vacancies.map((vacancy) => {
+      const mappedTechnologies: Technology[] = [];
+
+      technologies.forEach((technology) => {
+        if (vacancy.vacancyDescription.includes(technology.tecName)) {
+          mappedTechnologies.push(technology);
+        }
+      });
+
+      return { ...vacancy, technologies: mappedTechnologies };
+    });
 
     return { vacancies, total };
   }
