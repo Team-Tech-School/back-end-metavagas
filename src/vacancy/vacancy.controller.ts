@@ -28,6 +28,7 @@ export class VacancyController {
   async create(@Body() createVacancyDto: CreateVacancyDto) {
     return this.vacancyService.createVacancy(createVacancyDto);
   }
+
   @Get()
   async findAllVacancies(
     @Query('tecName') tecName?: string,
@@ -46,6 +47,7 @@ export class VacancyController {
       location,
     );
   }
+
   @ApiResponse({
     type: CreateVacancyDto,
   })
