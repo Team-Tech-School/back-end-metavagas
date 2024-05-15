@@ -18,8 +18,9 @@ import {
   UpdateVacancyDto,
   UserRoleEnum,
 } from 'src/auth/Config';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Vacancies')
 @Controller('vacancy/')
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}

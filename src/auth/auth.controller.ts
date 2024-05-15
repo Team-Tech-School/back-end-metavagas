@@ -30,6 +30,12 @@ export class AuthController {
   })
   @ApiResponse({
     type: LoginResponseDoc,
+    status: 201,
+    description: 'User successfully authenticated.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Email or password wrong.',
   })
   @HttpCode(HttpStatus.ACCEPTED)
   @Post('login')

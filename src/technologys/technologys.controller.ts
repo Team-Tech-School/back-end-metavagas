@@ -16,9 +16,10 @@ import { TechnologysService } from './technologys.service';
 import { CreateTechnologyDto } from '../auth/Config/dtos';
 import { Roles } from 'src/auth/Config/decorators/roles.decorator';
 import { AuthGuard, RoleGuard, UserRoleEnum } from 'src/auth/Config';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Technology } from 'src/Database/entities';
 
+@ApiTags('Technologies')
 @Controller('technology')
 export class TechnologyController {
   constructor(private technologysService: TechnologysService) {}

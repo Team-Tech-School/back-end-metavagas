@@ -19,7 +19,7 @@ import { Roles } from 'src/auth/Config/decorators/roles.decorator';
 import { CreateCompanyDto } from '../auth/Config';
 import { UpdateCompanyDto } from '../auth/Config';
 
-@ApiTags('Company')
+@ApiTags('Companies')
 @UseGuards()
 @Controller('company')
 export class CompanyController {
