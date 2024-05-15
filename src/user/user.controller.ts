@@ -13,11 +13,11 @@ import {
 import { ApiResponse } from '@nestjs/swagger';
 
 import { UsersService } from './user.service';
-import { UserRoleEnum, AuthGuard } from 'src/auth/config';
-import { Roles } from 'src/auth/config/decorators/roles.decorator';
-import { UserCreatedDoc } from 'src/docs';
-import { CurrentUser } from '../auth/config';
+import { UserRoleEnum, AuthGuard } from '../auth/config';
+import { Roles } from '../auth/config/decorators/roles.decorator';
+import { UserCreatedDoc } from '../docs';
 import { User } from '../database/entities/index';
+import { CurrentUser } from '../auth/config/decorators/current-user.decorator';
 
 @Controller('user')
 export class UsersController {

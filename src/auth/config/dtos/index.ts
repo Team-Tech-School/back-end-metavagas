@@ -1,5 +1,4 @@
-
-export * from './auth/Login-dto';
+export * from './auth/login-dto';
 export * from './auth/create-user.dto';
 export * from './auth/update-user.dto';
 

@@ -15,9 +15,9 @@ import { ApiResponse } from '@nestjs/swagger';
 
 import { TechnologysService } from './technology.service';
 import { CreateTechnologyDto } from '../auth/config/dtos';
-import { Roles } from 'src/auth/config/decorators/roles.decorator';
-import { AuthGuard, RoleGuard, UserRoleEnum } from 'src/auth/config';
-import { Technology } from 'src/database/entities';
+import { Roles } from '../auth/config/decorators/roles.decorator';
+import { AuthGuard, RoleGuard, UserRoleEnum } from '../auth/config';
+import { Technology } from '../database/entities';
 
 @Controller('technology')
 export class TechnologyController {

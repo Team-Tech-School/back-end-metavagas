@@ -14,7 +14,6 @@ import {
 import { Company, Technology, User } from './index';
 
 @Entity('vacancy')
-
 export class Vacancy {
   @PrimaryGeneratedColumn()
   id: number;

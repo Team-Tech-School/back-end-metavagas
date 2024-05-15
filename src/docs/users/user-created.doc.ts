@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+
 import { CreateUserDoc } from './create-user.docs';
 
 export class UserCreatedDoc extends CreateUserDoc {

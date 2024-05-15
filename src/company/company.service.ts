@@ -8,8 +8,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-
-
 import { CreateCompanyDto } from '../auth/config';
 import { Company } from 'src/database/entities';
 import { UpdateCompanyDto } from '../auth/config';
@@ -30,7 +28,6 @@ export class CompanyService {
         await this.companyRepository.save(newCompany);
 
         return newCompany;
-
       } catch (error) {
         console.log(error);
         throw new BadRequestException(
@@ -82,7 +79,6 @@ export class CompanyService {
         where: { id },
         relations: { vacancy: true },
       });
-
 
       if (!company) {
         throw new NotFoundException(`The company not located.`);
