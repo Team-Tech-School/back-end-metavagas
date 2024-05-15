@@ -7,9 +7,9 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateCompanyDto } from '../auth/Config';
-import { Company } from 'src/Database/entities';
-import { UpdateCompanyDto } from '../auth/Config';
+import { CreateCompanyDto } from '../auth/config';
+import { Company } from 'src/database/entities';
+import { UpdateCompanyDto } from '../auth/config';
 
 @Injectable()
 export class CompanyService {

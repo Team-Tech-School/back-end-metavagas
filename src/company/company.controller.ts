@@ -14,10 +14,10 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 
 import { CompanyService } from './company.service';
-import { AuthGuard, RoleGuard, UserRoleEnum } from 'src/auth/Config';
-import { Roles } from 'src/auth/Config/decorators/roles.decorator';
-import { CreateCompanyDto } from '../auth/Config';
-import { UpdateCompanyDto } from '../auth/Config';
+import { AuthGuard, RoleGuard, UserRoleEnum } from 'src/auth/config';
+import { Roles } from 'src/auth/config/decorators/roles.decorator';
+import { CreateCompanyDto } from '../auth/config';
+import { UpdateCompanyDto } from '../auth/config';
 
 @ApiTags('Companies')
 @UseGuards()

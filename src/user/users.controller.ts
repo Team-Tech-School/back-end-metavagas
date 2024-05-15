@@ -12,12 +12,12 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from '.';
-import { UserRoleEnum, AuthGuard } from 'src/auth/Config';
-import { Roles } from 'src/auth/Config/decorators/roles.decorator';
+import { UserRoleEnum, AuthGuard } from 'src/auth/config';
+import { Roles } from 'src/auth/config/decorators/roles.decorator';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserCreatedDoc } from 'src/Docs';
-import { CurrentUser } from '../auth/Config';
-import { CurrentUserDto } from 'src/auth/Config/dtos/Auth/CurrentUserDto/current-user.dto';
+import { UserCreatedDoc } from 'src/docs';
+import { CurrentUser } from '../auth/config';
+import { CurrentUserDto } from 'src/auth/config/dtos/Auth/CurrentUserDto/current-user.dto';
 
 @ApiTags('Users')
 @Controller('users')

@@ -1,4 +1,4 @@
-import { UserRoleEnum } from 'src/auth/Config';
+import { UserRoleEnum } from 'src/auth/config';
 import {
   Entity,
   PrimaryGeneratedColumn,

@@ -17,7 +17,7 @@ import {
   Roles,
   UpdateVacancyDto,
   UserRoleEnum,
-} from 'src/auth/Config';
+} from 'src/auth/config';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Vacancies')

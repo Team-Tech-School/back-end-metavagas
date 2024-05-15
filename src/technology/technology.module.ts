@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { TechnologysService } from './technologys.service';
 import { TechnologyController } from './technologys.controller';
-import { Technology } from 'src/Database/entities';
+import { Technology } from 'src/database/entities';
 
 @Global()
 @Module({

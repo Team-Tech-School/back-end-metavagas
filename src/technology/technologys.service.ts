@@ -8,8 +8,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CreateTechnologyDto } from '../auth/Config/dtos/technologys/create-technology.dto';
-import { Technology } from 'src/Database/entities';
+import { CreateTechnologyDto } from '../auth/config/dtos/technologys/create-technology.dto';
+import { Technology } from 'src/database/entities';
 
 @Injectable()
 export class TechnologysService {

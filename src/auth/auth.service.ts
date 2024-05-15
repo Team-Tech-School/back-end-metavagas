@@ -5,11 +5,11 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { User, UsersService } from '../users';
+import { User, UsersService } from '../user';
 import { JwtService } from '@nestjs/jwt';
-import { LoginDto } from '../auth/Config/dtos';
+import { LoginDto } from './config/dtos';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from './Config/dtos';
+import { CreateUserDto } from './config/dtos';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 

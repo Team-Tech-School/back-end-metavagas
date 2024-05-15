@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CompanyService } from './company.service';
 import { CompanyController } from './company.controller';
-import { Company } from 'src/Database/entities';
+import { Company } from 'src/database/entities';
 
 @Global()
 @Module({
