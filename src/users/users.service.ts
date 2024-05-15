@@ -112,9 +112,6 @@ export class UsersService {
     try {
       return await this.userRepository.findOne({
         where: { id },
-        select: {
-          password: false,
-        },
         relations: {
           vacancy: true,
         },

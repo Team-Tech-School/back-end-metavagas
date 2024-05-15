@@ -61,9 +61,7 @@ export class UsersController {
     return await this.userService.getUserById(id);
   }
 
-  @Roles(UserRoleEnum.admin)
   @UseGuards(AuthGuard)
-  @HttpCode(HttpStatus.ACCEPTED)
   @Get('profile')
   async profile(@CurrentUser() currentUser: { userId: number }) {
     const { userId } = currentUser;
