@@ -2,15 +2,15 @@ import { Controller, Post, Body, HttpStatus, HttpCode } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
-import { User } from '../Database/entities';
-import { LoginDto } from './Config/dtos';
-import { CreateUserDto } from './Config/dtos';
+import { User } from '../database/entities';
+import { LoginDto } from './config/dtos';
+import { CreateUserDto } from './config/dtos';
 import {
   CreateUserDoc,
   LoginDoc,
   LoginResponseDoc,
   UserCreatedDoc,
-} from '../Docs';
+} from '../docs';
 
 @ApiTags('Auth')
 @Controller('auth')

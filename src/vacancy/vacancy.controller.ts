@@ -19,7 +19,7 @@ import {
   Roles,
   UpdateVacancyDto,
   UserRoleEnum,
-} from 'src/auth/Config';
+} from 'src/auth/config';
 
 @Controller('vacancy/')
 export class VacancyController {

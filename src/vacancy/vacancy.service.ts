@@ -8,11 +8,11 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Technology, Vacancy } from 'src/Database/entities';
-import { CreateVacancyDto } from 'src/auth/Config';
-import { CompanyService } from 'src/companys/company.service';
-import { TechnologysService } from 'src/technologys/technologys.service';
-import { UsersService } from 'src/users';
+import { Technology, Vacancy } from 'src/database/entities';
+import { CreateVacancyDto } from 'src/auth/config';
+import { CompanyService } from 'src/company/company.service';
+import { TechnologysService } from 'src/technology/technologys.service';
+import { UsersService } from 'src/user';
 
 @Injectable()
 export class VacancyService {
