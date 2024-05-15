@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Technology, Vacancy } from 'src/database/entities';
 import { CreateVacancyDto } from 'src/auth/config';
 import { CompanyService } from 'src/company/company.service';
-import { TechnologysService } from 'src/technology/technologys.service';
+import { TechnologysService } from 'src/technology/technology.service';
 import { UsersService } from 'src/user';
 import { Repository } from 'typeorm';
 
@@ -20,7 +20,7 @@ export class VacancyService {
     private readonly vacancyRepository: Repository<Vacancy>,
     private readonly companyService: CompanyService,
     private readonly advertiserService: UsersService,
-    private readonly technologyRepository: TechnologysService,
+    private readonly technologyService: TechnologysService,
   ) {}
 
   async createVacancy(data: CreateVacancyDto) {
@@ -128,7 +128,7 @@ export class VacancyService {
       .leftJoinAndSelect('vacancy.company', 'company')
       .leftJoinAndSelect('vacancy.advertiser', 'advertiser');
 
-    const technologies = await this.technologyRepository.findAll();
+    const technologies = await this.technologyService.findAll();
 
     if (tecName) {
       query.where(
