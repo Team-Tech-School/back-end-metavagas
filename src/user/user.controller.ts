@@ -19,7 +19,7 @@ import { UserCreatedDoc } from 'src/docs';
 import { CurrentUser } from '../auth/config';
 import { User } from '../database/entities/index';
 
-@Controller('users')
+@Controller('user')
 export class UsersController {
   constructor(private userService: UsersService) {}
 

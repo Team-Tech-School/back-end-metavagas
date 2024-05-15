@@ -21,7 +21,7 @@ import {
   UserRoleEnum,
 } from 'src/auth/config';
 
-@Controller('vacancy/')
+@Controller('vacancy')
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
 
