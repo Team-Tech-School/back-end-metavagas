@@ -6,13 +6,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-
 import { Technology, Vacancy } from 'src/database/entities';
 import { CreateVacancyDto } from 'src/auth/config';
 import { CompanyService } from 'src/company/company.service';
+import { TechnologysService } from 'src/technology/technologys.service';
 import { UsersService } from 'src/user';
-import { TechnologysService } from 'src/technology/technology.service';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class VacancyService {

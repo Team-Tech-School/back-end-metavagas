@@ -1,6 +1,5 @@
 import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
 import { VacancyService } from './vacancy.service';
 import { VacancyController } from './vacancy.controller';
 import { Vacancy } from 'src/database/entities';

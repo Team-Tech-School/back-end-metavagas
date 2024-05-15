@@ -19,7 +19,9 @@ import { Roles } from 'src/auth/config/decorators/roles.decorator';
 import { CreateCompanyDto } from '../auth/config';
 import { UpdateCompanyDto } from '../auth/config';
 
+
 @ApiTags('Company')
+
 @Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
@@ -32,8 +34,10 @@ export class CompanyController {
     return await this.companyService.create(payload);
   }
 
+
   @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRoleEnum.admin)
+
   @HttpCode(HttpStatus.ACCEPTED)
   @Patch(':id')
   async update(
