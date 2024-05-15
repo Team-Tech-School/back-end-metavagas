@@ -11,7 +11,7 @@ import {
 
 import { Vacancy } from './index';
 
-@Entity('companys')
+@Entity('company')
 export class Company {
   @PrimaryGeneratedColumn()
   id: number;

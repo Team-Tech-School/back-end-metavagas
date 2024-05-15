@@ -16,7 +16,7 @@ import * as bcrypt from 'bcrypt';
 import { Vacancy } from './index';
 import { UserRoleEnum } from 'src/auth/config';
 
-@Entity('users')
+@Entity('user')
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
