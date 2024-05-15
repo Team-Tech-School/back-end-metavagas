@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { UserRoleEnum } from '../../enums/userRoleEnum';
+import { UserRoleEnum } from '../../enums/user.roleEnum';
 
 export class CreateUserDto {
   @IsString()

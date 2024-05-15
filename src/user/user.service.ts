@@ -120,7 +120,7 @@ export class UsersService {
 
   async profile(id: number) {
     try {
-      return await this.userRepository.findOne({
+      const user = this.userRepository.findOneOrFail({
         where: { id },
         select: {
           password: false,
@@ -129,6 +129,8 @@ export class UsersService {
           vacancy: true,
         },
       });
+
+      return user;
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, error.status);

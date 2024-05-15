@@ -25,10 +25,17 @@ import {
 @Controller('vacancy')
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
-
   @Post()
   async create(@Body() createVacancyDto: CreateVacancyDto) {
     return this.vacancyService.createVacancy(createVacancyDto);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateVacancyDto: UpdateVacancyDto,
+  ) {
+    return this.vacancyService.update(+id, updateVacancyDto);
   }
 
   @Get()
@@ -57,14 +64,6 @@ export class VacancyController {
   @Get(':id')
   async getByVacancyId(@Param('id', ParseIntPipe) id: number) {
     return await this.vacancyService.getVacancyById(id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateVacancyDto: UpdateVacancyDto,
-  ) {
-    return this.vacancyService.update(+id, updateVacancyDto);
   }
 
   @Roles(UserRoleEnum.admin)
