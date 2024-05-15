@@ -20,7 +20,6 @@ import { CreateCompanyDto } from '../auth/config';
 import { UpdateCompanyDto } from '../auth/config';
 
 @ApiTags('Company')
-@UseGuards()
 @Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
