@@ -11,6 +11,8 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
+
 import { VacancyService } from './vacancy.service';
 import {
   CreateVacancyDto,
@@ -20,8 +22,9 @@ import {
 } from 'src/auth/config';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Vacancies')
-@Controller('vacancy/')
+@ApiTags('vacancy')
+@Controller('vacancy')
+
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
 

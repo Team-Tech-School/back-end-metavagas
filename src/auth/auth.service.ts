@@ -1,10 +1,11 @@
 import {
-  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 import { User, UsersService } from '../user';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './config/dtos';
@@ -21,6 +22,7 @@ export class AuthService {
     private userService: UsersService,
     private jwtService: JwtService,
   ) {}
+
   async register(createAuthDto: CreateUserDto) {
     try {
       return await this.userService.create(createAuthDto);
@@ -29,6 +31,7 @@ export class AuthService {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
   async login(data: LoginDto) {
     try {
       const { email, password } = data;
@@ -55,7 +58,7 @@ export class AuthService {
       };
     } catch (error) {
       console.log(error);
-      throw new HttpException(error.message, error.status);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 }

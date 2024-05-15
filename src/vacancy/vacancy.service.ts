@@ -22,6 +22,7 @@ export class VacancyService {
     private readonly advertiserService: UsersService,
     private readonly technologyRepository: TechnologysService,
   ) {}
+
   async createVacancy(data: CreateVacancyDto) {
     try {
       if (await this.vacancyExists(data.vacancyRole)) {
@@ -29,9 +30,10 @@ export class VacancyService {
           `A vacancy with this name: ${data.vacancyRole} already exists.`,
         );
       }
+
       try {
         await this.companyService.idPicker(+data.companyId);
-      } catch (e) {
+      } catch (error) {
         throw new BadRequestException(
           `A company with this id: ${data.companyId} does not exist.`,
         );
@@ -39,7 +41,7 @@ export class VacancyService {
 
       try {
         await this.advertiserService.getUserById(+data.advertiserId);
-      } catch (e) {
+      } catch (error) {
         throw new BadRequestException(
           `ID: ${data.advertiserId} advertiser does not exist.`,
         );
@@ -52,7 +54,6 @@ export class VacancyService {
       return newVacancy;
     } catch (error) {
       console.log(error);
-
       throw new HttpException(error.message, error.status);
     }
   }
@@ -61,12 +62,14 @@ export class VacancyService {
     const vacancy = await this.vacancyRepository.exists({
       where: { vacancyRole },
     });
+
     if (vacancy) {
       return true;
     } else {
       return false;
     }
   }
+
   async update(id: number, updateVacancyDto) {
     try {
       await this.getVacancyById(+id);
@@ -83,9 +86,11 @@ export class VacancyService {
   async getVacancyById(id: number) {
     try {
       const vacancy = await this.vacancyRepository.findOne({ where: { id } });
+
       if (!vacancy) {
         throw new NotFoundException(`vacancy not located.`);
       }
+
       return vacancy;
     } catch (error) {
       console.log(error);

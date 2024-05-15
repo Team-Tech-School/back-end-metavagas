@@ -6,7 +6,6 @@ import {
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 import { User, Vacancy, Technology, Company } from './entities';
-import { Vacancies_Technologies } from './entities/technology_vacancy.entity';
 
 export default <TypeOrmModuleAsyncOptions>{
   inject: [ConfigService],

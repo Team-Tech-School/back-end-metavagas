@@ -26,6 +26,7 @@ export class AuthController {
     console.log(createAuthDto);
     return this.authService.register(createAuthDto);
   }
+
   @ApiBody({
     type: LoginDoc,
   })
