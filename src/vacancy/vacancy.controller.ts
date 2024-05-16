@@ -24,30 +24,18 @@ import {
   UpdateVacancyDto,
   UserRoleEnum,
 } from '../auth/config';
+
 @ApiBearerAuth()
 @ApiTags('Vacancy')
 @Controller('vacancy')
-@UseGuards(AuthGuard)
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
-  @UseGuards(RoleGuard)
-  @Roles(UserRoleEnum.advertiser)
-  @Post('create')
-  async create(@Body() createVacancyDto: CreateVacancyDto) {
-    return this.vacancyService.createVacancy(createVacancyDto);
-  }
-
-  @UseGuards(RoleGuard)
-  @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)
-  @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateVacancyDto: UpdateVacancyDto,
-  ) {
-    return this.vacancyService.update(+id, updateVacancyDto);
-  }
-
   @Get()
+  async getAllVacanciesPublic() {
+    return await this.vacancyService.getAllVacanciesPublic();
+  }
+  @UseGuards(AuthGuard)
+  @Get('vacancies')
   async findAllVacancies(
     @Query('tecName') tecName?: string,
     @Query('vacancyRole') vacancyRole?: string,
@@ -65,15 +53,36 @@ export class VacancyController {
       location,
     );
   }
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles(UserRoleEnum.advertiser)
+  @Post('create')
+  async create(@Body() createVacancyDto: CreateVacancyDto) {
+    return this.vacancyService.createVacancy(createVacancyDto);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateVacancyDto: UpdateVacancyDto,
+  ) {
+    return this.vacancyService.update(+id, updateVacancyDto);
+  }
 
   @ApiResponse({
     type: CreateVacancyDto,
   })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get(':id')
   async getByVacancyId(@Param('id', ParseIntPipe) id: number) {
     return await this.vacancyService.getVacancyById(id);
   }
-  @UseGuards(RoleGuard)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)
   @HttpCode(HttpStatus.ACCEPTED)
   @Delete(':id')

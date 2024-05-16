@@ -211,4 +211,8 @@ export class VacancyService {
 
     return { vacancies, total };
   }
+  getAllVacanciesPublic() {
+    const vacancy = this.searchVacancies();
+    return vacancy;
+  }
 }

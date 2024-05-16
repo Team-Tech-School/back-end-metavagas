@@ -19,13 +19,12 @@ import { Roles } from '../auth/config/decorators/roles.decorator';
 import { AuthGuard, RoleGuard, UserRoleEnum } from '../auth/config';
 import { Technology } from '../database/entities';
 
-@ApiBearerAuth()
 @ApiTags('Technology')
 @Controller('technology')
 @UseGuards(AuthGuard)
 export class TechnologyController {
   constructor(private technologyService: TechnologysService) {}
-
+  @ApiBearerAuth()
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)

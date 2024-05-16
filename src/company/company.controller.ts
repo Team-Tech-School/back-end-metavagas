@@ -22,7 +22,7 @@ import { UpdateCompanyDto } from '../auth/config';
 @ApiBearerAuth()
 @ApiTags('Company')
 @Controller('company')
-@UseGuards(RoleGuard)
+@UseGuards(AuthGuard)
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 

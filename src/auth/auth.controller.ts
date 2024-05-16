@@ -23,7 +23,6 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @Post('register')
   async register(@Body() createAuthDto: CreateUserDto): Promise<User> {
-    console.log(createAuthDto);
     return this.authService.register(createAuthDto);
   }
 
