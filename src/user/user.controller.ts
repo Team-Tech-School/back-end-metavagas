@@ -9,7 +9,6 @@ import {
   ParseIntPipe,
   Patch,
   UseGuards,
-  Request,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 

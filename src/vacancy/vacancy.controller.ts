@@ -24,6 +24,7 @@ import {
   UpdateVacancyDto,
   UserRoleEnum,
 } from '../auth/config';
+
 @ApiBearerAuth()
 @ApiTags('Vacancy')
 @Controller('vacancy')
