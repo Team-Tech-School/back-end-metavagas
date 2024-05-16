@@ -53,15 +53,12 @@ export class VacancyController {
       location,
     );
   }
-  @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRoleEnum.advertiser)
   @Post('create')
   async create(@Body() createVacancyDto: CreateVacancyDto) {
     return this.vacancyService.createVacancy(createVacancyDto);
   }
-
-  @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)
   @Patch(':id')
@@ -71,17 +68,14 @@ export class VacancyController {
   ) {
     return this.vacancyService.update(+id, updateVacancyDto);
   }
-
   @ApiResponse({
     type: CreateVacancyDto,
   })
-  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get(':id')
   async getByVacancyId(@Param('id', ParseIntPipe) id: number) {
     return await this.vacancyService.getVacancyById(id);
   }
-  @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)
   @HttpCode(HttpStatus.ACCEPTED)
