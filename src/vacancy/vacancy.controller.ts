@@ -25,14 +25,14 @@ import {
   UserRoleEnum,
 } from '../auth/config';
 @ApiBearerAuth()
-@ApiTags('vacancy')
+@ApiTags('Vacancy')
 @Controller('vacancy')
 @UseGuards(AuthGuard)
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.advertiser)
-  @Post()
+  @Post('create')
   async create(@Body() createVacancyDto: CreateVacancyDto) {
     return this.vacancyService.createVacancy(createVacancyDto);
   }

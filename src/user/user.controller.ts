@@ -22,7 +22,7 @@ import { CurrentUser } from '../auth/config/decorators/current-user.decorator';
 import { CurrentUserDto } from 'src/auth/config';
 
 @ApiBearerAuth()
-@ApiTags('user')
+@ApiTags('User')
 @Controller('user')
 @UseGuards(AuthGuard)
 export class UsersController {

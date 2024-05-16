@@ -11,7 +11,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { TechnologysService } from './technology.service';
 import { CreateTechnologyDto } from '../auth/config/dtos';
@@ -20,6 +20,7 @@ import { AuthGuard, RoleGuard, UserRoleEnum } from '../auth/config';
 import { Technology } from '../database/entities';
 
 @ApiBearerAuth()
+@ApiTags('Technology')
 @Controller('technology')
 @UseGuards(AuthGuard)
 export class TechnologyController {
