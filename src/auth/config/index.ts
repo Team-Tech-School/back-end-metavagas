@@ -1,4 +1,4 @@
-export * from './enums/user.roleEnum';
+export * from './enums/userRoleEnum';
 
 export * from './jwt/jwt.config';
 
