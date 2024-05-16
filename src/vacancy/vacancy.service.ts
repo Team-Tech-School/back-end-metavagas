@@ -84,7 +84,7 @@ export class VacancyService {
     }
   }
 
-  async findVacancyById(id: number): Promise<Vacancy> {
+  async getVacancyRelations(id: number): Promise<Vacancy> {
     return await this.vacancyRepository.findOne({
       where: { id },
       select: {
@@ -102,7 +102,8 @@ export class VacancyService {
   }
   async getVacancyById(id: number) {
     try {
-      const vacancy = await this.findVacancyById(id);
+      const vacancy = await this.getVacancyRelations(id);
+
       if (!vacancy) {
         throw new NotFoundException(`vacancy not located.`);
       }
