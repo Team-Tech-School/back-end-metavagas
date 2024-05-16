@@ -24,11 +24,13 @@ import { CurrentUserDto } from 'src/auth/config';
 @ApiBearerAuth()
 @ApiTags('user')
 @Controller('user')
-@UseGuards(AuthGuard, RoleGuard)
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private userService: UsersService) {}
 
+  @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
+  @HttpCode(HttpStatus.ACCEPTED)
   @Patch(':id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
@@ -41,6 +43,7 @@ export class UsersController {
     type: UserCreatedDoc,
     isArray: true,
   })
+  @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @Get()
   async list() {
@@ -54,12 +57,14 @@ export class UsersController {
   @ApiResponse({
     type: UserCreatedDoc,
   })
+  @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Get(':id')
   async show(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.getUserById(id);
   }
+  @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Delete(':id')

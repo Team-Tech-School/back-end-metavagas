@@ -23,21 +23,20 @@ import {
   UpdateVacancyDto,
   UserRoleEnum,
 } from '../auth/config';
-
+@ApiBearerAuth()
 @ApiTags('vacancy')
 @Controller('vacancy')
+@UseGuards(AuthGuard)
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.advertiser)
   @Post()
   async create(@Body() createVacancyDto: CreateVacancyDto) {
     return this.vacancyService.createVacancy(createVacancyDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)
   @Patch(':id')
   update(
@@ -73,9 +72,7 @@ export class VacancyController {
   async getByVacancyId(@Param('id', ParseIntPipe) id: number) {
     return await this.vacancyService.getVacancyById(id);
   }
-
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)
   @HttpCode(HttpStatus.ACCEPTED)
   @Delete(':id')
