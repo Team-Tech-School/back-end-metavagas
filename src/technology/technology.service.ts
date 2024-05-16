@@ -27,7 +27,7 @@ export class TechnologysService {
       return newTechnology;
     } catch (error) {
       throw new BadRequestException(
-        `A technology with this name: ${payload.tecName} already exists.`,
+        `A technology with the name "${payload.tecName}" already exists.`,
       );
     }
   }

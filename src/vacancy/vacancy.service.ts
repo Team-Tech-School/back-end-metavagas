@@ -28,7 +28,7 @@ export class VacancyService {
     try {
       if (await this.vacancyExists(data.vacancyRole)) {
         throw new BadRequestException(
-          `A vacancy with this name: ${data.vacancyRole} already exists.`,
+          `A vacancy with the role "${data.vacancyRole}" already exists.`,
         );
       }
 
@@ -36,7 +36,7 @@ export class VacancyService {
         await this.companyService.idPicker(+data.companyId);
       } catch (error) {
         throw new BadRequestException(
-          `A company with this id: ${data.companyId} does not exist.`,
+          `No company found with ID: ${data.companyId}.`,
         );
       }
 
@@ -44,7 +44,7 @@ export class VacancyService {
         await this.advertiserService.getUserById(+data.advertiserId);
       } catch (error) {
         throw new BadRequestException(
-          `ID: ${data.advertiserId} advertiser does not exist.`,
+          `No advertiser found with ID: ${data.advertiserId}.`,
         );
       }
 
@@ -100,13 +100,15 @@ export class VacancyService {
       relations: ['company', 'advertiser'],
     });
   }
+
   async getVacancyById(id: number) {
     try {
       const vacancy = await this.getVacancyRelations(id);
 
       if (!vacancy) {
-        throw new NotFoundException(`vacancy not located.`);
+        throw new NotFoundException(`Vacancy with ID ${id} not found.`);
       }
+
       if (vacancy && vacancy.company) {
         return {
           ...vacancy,
@@ -128,7 +130,7 @@ export class VacancyService {
 
       await this.vacancyRepository.softDelete(id);
 
-      return { response: 'Vacancy deleted with success.' };
+      return { response: 'Vacancy deleted successfully.' };
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, error.status);
