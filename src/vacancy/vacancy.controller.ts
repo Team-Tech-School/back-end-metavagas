@@ -16,10 +16,10 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { VacancyService } from './vacancy.service';
 import {
   CreateVacancyDto,
-  Roles,
   UpdateVacancyDto,
   UserRoleEnum,
-} from 'src/auth/config';
+} from '../auth/config';
+import { Roles } from '../auth/config/decorators/roles.decorator';
 
 @ApiTags('vacancy')
 @Controller('vacancy')
