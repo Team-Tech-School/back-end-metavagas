@@ -14,11 +14,12 @@ import {
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { UsersService } from './user.service';
-import { UserRoleEnum, AuthGuard } from '../auth/config';
+import { UserRoleEnum, AuthGuard, RoleGuard } from '../auth/config';
 import { Roles } from '../auth/config/decorators/roles.decorator';
 import { UserCreatedDoc } from '../docs';
 import { User } from '../database/entities/index';
 import { CurrentUser } from '../auth/config/decorators/current-user.decorator';
+import { CurrentUserDto } from 'src/auth/config';
 
 @ApiBearerAuth()
 @ApiTags('user')

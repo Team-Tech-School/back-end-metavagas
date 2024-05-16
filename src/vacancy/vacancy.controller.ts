@@ -18,15 +18,11 @@ import { VacancyService } from './vacancy.service';
 import {
   AuthGuard,
   CreateVacancyDto,
-<<<<<<< HEAD
-=======
   RoleGuard,
   Roles,
->>>>>>> 79a930e (refactor: revisão de rotas vagas e users)
   UpdateVacancyDto,
   UserRoleEnum,
 } from '../auth/config';
-import { Roles } from '../auth/config/decorators/roles.decorator';
 
 @ApiTags('vacancy')
 @Controller('vacancy')
