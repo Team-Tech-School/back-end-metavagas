@@ -10,12 +10,19 @@ import {
   HttpCode,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { VacancyService } from './vacancy.service';
 import {
+  AuthGuard,
   CreateVacancyDto,
+<<<<<<< HEAD
+=======
+  RoleGuard,
+  Roles,
+>>>>>>> 79a930e (refactor: revisão de rotas vagas e users)
   UpdateVacancyDto,
   UserRoleEnum,
 } from '../auth/config';
@@ -25,11 +32,17 @@ import { Roles } from '../auth/config/decorators/roles.decorator';
 @Controller('vacancy')
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles(UserRoleEnum.advertiser)
   @Post()
   async create(@Body() createVacancyDto: CreateVacancyDto) {
     return this.vacancyService.createVacancy(createVacancyDto);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -60,13 +73,14 @@ export class VacancyController {
   @ApiResponse({
     type: CreateVacancyDto,
   })
-  @Roles(UserRoleEnum.admin)
   @Get(':id')
   async getByVacancyId(@Param('id', ParseIntPipe) id: number) {
     return await this.vacancyService.getVacancyById(id);
   }
 
-  @Roles(UserRoleEnum.admin)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)
   @HttpCode(HttpStatus.ACCEPTED)
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {

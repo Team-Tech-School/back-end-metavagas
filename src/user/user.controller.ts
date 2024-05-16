@@ -60,7 +60,7 @@ export class UsersController {
     return await this.userService.getUserById(id);
   }
   @Roles(UserRoleEnum.admin)
-  // @HttpCode(HttpStatus.ACCEPTED)
+  @HttpCode(HttpStatus.ACCEPTED)
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.delete(id);
