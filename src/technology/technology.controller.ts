@@ -11,7 +11,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { TechnologysService } from './technology.service';
 import { CreateTechnologyDto } from '../auth/config/dtos';
@@ -19,22 +19,25 @@ import { Roles } from '../auth/config/decorators/roles.decorator';
 import { AuthGuard, RoleGuard, UserRoleEnum } from '../auth/config';
 import { Technology } from '../database/entities';
 
+@ApiBearerAuth()
+@ApiTags('Technology')
 @Controller('technology')
+@UseGuards(AuthGuard)
 export class TechnologyController {
-  constructor(private technologysService: TechnologysService) {}
+  constructor(private technologyService: TechnologysService) {}
 
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Post()
   async create(@Body() payload: CreateTechnologyDto) {
-    return await this.technologysService.create(payload);
+    return await this.technologyService.create(payload);
   }
 
   @HttpCode(HttpStatus.ACCEPTED)
   @Get()
   async findAll() {
-    return await this.technologysService.findAll();
+    return await this.technologyService.findAll();
   }
 
   @ApiResponse({
@@ -43,10 +46,10 @@ export class TechnologyController {
   @HttpCode(HttpStatus.ACCEPTED)
   @Get(':id')
   async getByTechnologyId(@Param('id', ParseIntPipe) id: number) {
-    return await this.technologysService.getTechnologyById(id);
+    return await this.technologyService.getTechnologyById(id);
   }
 
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Patch(':id')
@@ -54,14 +57,14 @@ export class TechnologyController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateVacancyDto: Partial<Technology>,
   ) {
-    return this.technologysService.updateTechnologyById(+id, updateVacancyDto);
+    return this.technologyService.updateTechnologyById(+id, updateVacancyDto);
   }
 
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.technologysService.delete(id);
+    return await this.technologyService.delete(id);
   }
 }

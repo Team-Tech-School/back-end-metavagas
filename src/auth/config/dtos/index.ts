@@ -1,4 +1,4 @@
-export * from './auth/login-dto';
+export * from './auth/login-dto/login-dto';
 export * from './auth/create-user.dto';
 export * from './auth/update-user.dto';
 
@@ -10,3 +10,5 @@ export * from './companies/update-company.dto';
 
 export * from './technologies/create-technology.dto';
 export * from './technologies/update-technology.dto';
+
+export * from './auth/CurrentUserDto/current-user.dto';

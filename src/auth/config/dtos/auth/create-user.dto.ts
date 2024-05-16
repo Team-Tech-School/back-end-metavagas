@@ -6,22 +6,22 @@ import {
   IsString,
 } from 'class-validator';
 
-import { UserRoleEnum } from '../../enums/userRoleEnum';
+import { UserRoleEnum } from '../../enums/user.roleEnum';
 
 export class CreateUserDto {
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: 'Name must be a string' })
+  @IsNotEmpty({ message: 'Name must not be empty' })
   name: string;
 
-  @IsString()
+  @IsString({ message: 'Email must be a string' })
   @IsEmail()
   email: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: 'Password must be a string' })
+  @IsNotEmpty({ message: 'Password must not be empty' })
   password: string;
 
   @IsEnum(UserRoleEnum)
-  @IsOptional()
+  @IsOptional({ message: 'Role must be a valid user role' })
   role?: UserRoleEnum;
 }

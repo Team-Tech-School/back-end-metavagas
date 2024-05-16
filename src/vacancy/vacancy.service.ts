@@ -21,7 +21,7 @@ export class VacancyService {
     private readonly vacancyRepository: Repository<Vacancy>,
     private readonly companyService: CompanyService,
     private readonly advertiserService: UsersService,
-    private readonly technologyRepository: TechnologysService,
+    private readonly technologyService: TechnologysService,
   ) {}
 
   async createVacancy(data: CreateVacancyDto) {
@@ -84,12 +84,35 @@ export class VacancyService {
     }
   }
 
+  async getVacancyRelations(id: number): Promise<Vacancy> {
+    return await this.vacancyRepository.findOne({
+      where: { id },
+      select: {
+        id: true,
+        vacancyRole: true,
+        wage: true,
+        location: true,
+        vacancyType: true,
+        vacancyDescription: true,
+        level: true,
+        companyId: false,
+      },
+      relations: ['company', 'advertiser'],
+    });
+  }
   async getVacancyById(id: number) {
     try {
-      const vacancy = await this.vacancyRepository.findOne({ where: { id } });
+      const vacancy = await this.getVacancyRelations(id);
 
       if (!vacancy) {
         throw new NotFoundException(`vacancy not located.`);
+      }
+      if (vacancy && vacancy.company) {
+        return {
+          ...vacancy,
+          companyName: vacancy.company.name,
+          advertiser: vacancy.advertiser.name,
+        };
       }
 
       return vacancy;
@@ -129,7 +152,7 @@ export class VacancyService {
       .leftJoinAndSelect('vacancy.company', 'company')
       .leftJoinAndSelect('vacancy.advertiser', 'advertiser');
 
-    const technologies = await this.technologyRepository.findAll();
+    const technologies = await this.technologyService.findAll();
 
     if (tecName) {
       query.where(

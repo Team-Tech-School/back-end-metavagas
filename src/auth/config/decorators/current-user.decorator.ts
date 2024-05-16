@@ -1,13 +1,15 @@
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
 
-const getUserByContext = (context: ExecutionContext) => {
-  if (context.getType() === 'http') {
-    const user = context.switchToHttp().getRequest().user;
+export const CurrentUser = createParamDecorator(
+  (data: unknown, context: ExecutionContext) => {
+    return getCurrentUserByContext(context);
+  },
+);
 
-    return user;
+const getCurrentUserByContext = (context: ExecutionContext) => {
+  if (context.getType() === 'http') {
+    const request = context.switchToHttp().getRequest();
+    console.log(request);
+    return request['user'];
   }
 };
-
-export const CurrentUser = createParamDecorator(
-  (data: unknown, context: ExecutionContext) => getUserByContext(context),
-);

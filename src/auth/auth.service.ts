@@ -33,13 +33,9 @@ export class AuthService {
 
   async login(data: LoginDto) {
     try {
-      const { email, password } = data;
-      const user = await this.userRepository.findOne({
-        where: { email },
-        select: { id: true, email: true, password: true },
-      });
-      console.log(user);
-      if (!user || !(await bcrypt.compare(password, user.password))) {
+      const user = await this.userService.getUserBy(data.email);
+
+      if (!user || !(await bcrypt.compare(data.password, user.password))) {
         throw new UnauthorizedException('Email or password wrong.');
       }
 
