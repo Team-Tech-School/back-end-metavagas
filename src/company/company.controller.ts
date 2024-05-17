@@ -11,13 +11,19 @@ import {
   Get,
   Query,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CompanyService } from './company.service';
-import { AuthGuard, RoleGuard, UserRoleEnum } from '../auth/config';
+import {
+  AuthGuard,
+  CreateCompanyDto,
+  RoleGuard,
+  UserRoleEnum,
+} from '../auth/config';
 import { Roles } from '../auth/config/decorators/roles.decorator';
-import { CreateCompanyDto } from '../auth/config';
+import { CreateCompanyDtoDocs } from '../docs';
 import { UpdateCompanyDto } from '../auth/config';
+import { CompanyDtoDoc } from 'src/docs/company/company-dto-Docs';
 
 @ApiBearerAuth()
 @ApiTags('Company')
@@ -26,6 +32,14 @@ import { UpdateCompanyDto } from '../auth/config';
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
+  @ApiBody({
+    type: CreateCompanyDtoDocs,
+  })
+  @ApiResponse({
+    type: CompanyDtoDoc,
+    status: 201,
+    description: 'Successfully Created Company.',
+  })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
@@ -34,6 +48,14 @@ export class CompanyController {
     return await this.companyService.create(payload);
   }
 
+  @ApiBody({
+    type: CreateCompanyDtoDocs,
+  })
+  @ApiResponse({
+    type: CompanyDtoDoc,
+    status: 201,
+    description: 'Successfully Update Company.',
+  })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
@@ -44,10 +66,20 @@ export class CompanyController {
   ) {
     return await this.companyService.update(id, payload);
   }
+  @ApiResponse({
+    type: CompanyDtoDoc,
+    status: 201,
+    description: 'Get All Companies.',
+  })
   @Get()
   async findAll(@Query('name') name?: string) {
     return await this.companyService.findAll(name);
   }
+  @ApiResponse({
+    type: CompanyDtoDoc,
+    status: 201,
+    description: 'Get Company by ID.',
+  })
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return await this.companyService.idPicker(id);

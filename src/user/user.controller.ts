@@ -11,15 +11,16 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { UsersService } from './user.service';
 import { UserRoleEnum, AuthGuard, RoleGuard } from '../auth/config';
 import { Roles } from '../auth/config/decorators/roles.decorator';
-import { UserCreatedDoc } from '../docs';
+import { CreateUserDoc, UserCreatedDoc } from '../docs';
 import { User } from '../database/entities/index';
 import { CurrentUser } from '../auth/config/decorators/current-user.decorator';
 import { CurrentUserDto } from 'src/auth/config';
+import { DeletedDto } from 'src/docs';
 
 @ApiBearerAuth()
 @ApiTags('User')
@@ -28,6 +29,14 @@ import { CurrentUserDto } from 'src/auth/config';
 export class UsersController {
   constructor(private userService: UsersService) {}
 
+  @ApiBody({
+    type: CreateUserDoc,
+  })
+  @ApiResponse({
+    type: UserCreatedDoc,
+    status: 201,
+    isArray: true,
+  })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
@@ -49,6 +58,10 @@ export class UsersController {
   async list() {
     return await this.userService.listUsers();
   }
+  @ApiResponse({
+    type: UserCreatedDoc,
+    isArray: true,
+  })
   @Get('profile')
   profile(@CurrentUser() user: CurrentUserDto) {
     console.log('user', user);
@@ -56,6 +69,7 @@ export class UsersController {
   }
   @ApiResponse({
     type: UserCreatedDoc,
+    isArray: true,
   })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
@@ -64,6 +78,11 @@ export class UsersController {
   async show(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.getUserById(id);
   }
+  @ApiResponse({
+    type: DeletedDto,
+    description: 'User deleted with success.',
+    isArray: true,
+  })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
