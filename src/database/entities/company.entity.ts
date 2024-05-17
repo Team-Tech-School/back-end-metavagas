@@ -31,7 +31,7 @@ export class Company {
   @Column({ type: 'varchar', length: 128, nullable: false })
   address: string;
 
-  @Column({ type: 'date', nullable: false })
+  @Column({ type: 'timestamp', nullable: false })
   foundedAt: string;
 
   @Column({ type: 'text', nullable: false })

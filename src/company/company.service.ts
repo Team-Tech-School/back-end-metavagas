@@ -19,7 +19,7 @@ export class CompanyService {
     private readonly companyRepository: Repository<Company>,
   ) {}
 
-  async create(payload: CreateCompanyDto) {
+  async create(payload: CreateCompanyDto): Promise<Company> {
     try {
       await this.findAll(payload.name);
       try {
