@@ -1,4 +1,4 @@
-![logo](./img//capa_metavagas.jpeg)
+![capa_metavagas](https://github.com/Team-Tech-School/back-end-metavagas/assets/127049907/61acaf23-7b23-47e6-8a1a-2dc48ebaa908)
 
 <h1 align="center" style="color:#7f5cd1; font-size:45px;">Metavagas – Projeto Fullstack</h1>
 
