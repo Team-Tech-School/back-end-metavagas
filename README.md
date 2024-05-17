@@ -1,38 +1,169 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+![logo](./img//capa_metavagas.jpeg)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<h1 align="center" style="color:#7f5cd1; font-size:45px;">Metavagas – Projeto Fullstack</h1>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+<h2 style="color:#7f5cd1; font-size:26px;">Descrição</h2>
 
-## Description
+Metavagas é um projeto fullstack que visa criar um front-end e uma API para a plataforma de vagas - Metavagas. O objetivo é permitir que usuários possam visualizar, cadastrar e filtrar vagas de emprego, bem como gerenciar empresas e tecnologias relacionadas às vagas.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+<h2 style="color:#7f5cd1; font-size:26px;">Requisitos do projeto</h2>
 
-## Installation
+### Data de Entrega;
+
+- **Data de entrega**: 31/05/2024.
+- **Repositórios**: Os arquivos do projeto deverão estar em repositórios públicos no GitHub.
+- **Publicação**: A aplicação deverá ser publicada no Vercel/Railway.
+
+### Tecnologias Utilizadas;
+
+- **Back-end**: NestJS, TypeORM, PostgreSQL.
+- **Autenticação**: JWT (JSON Web Token).
+- **Documentação**: Swagger.
+
+<h2 style="color:#7f5cd1; font-size:20px;">Funcionalidades da API</h2>
+
+### Funcionalidades Públicas
+
+1. Criar usuário;
+2. Autenticação;
+3. Buscar todas vagas com empresas, anunciantes e tecnologias relacionadas;
+
+### Funcionalidades Privadas (Usuário)
+
+1. Atualizar usuário (self update ou admin);
+2. Soft delete de usuário (self delete ou admin);
+3. Buscar todos usuários (somente admin);
+4. Buscar usuário pelo ID (somente admin);
+5. Rota de profile retornando todas informações do usuário, exceto a senha;
+
+### Funcionalidades Privadas (Empresas)
+
+1. Criar empresa (somente admin);
+2. Atualizar empresa (somente admin);
+3. Buscar todas empresas e suas vagas atreladas;
+4. Buscar empresa pelo ID e suas vagas atreladas;
+
+### Funcionalidades Privadas (Vagas)
+
+1. Criar vaga (somente anunciante);
+2. Atualizar vaga (somente admin ou anunciante dono da vaga);
+3. Deletar vaga (somente admin ou anunciante dono da vaga);
+4. Buscar vaga pelo ID, incluindo nome da empresa e anunciante;
+5. Filtrar vagas por tecnologia, nome da vaga, faixa salarial, tipo de vaga e localização, com paginação;
+
+### Funcionalidades Privadas (Tecnologias)
+
+1. Criar tecnologia (somente admin);
+2. Buscar todas tecnologias;
+
+<h2 style="color:#7f5cd1; font-size:20px;">Documentação e Testes</h2>
+
+1. Documentação com Swagger para autenticação, usuários, empresas, vagas e tecnologias;
+2. Testes para serviços de autenticação, usuários, empresas, vagas e tecnologias;
+3. Testes para controllers e módulos de autenticação e usuários;
+4. Ferramentas de organização utilizadas deverão ser entregues pelo grupo;
+
+<h2 style="color:#7f5cd1; font-size:20px;">Entidades</h2>
+
+### User
+
+```
+{
+  name = VARCHAR(64), NOT NULL
+  email = VARCHAR(100), NOT NULL, UNIQUE
+  password = VARCHAR(64), NOT NULL
+  role = (admin, advertiser, cadidate), NOT NULL, DEFAULT (candidate)
+  isActive = BOOLEAN, DAFAULT (true)
+  createAt = DATE, DAFAULT (now)
+  updateAt = DATE, DAFAULT (now)
+  daleteAt = DATE
+}
+```
+
+### Vacancy
+
+```
+{
+  vacancyRole = VARCHAR(80), NOT NULL
+  wage = INT, NOT NULL
+  location = VARCHAR(80), NOT NULL
+  vacancyType = VARCHAR(80), NOT NULL
+  vacancyDescription = TEXT, NOT NULL
+  companyId = INT, NOT NULL
+  advertserId = INT, NOT NULL
+  createAt = DATE, DAFAULT (now)
+  updateAt = DATE, DAFAULT (now)
+  daleteAt = DATE
+}
+```
+
+### Company
+
+```
+{
+  name = VARCHAR(64), NOT NULL, UNIQUE
+  city = VARCHAR(128), NOT NULL
+  state = VARCHAR(128), NOT NULL
+  address = VARCHAR(128), NOT NULL
+  foundeAt = DATE, NOT NULL
+  description = TEXT, NOT NULL
+  createAt = DATE, DAFAULT (now)
+  updateAt = DATE, DAFAULT (now)
+  daleteAt = DATE
+}
+```
+
+### Technology
+
+```
+{
+  tecName = VARCHAR(64), NOT NULL, UNIQUE
+  creatorsName = VARCHAR(64), NOT NULL
+  createAt = DATE, DAFAULT (now)
+  updateAt = DATE, DAFAULT (now)
+  daleteAt = DATE
+}
+```
+
+<h2 style="color:#7f5cd1; font-size:20px;">Links Úteis</h2>
+
+- [Documentação adicional](https://drive.google.com/file/d/1Nk7m-U-1q4g2fZOHsmoUFRJbxC375ZMm/view)
+
+<h2 style="color:#7f5cd1; font-size:26px">Como Rodar a Aplicação</h2>
+
+### Clone o Repositório
+
+```bash
+git clone https://github.com/seu-usuario/metavagas-backend.git
+```
+
+### Instalação de dependências
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+### Configure as Variáveis de Ambiente
+
+- Crie um arquivo **.env** na **raiz do projeto backend** com as variáveis de ambiente necessárias;
+
+```
+# APP
+PORT = Porta que queira utilizar em sua aplicação (3000);
+
+# BASE_URL
+JWT_SECRET = Chave para jwt funcionar (exemplo_de_chave);
+JWT_EXPIRES = Tempo de expiração de um token gerado (10m);
+
+## DATABASE
+DB_HOST = Host do banco de dados (localhost);
+DB_PORT = Porta que seu banco esta ativo (5431);
+DB_USERNAME = Nome de usuário do banco de dados (nome_user);
+DB_PASSWORD = Senha do banco de dados (123456);
+DB_NAME = Nome do banco de dados (back-end-metavagas);
+```
+
+### Executando o aplicativo
 
 ```bash
 # development
@@ -45,7 +176,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+### Teste
 
 ```bash
 # unit tests
@@ -58,17 +189,13 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+<h3 style="color:#7f5cd1;">Contato</h3>
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- [Anderson Rodrigues](https://www.linkedin.com/in/dev-anderson-rodrigues/)
+- [Hamilton Gonçalves](https://www.linkedin.com/in/hamilton-jr/)
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
+<h3 style="color:#7f5cd1;">License</h3>
 
 Nest is [MIT licensed](LICENSE).
-# back-end-metavagas
+
+<h3 style="color:#7f5cd1; font-size:22px;">back-end-metavagas</h3>
