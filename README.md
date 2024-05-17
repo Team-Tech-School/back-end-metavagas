@@ -127,7 +127,7 @@ Metavagas é um projeto fullstack que visa criar um front-end e uma API para a p
 
 <h2 style="color:#7f5cd1; font-size:20px;">Links Úteis</h2>
 
-- [diagramming](https://drive.google.com/file/d/1Nk7m-U-1q4g2fZOHsmoUFRJbxC375ZMm/view)
+- [DIAGRAMA](https://drive.google.com/file/d/1Nk7m-U-1q4g2fZOHsmoUFRJbxC375ZMm/view)
 
 <h2 style="color:#7f5cd1; font-size:26px">Como Rodar a Aplicação</h2>
 
