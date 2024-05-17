@@ -134,7 +134,7 @@ Metavagas é um projeto fullstack que visa criar um front-end e uma API para a p
 ### Clone o Repositório
 
 ```bash
-git clone https://github.com/seu-usuario/metavagas-backend.git
+git clone https://github.com/Team-Tech-School/front-end-metavagas.git
 ```
 
 ### Instalação de dependências
