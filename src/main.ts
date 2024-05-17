@@ -15,7 +15,6 @@ async function bootstrap() {
       'API that provides access to job openings in the technology area.',
     )
     .setVersion('1.0')
-    .addTag('users')
     .build();
   const document = SwaggerModule.createDocument(app, configSwagger);
   SwaggerModule.setup('v1/docs', app, document);

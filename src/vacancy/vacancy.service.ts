@@ -6,12 +6,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Technology, Vacancy } from 'src/Database/entities';
-import { CreateVacancyDto } from 'src/auth/Config';
-import { CompanyService } from 'src/companys/company.service';
-import { TechnologysService } from 'src/technologys/technologys.service';
-import { UsersService } from 'src/users';
 import { Repository } from 'typeorm';
+
+import { Technology, Vacancy } from '../database/entities';
+import { CreateVacancyDto } from '../auth/config';
+import { CompanyService } from '../company/company.service';
+import { UsersService } from '../user';
+import { TechnologysService } from '../technology/technology.service';
 
 @Injectable()
 export class VacancyService {
@@ -20,8 +21,9 @@ export class VacancyService {
     private readonly vacancyRepository: Repository<Vacancy>,
     private readonly companyService: CompanyService,
     private readonly advertiserService: UsersService,
-    private readonly technologyRepository: TechnologysService,
+    private readonly technologyService: TechnologysService,
   ) {}
+
   async createVacancy(data: CreateVacancyDto) {
     try {
       if (await this.vacancyExists(data.vacancyRole)) {
@@ -29,9 +31,10 @@ export class VacancyService {
           `A vacancy with this name: ${data.vacancyRole} already exists.`,
         );
       }
+
       try {
         await this.companyService.idPicker(+data.companyId);
-      } catch (e) {
+      } catch (error) {
         throw new BadRequestException(
           `A company with this id: ${data.companyId} does not exist.`,
         );
@@ -39,7 +42,7 @@ export class VacancyService {
 
       try {
         await this.advertiserService.getUserById(+data.advertiserId);
-      } catch (e) {
+      } catch (error) {
         throw new BadRequestException(
           `ID: ${data.advertiserId} advertiser does not exist.`,
         );
@@ -52,7 +55,6 @@ export class VacancyService {
       return newVacancy;
     } catch (error) {
       console.log(error);
-
       throw new HttpException(error.message, error.status);
     }
   }
@@ -61,12 +63,14 @@ export class VacancyService {
     const vacancy = await this.vacancyRepository.exists({
       where: { vacancyRole },
     });
+
     if (vacancy) {
       return true;
     } else {
       return false;
     }
   }
+
   async update(id: number, updateVacancyDto) {
     try {
       await this.getVacancyById(+id);
@@ -80,12 +84,37 @@ export class VacancyService {
     }
   }
 
+  async getVacancyRelations(id: number): Promise<Vacancy> {
+    return await this.vacancyRepository.findOne({
+      where: { id },
+      select: {
+        id: true,
+        vacancyRole: true,
+        wage: true,
+        location: true,
+        vacancyType: true,
+        vacancyDescription: true,
+        level: true,
+        companyId: false,
+      },
+      relations: ['company', 'advertiser'],
+    });
+  }
   async getVacancyById(id: number) {
     try {
-      const vacancy = await this.vacancyRepository.findOne({ where: { id } });
+      const vacancy = await this.getVacancyRelations(id);
+
       if (!vacancy) {
         throw new NotFoundException(`vacancy not located.`);
       }
+      if (vacancy && vacancy.company) {
+        return {
+          ...vacancy,
+          companyName: vacancy.company.name,
+          advertiser: vacancy.advertiser.name,
+        };
+      }
+
       return vacancy;
     } catch (error) {
       console.log(error);
@@ -123,7 +152,7 @@ export class VacancyService {
       .leftJoinAndSelect('vacancy.company', 'company')
       .leftJoinAndSelect('vacancy.advertiser', 'advertiser');
 
-    const technologies = await this.technologyRepository.findAll();
+    const technologies = await this.technologyService.findAll();
 
     if (tecName) {
       query.where(
@@ -181,5 +210,9 @@ export class VacancyService {
     });
 
     return { vacancies, total };
+  }
+  getAllVacanciesPublic() {
+    const vacancy = this.searchVacancies();
+    return vacancy;
   }
 }
