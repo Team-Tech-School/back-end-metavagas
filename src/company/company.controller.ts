@@ -11,7 +11,13 @@ import {
   Get,
   Query,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { CompanyService } from './company.service';
 import {
@@ -44,6 +50,9 @@ export class CompanyController {
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Post()
+  @ApiOperation({
+    summary: 'Create a company',
+  })
   async create(@Body() payload: CreateCompanyDto) {
     return await this.companyService.create(payload);
   }
@@ -60,6 +69,9 @@ export class CompanyController {
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @Patch(':id')
+  @ApiOperation({
+    summary: "Authenticate a company's data",
+  })
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: UpdateCompanyDto,
@@ -72,6 +84,9 @@ export class CompanyController {
     description: 'Get All Companies.',
   })
   @Get()
+  @ApiOperation({
+    summary: 'Search for all companies and their linked vacancies',
+  })
   async findAll(@Query('name') name?: string) {
     return await this.companyService.findAll(name);
   }
@@ -81,6 +96,9 @@ export class CompanyController {
     description: 'Get Company by ID.',
   })
   @Get(':id')
+  @ApiOperation({
+    summary: 'Search for a company by Id',
+  })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return await this.companyService.idPicker(id);
   }

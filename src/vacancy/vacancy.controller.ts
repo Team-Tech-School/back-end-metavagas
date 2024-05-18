@@ -13,7 +13,13 @@ import {
   UseGuards,
   HttpException,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { VacancyService } from './vacancy.service';
 import {
@@ -42,6 +48,10 @@ export class VacancyController {
     isArray: true,
   })
   @Get()
+  @ApiOperation({
+    summary:
+      'Search all vacancies with companies, advertisers and related technologies',
+  })
   async getAllVacanciesPublic() {
     return await this.vacancyService.getAllVacanciesPublic();
   }
@@ -52,6 +62,10 @@ export class VacancyController {
   })
   @UseGuards(AuthGuard)
   @Get('vacancies')
+  @ApiOperation({
+    summary:
+      'Search all vacancies with companies, advertisers and related technologies',
+  })
   async findAllVacancies(
     @Query('tecName') tecName?: string,
     @Query('vacancyRole') vacancyRole?: string,
@@ -80,6 +94,9 @@ export class VacancyController {
   @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRoleEnum.advertiser)
   @Post('create')
+  @ApiOperation({
+    summary: 'Create a vacancy',
+  })
   async create(@Body() createVacancyDto: CreateVacancyDto) {
     return this.vacancyService.createVacancy(createVacancyDto);
   }
@@ -94,6 +111,9 @@ export class VacancyController {
   @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)
   @Patch(':id')
+  @ApiOperation({
+    summary: 'Updated vacancy',
+  })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateVacancyDto: UpdateVacancyDto,
@@ -107,6 +127,9 @@ export class VacancyController {
   })
   @UseGuards(AuthGuard)
   @Get(':id')
+  @ApiOperation({
+    summary: 'Search for a vacancy by Id',
+  })
   async getByVacancyId(@Param('id', ParseIntPipe) id: number) {
     return await this.vacancyService.getVacancyById(id);
   }
@@ -119,6 +142,9 @@ export class VacancyController {
   @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)
   @HttpCode(HttpStatus.ACCEPTED)
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete vacancy',
+  })
   async delete(@Param('id', ParseIntPipe) id: number) {
     return await this.vacancyService.delete(id);
   }

@@ -1,5 +1,11 @@
 import { Controller, Post, Body, HttpStatus, HttpCode } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags, ApiBody } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiResponse,
+  ApiTags,
+  ApiBody,
+  ApiOperation,
+} from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { User } from '../database/entities';
@@ -22,6 +28,9 @@ export class AuthController {
   @ApiResponse({ type: UserCreatedDoc })
   @HttpCode(HttpStatus.CREATED)
   @Post('register')
+  @ApiOperation({
+    summary: 'User Registration',
+  })
   async register(@Body() createAuthDto: CreateUserDto): Promise<User> {
     return this.authService.register(createAuthDto);
   }
@@ -40,6 +49,9 @@ export class AuthController {
   })
   @HttpCode(HttpStatus.ACCEPTED)
   @Post('login')
+  @ApiOperation({
+    summary: 'Login',
+  })
   async login(@Body() data: LoginDto) {
     return await this.authService.login(data);
   }
