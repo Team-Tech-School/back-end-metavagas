@@ -116,8 +116,6 @@ export class VacancyService {
         company: data.company.name,
         advertiser: data.advertiser.name,
       };
-
-      return vacancy;
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
