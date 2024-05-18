@@ -46,6 +46,7 @@ export class VacancyController {
     type: vacancyDtoDocs,
     status: 201,
     isArray: true,
+    description: 'Get all Successfully.',
   })
   @Get()
   @ApiOperation({
@@ -58,6 +59,7 @@ export class VacancyController {
   @ApiResponse({
     type: vacancyTechnologyDtoDocs,
     status: 201,
+    description: 'Get all Successfully.',
     isArray: true,
   })
   @UseGuards(AuthGuard)
@@ -89,7 +91,16 @@ export class VacancyController {
   @ApiResponse({
     type: vacancyDtoDocs,
     status: 201,
+    description: 'Created vacancy Successfully.',
     isArray: true,
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Vacancy already exists.',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Unauthorized.',
   })
   @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRoleEnum.advertiser)
@@ -106,7 +117,16 @@ export class VacancyController {
   @ApiResponse({
     type: vacancyDtoDocs,
     status: 201,
+    description: 'Updated vacancy Successfully.',
     isArray: true,
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Unauthorized.',
+  })
+  @ApiResponse({
+    status: 302,
+    description: 'Vacancy not exists.',
   })
   @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)
@@ -123,7 +143,12 @@ export class VacancyController {
   @ApiResponse({
     type: vacancyTechnologyDtoDocs,
     status: 201,
+    description: 'Get vacancy Successfully.',
     isArray: true,
+  })
+  @ApiResponse({
+    status: 302,
+    description: 'Vacancy not exists.',
   })
   @UseGuards(AuthGuard)
   @Get(':id')
@@ -137,6 +162,14 @@ export class VacancyController {
     type: DeletedDto,
     description: 'Vacancy deleted with success.',
     isArray: true,
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Unauthorized.',
+  })
+  @ApiResponse({
+    status: 302,
+    description: 'Vacancy not exists.',
   })
   @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)

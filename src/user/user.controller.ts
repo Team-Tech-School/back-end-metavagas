@@ -42,6 +42,15 @@ export class UsersController {
     type: UserCreatedDoc,
     status: 201,
     isArray: true,
+    description: 'User successfully updated.',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User not exists.',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Unauthorized.',
   })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
@@ -59,7 +68,13 @@ export class UsersController {
 
   @ApiResponse({
     type: UserCreatedDoc,
+    status: 201,
+    description: 'Acessed successfully.',
     isArray: true,
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Unauthorized.',
   })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
@@ -73,6 +88,8 @@ export class UsersController {
   @ApiResponse({
     type: UserCreatedDoc,
     isArray: true,
+    status: 201,
+    description: 'Acessed successfully.',
   })
   @Get('profile')
   @ApiOperation({
@@ -85,6 +102,16 @@ export class UsersController {
   @ApiResponse({
     type: UserCreatedDoc,
     isArray: true,
+    status: 201,
+    description: 'Acessed successfully.',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Unauthorized.',
+  })
+  @ApiResponse({
+    status: 302,
+    description: 'User not exists.',
   })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
@@ -100,6 +127,14 @@ export class UsersController {
     type: DeletedDto,
     description: 'User deleted with success.',
     isArray: true,
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Unauthorized.',
+  })
+  @ApiResponse({
+    status: 302,
+    description: 'User not exists.',
   })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)

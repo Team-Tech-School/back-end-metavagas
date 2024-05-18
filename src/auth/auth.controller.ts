@@ -25,7 +25,16 @@ export class AuthController {
 
   @ApiBearerAuth()
   @ApiBody({ type: CreateUserDoc })
-  @ApiResponse({ type: UserCreatedDoc })
+  @ApiResponse({
+    type: UserCreatedDoc,
+    status: 201,
+    isArray: true,
+    description: 'User successfully registered.',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User already exists.',
+  })
   @HttpCode(HttpStatus.CREATED)
   @Post('register')
   @ApiOperation({

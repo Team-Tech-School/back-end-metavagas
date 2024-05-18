@@ -46,6 +46,18 @@ export class CompanyController {
     status: 201,
     description: 'Successfully Created Company.',
   })
+  @ApiResponse({
+    status: 409,
+    description: 'Company already exists.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad Request.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized.',
+  })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
@@ -64,6 +76,14 @@ export class CompanyController {
     type: CompanyDtoDoc,
     status: 201,
     description: 'Successfully Update Company.',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Unauthorized.',
+  })
+  @ApiResponse({
+    status: 302,
+    description: 'Company not exists.',
   })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
@@ -94,6 +114,10 @@ export class CompanyController {
     type: CompanyDtoDoc,
     status: 201,
     description: 'Get Company by ID.',
+  })
+  @ApiResponse({
+    status: 302,
+    description: 'Company not exists.',
   })
   @Get(':id')
   @ApiOperation({

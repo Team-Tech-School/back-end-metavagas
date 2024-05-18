@@ -42,7 +42,16 @@ export class TechnologyController {
   @ApiResponse({
     type: TechnologyExtendsDtoDocs,
     status: 201,
+    description: 'Successfully Created Technology.',
     isArray: true,
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Technology already exists.',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Unauthorized.',
   })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
@@ -58,6 +67,7 @@ export class TechnologyController {
   @ApiResponse({
     type: TechnologyExtendsDtoDocs,
     status: 201,
+    description: 'Get a technology with success.',
     isArray: true,
   })
   @HttpCode(HttpStatus.ACCEPTED)
@@ -77,6 +87,10 @@ export class TechnologyController {
   @ApiResponse({
     type: CreateTechnologyDto,
   })
+  @ApiResponse({
+    status: 302,
+    description: 'Technology not exists.',
+  })
   @HttpCode(HttpStatus.ACCEPTED)
   @Get(':id')
   @ApiOperation({
@@ -94,6 +108,14 @@ export class TechnologyController {
     status: 201,
     isArray: true,
   })
+  @ApiResponse({
+    status: 403,
+    description: 'Unauthorized.',
+  })
+  @ApiResponse({
+    status: 302,
+    description: 'Technology not exists.',
+  })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
@@ -110,8 +132,17 @@ export class TechnologyController {
 
   @ApiResponse({
     type: DeletedDto,
+    status: 202,
     description: 'Technology deleted with success.',
     isArray: true,
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Unauthorized.',
+  })
+  @ApiResponse({
+    status: 302,
+    description: 'Technology not exists.',
   })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
