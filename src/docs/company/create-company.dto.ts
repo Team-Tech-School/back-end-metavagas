@@ -35,7 +35,7 @@ export class CreateCompanyDtoDocs {
 
   @ApiProperty({
     type: String,
-    example: '26051982',
+    example: '26/05/1982',
     required: true,
     description: 'Date of foundation of the company.',
   })

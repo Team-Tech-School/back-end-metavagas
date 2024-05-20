@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
+import * as cors from 'cors';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
@@ -20,6 +21,12 @@ async function bootstrap() {
   SwaggerModule.setup('v1/docs', app, document);
 
   app.setGlobalPrefix('v1/');
+  app.use(cors());
+  app.enableCors({
+    origin: 'https://meta-vagas.netlify.app/',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(configService.get('PORT') || 3000);
 }

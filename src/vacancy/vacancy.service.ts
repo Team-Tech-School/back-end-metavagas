@@ -95,7 +95,6 @@ export class VacancyService {
         vacancyType: true,
         vacancyDescription: true,
         level: true,
-        companyId: false,
       },
       relations: ['company', 'advertiser'],
     });
@@ -107,15 +106,16 @@ export class VacancyService {
       if (!vacancy) {
         throw new NotFoundException(`vacancy not located.`);
       }
-      if (vacancy && vacancy.company) {
-        return {
-          ...vacancy,
-          companyName: vacancy.company.name,
-          advertiser: vacancy.advertiser.name,
-        };
-      }
-
-      return vacancy;
+      const data = await this.vacancyRepository
+        .createQueryBuilder('vacancy')
+        .leftJoinAndSelect('vacancy.company', 'company')
+        .leftJoinAndSelect('vacancy.advertiser', 'advertiser')
+        .getOne();
+      return {
+        ...vacancy,
+        company: data.company.name,
+        advertiser: data.advertiser.name,
+      };
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
