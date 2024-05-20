@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { UserCreatedDoc } from '../users';
 import { CompanyDtoDoc } from '../company';
-import { UpdateTechnologyDto } from 'src/auth/config';
+import { UpdateTechnologyDto } from '../../auth/config';
 
 export class VacancyTechnologyDtoDocs {
   @ApiProperty({

@@ -45,7 +45,7 @@ export class AuthService {
       };
 
       return {
-        accessToken: await this.jwtService.signAsync(tokenPayload),
+        accessToken: await this.jwtService.sign(tokenPayload),
       };
     } catch (error) {
       console.log(error);
