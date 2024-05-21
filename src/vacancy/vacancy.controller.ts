@@ -71,6 +71,7 @@ export class VacancyController {
   async findAllVacancies(
     @Query('tecName') tecName?: string,
     @Query('vacancyRole') vacancyRole?: string,
+    @Query('level') level?: string,
     @Query('minSalary') minSalary?: number,
     @Query('maxSalary') maxSalary?: number,
     @Query('vacancyType') vacancyType?: string,
@@ -79,6 +80,7 @@ export class VacancyController {
     return await this.vacancyService.searchVacancies(
       tecName,
       vacancyRole,
+      level,
       minSalary,
       maxSalary,
       vacancyType,

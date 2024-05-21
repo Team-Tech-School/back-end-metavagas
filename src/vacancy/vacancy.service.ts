@@ -138,6 +138,7 @@ export class VacancyService {
   async searchVacancies(
     tecName?: string,
     vacancyRole?: string,
+    level?: string,
     minSalary?: number,
     maxSalary?: number,
     vacancyType?: string,
@@ -169,6 +170,11 @@ export class VacancyService {
         vacancyRole: `%${vacancyRole}%`,
       });
       console.log(vacancyRole);
+    }
+    if (level) {
+      query.andWhere('vacancy.level ILIKE :level', {
+        level: `%${level}%`,
+      });
     }
 
     if (minSalary) {
