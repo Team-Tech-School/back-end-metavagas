@@ -20,6 +20,7 @@ export const usersListMock = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    vacancy: [],
   },
   {
     id: 3,

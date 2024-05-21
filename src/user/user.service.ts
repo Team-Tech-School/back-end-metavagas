@@ -130,9 +130,9 @@ export class UsersService {
         },
       });
 
+      console.log(user);
       return user;
     } catch (error) {
-      console.log(error);
       throw new HttpException(error.message, error.status);
     }
   }
