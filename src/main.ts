@@ -23,7 +23,7 @@ async function bootstrap() {
   app.setGlobalPrefix('v1/');
   app.use(cors());
   app.enableCors({
-    origin: 'https://localhost:5173',
+    origin: 'http://localhost:5173',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
