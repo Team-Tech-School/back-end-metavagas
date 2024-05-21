@@ -17,6 +17,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -56,7 +57,7 @@ export class VacancyController {
   async getAllVacanciesPublic() {
     return await this.vacancyService.getAllVacanciesPublic();
   }
-  
+
   @ApiResponse({
     type: vacancyTechnologyDtoDocs,
     status: 201,
@@ -150,7 +151,7 @@ export class VacancyController {
   async create(@Body() createVacancyDto: CreateVacancyDto) {
     return this.vacancyService.createVacancy(createVacancyDto);
   }
-  
+
   @ApiBody({
     type: VacancyDtoDocsOrigin,
   })
@@ -180,7 +181,7 @@ export class VacancyController {
   ) {
     return this.vacancyService.update(+id, updateVacancyDto);
   }
-  
+
   @ApiResponse({
     type: vacancyTechnologyDtoDocs,
     status: 201,
@@ -199,7 +200,7 @@ export class VacancyController {
   async getByVacancyId(@Param('id', ParseIntPipe) id: number) {
     return await this.vacancyService.getVacancyById(id);
   }
-  
+
   @ApiResponse({
     type: DeletedDto,
     description: 'Vacancy deleted with success.',
