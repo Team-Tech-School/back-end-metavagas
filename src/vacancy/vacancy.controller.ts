@@ -17,6 +17,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -67,6 +68,41 @@ export class VacancyController {
   @ApiOperation({
     summary:
       'Search all vacancies with companies, advertisers and related technologies',
+  })
+  @ApiQuery({
+    name: 'tecName',
+    required: false,
+    type: String,
+  })
+  @ApiQuery({
+    name: 'vacancyRole',
+    required: false,
+    type: String,
+  })
+  @ApiQuery({
+    name: 'level',
+    required: false,
+    type: String,
+  })
+  @ApiQuery({
+    name: 'minSalary',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'maxSalary',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'vacancyType',
+    required: false,
+    type: String,
+  })
+  @ApiQuery({
+    name: 'location',
+    required: false,
+    type: String,
   })
   async findAllVacancies(
     @Query('tecName') tecName?: string,
