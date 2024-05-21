@@ -56,6 +56,7 @@ export class VacancyController {
   async getAllVacanciesPublic() {
     return await this.vacancyService.getAllVacanciesPublic();
   }
+  
   @ApiResponse({
     type: vacancyTechnologyDtoDocs,
     status: 201,
@@ -67,6 +68,41 @@ export class VacancyController {
   @ApiOperation({
     summary:
       'Search all vacancies with companies, advertisers and related technologies',
+  })
+  @ApiQuery({
+    name: 'tecName',
+    required: false,
+    type: String,
+  })
+  @ApiQuery({
+    name: 'vacancyRole',
+    required: false,
+    type: String,
+  })
+  @ApiQuery({
+    name: 'level',
+    required: false,
+    type: String,
+  })
+  @ApiQuery({
+    name: 'minSalary',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'maxSalary',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'vacancyType',
+    required: false,
+    type: String,
+  })
+  @ApiQuery({
+    name: 'location',
+    required: false,
+    type: String,
   })
   async findAllVacancies(
     @Query('tecName') tecName?: string,
@@ -87,6 +123,7 @@ export class VacancyController {
       location,
     );
   }
+
   @ApiBody({
     type: VacancyDtoDocsOrigin,
   })
@@ -113,6 +150,7 @@ export class VacancyController {
   async create(@Body() createVacancyDto: CreateVacancyDto) {
     return this.vacancyService.createVacancy(createVacancyDto);
   }
+  
   @ApiBody({
     type: VacancyDtoDocsOrigin,
   })
@@ -142,6 +180,7 @@ export class VacancyController {
   ) {
     return this.vacancyService.update(+id, updateVacancyDto);
   }
+  
   @ApiResponse({
     type: vacancyTechnologyDtoDocs,
     status: 201,
@@ -160,6 +199,7 @@ export class VacancyController {
   async getByVacancyId(@Param('id', ParseIntPipe) id: number) {
     return await this.vacancyService.getVacancyById(id);
   }
+  
   @ApiResponse({
     type: DeletedDto,
     description: 'Vacancy deleted with success.',
