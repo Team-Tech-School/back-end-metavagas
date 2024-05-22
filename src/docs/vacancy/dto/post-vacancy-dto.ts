@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CompanyDtoDoc } from '../company';
-import { UserCreatedDoc } from '../users';
+import { CompanyDtoDoc } from '../../company/dto';
+import { UserCreatedDoc } from '../../users/dto';
 
 export class VacancyDtoDocsOrigin {
   @ApiProperty({

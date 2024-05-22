@@ -23,7 +23,6 @@ import {
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  
   @ApiBody({ type: CreateUserDoc })
   @ApiResponse({
     type: UserCreatedDoc,

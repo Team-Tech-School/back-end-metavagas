@@ -143,8 +143,8 @@ export class VacancyService {
     maxSalary?: number,
     vacancyType?: string,
     location?: string,
-    page = 1,
-    limit = 10,
+    page?: number,
+    limit?: number,
   ): Promise<{ vacancies: Vacancy[]; total: number }> {
     const query = this.vacancyRepository.createQueryBuilder('vacancy');
 

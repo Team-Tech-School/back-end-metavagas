@@ -27,9 +27,8 @@ import {
   UserRoleEnum,
 } from '../auth/config';
 import { Roles } from '../auth/config/decorators/roles.decorator';
-import { CreateCompanyDtoDocs } from '../docs';
+import { CompanyDtoDoc, CreateCompanyDtoDocs } from '../docs';
 import { UpdateCompanyDto } from '../auth/config';
-import { CompanyDtoDoc } from 'src/docs/company/company-dto-Docs';
 
 @ApiBearerAuth()
 @ApiTags('Company')
