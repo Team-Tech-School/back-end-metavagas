@@ -1,7 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { CreateCompanyDtoDocs } from './create-company.dto';
 
-export class CompanyDtoDoc extends CreateCompanyDtoDocs {
+export class CompanyDtoDoc extends PartialType(CreateCompanyDtoDocs) {
   @ApiProperty({
     type: Number,
     example: 1,
@@ -22,6 +22,14 @@ export class CompanyDtoDoc extends CreateCompanyDtoDocs {
     description: 'Date when user was updated.',
   })
   updatedAt: Date;
+
+  @ApiProperty({
+    type: String,
+    example: '1982-05-26T03:00:00.000Z',
+    required: true,
+    description: 'Date of foundation of the company.',
+  })
+  foundedAt: string;
 
   @ApiProperty({
     type: Date,

@@ -60,7 +60,7 @@ export class CreateVacancyDtoDocs {
       city: 'Campinas',
       state: 'SP or São paulo',
       address: 'Avenida Ranulfo Barbosa dos Santos - Jardim Camburi',
-      foundedAt: '26051982',
+      foundedAt: '1982-05-26T03:00:00.000Z',
       description: 'Francisco',
       id: 2,
       createdAt: '2024-05-17T02:22:02.659Z',

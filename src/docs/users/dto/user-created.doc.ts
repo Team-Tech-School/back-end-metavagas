@@ -1,8 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 import { CreateUserDoc } from './create-user.docs';
 
-export class UserCreatedDoc extends CreateUserDoc {
+export class UserCreatedDoc extends PartialType(CreateUserDoc) {
   @ApiProperty({
     type: Number,
     example: 1,
@@ -30,4 +30,12 @@ export class UserCreatedDoc extends CreateUserDoc {
     description: 'Date when user was deleted.',
   })
   deletedAt?: Date;
+
+  @ApiProperty({
+    type: String,
+    example: '$2b$10$DNp4doLzg39i8l2NsK6aFOTTzwfQ5Epal1VMX3AF1caTG/N8uuGA',
+    required: true,
+    description: 'Users password.',
+  })
+  password: string;
 }
