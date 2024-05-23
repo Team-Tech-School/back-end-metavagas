@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import * as cors from 'cors';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
 import { AppModule } from './app.module';
 
 async function bootstrap() {

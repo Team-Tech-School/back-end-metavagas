@@ -1,3 +1,6 @@
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { UsersService } from './user.service';
+import { User } from '../database/entities/index';
 import {
   Body,
   Controller,
@@ -11,21 +14,20 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-
-import { UsersService } from './user.service';
-import { UserRoleEnum, AuthGuard, RoleGuard } from '../auth/config';
-import { Roles } from '../auth/config/decorators/roles.decorator';
-import { CreateUserDoc, UserCreatedDoc } from '../docs';
-import { User } from '../database/entities/index';
-import { CurrentUser } from '../auth/config/decorators/current-user.decorator';
-import { CurrentUserDto } from '../../src/auth/config';
-import { DeletedDto } from '../docs';
+  UserRoleEnum,
+  AuthGuard,
+  RoleGuard,
+  CurrentUser,
+  CurrentUserDto,
+  Roles,
+} from '../auth/config';
+import {
+  ApiDeleteUserDocs,
+  ApiFindAllUserDocs,
+  ApiFindOneUserDocs,
+  ApiProfileUserDocs,
+  ApiUpdateUserDocs,
+} from '../docs';
 
 @ApiBearerAuth()
 @ApiTags('User')
@@ -34,30 +36,11 @@ import { DeletedDto } from '../docs';
 export class UsersController {
   constructor(private userService: UsersService) {}
 
-  @ApiBody({
-    type: CreateUserDoc,
-  })
-  @ApiResponse({
-    type: UserCreatedDoc,
-    status: 201,
-    isArray: true,
-    description: 'User successfully updated.',
-  })
-  @ApiResponse({
-    status: 409,
-    description: 'User not exists.',
-  })
-  @ApiResponse({
-    status: 403,
-    description: 'Unauthorized.',
-  })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
+  @ApiUpdateUserDocs()
   @Patch(':id')
-  @ApiOperation({
-    summary: 'Update user data',
-  })
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() userData: Partial<User>,
@@ -65,83 +48,35 @@ export class UsersController {
     return this.userService.updateUserById(id, userData);
   }
 
-  @ApiResponse({
-    type: UserCreatedDoc,
-    status: 201,
-    description: 'Acessed successfully.',
-    isArray: true,
-  })
-  @ApiResponse({
-    status: 403,
-    description: 'Unauthorized.',
-  })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
+  @ApiFindAllUserDocs()
   @Get()
-  @ApiOperation({
-    summary: 'Find All Users',
-  })
   async list() {
     return await this.userService.listUsers();
   }
-  @ApiResponse({
-    type: UserCreatedDoc,
-    isArray: true,
-    status: 201,
-    description: 'Acessed successfully.',
-  })
+
+  @ApiProfileUserDocs()
   @Get('profile')
-  @ApiOperation({
-    summary: 'Fetch profile data',
-  })
   profile(@CurrentUser() user: CurrentUserDto) {
     console.log('user', user);
     return this.userService.profile(user.userId);
   }
-  @ApiResponse({
-    type: UserCreatedDoc,
-    isArray: true,
-    status: 201,
-    description: 'Acessed successfully.',
-  })
-  @ApiResponse({
-    status: 403,
-    description: 'Unauthorized.',
-  })
-  @ApiResponse({
-    status: 302,
-    description: 'User not exists.',
-  })
+
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
+  @ApiFindOneUserDocs()
   @Get(':id')
-  @ApiOperation({
-    summary: 'Search for a user by id',
-  })
   async show(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.getUserById(id);
   }
-  @ApiResponse({
-    type: DeletedDto,
-    description: 'User deleted with success.',
-    isArray: true,
-  })
-  @ApiResponse({
-    status: 403,
-    description: 'Unauthorized.',
-  })
-  @ApiResponse({
-    status: 302,
-    description: 'User not exists.',
-  })
+
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
+  @ApiDeleteUserDocs()
   @Delete(':id')
-  @ApiOperation({
-    summary: 'Delete a user',
-  })
   async delete(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.delete(id);
   }

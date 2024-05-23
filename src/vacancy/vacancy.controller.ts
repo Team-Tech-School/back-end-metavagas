@@ -1,3 +1,5 @@
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { VacancyService } from './vacancy.service';
 import {
   Controller,
   Get,
@@ -12,9 +14,6 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-
-import { VacancyService } from './vacancy.service';
 import {
   AuthGuard,
   CreateVacancyDto,

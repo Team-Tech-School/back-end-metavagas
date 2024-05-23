@@ -1,3 +1,5 @@
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CompanyService } from './company.service';
 import {
   Controller,
   Post,
@@ -12,23 +14,19 @@ import {
   Query,
 } from '@nestjs/common';
 import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
-
-import { CompanyService } from './company.service';
-import {
   AuthGuard,
   CreateCompanyDto,
   RoleGuard,
   UserRoleEnum,
+  Roles,
+  UpdateCompanyDto,
 } from '../auth/config';
-import { Roles } from '../auth/config/decorators/roles.decorator';
-import { CompanyDtoDoc, CreateCompanyDtoDocs } from '../docs';
-import { UpdateCompanyDto } from '../auth/config';
+import {
+  ApiCreateCompanyDocs,
+  ApiFindAllCompanyDocs,
+  ApiFindOneCompanyDocs,
+  ApiUpdateCompanyDocs,
+} from '../docs';
 
 @ApiBearerAuth()
 @ApiTags('Company')
@@ -37,91 +35,35 @@ import { UpdateCompanyDto } from '../auth/config';
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
-  @ApiBody({
-    type: CreateCompanyDtoDocs,
-  })
-  @ApiResponse({
-    type: CompanyDtoDoc,
-    status: 201,
-    description: 'Successfully Created Company.',
-  })
-  @ApiResponse({
-    status: 409,
-    description: 'Company already exists.',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Bad Request.',
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized.',
-  })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
+  @ApiCreateCompanyDocs()
   @Post()
-  @ApiOperation({
-    summary: 'Create a company',
-  })
   async create(@Body() payload: CreateCompanyDto) {
     return await this.companyService.create(payload);
   }
 
-  @ApiBody({
-    type: CreateCompanyDtoDocs,
-  })
-  @ApiResponse({
-    type: CompanyDtoDoc,
-    status: 201,
-    description: 'Successfully Update Company.',
-  })
-  @ApiResponse({
-    status: 403,
-    description: 'Unauthorized.',
-  })
-  @ApiResponse({
-    status: 302,
-    description: 'Company not exists.',
-  })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
+  @ApiUpdateCompanyDocs()
   @Patch(':id')
-  @ApiOperation({
-    summary: "Authenticate a company's data",
-  })
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: UpdateCompanyDto,
   ) {
     return await this.companyService.update(id, payload);
   }
-  @ApiResponse({
-    type: CompanyDtoDoc,
-    status: 201,
-    description: 'Get All Companies.',
-  })
+
+  @ApiFindAllCompanyDocs()
   @Get()
-  @ApiOperation({
-    summary: 'Search for all companies and their linked vacancies',
-  })
   async findAll(@Query('name') name?: string) {
     return await this.companyService.findAll(name);
   }
-  @ApiResponse({
-    type: CompanyDtoDoc,
-    status: 201,
-    description: 'Get Company by ID.',
-  })
-  @ApiResponse({
-    status: 302,
-    description: 'Company not exists.',
-  })
+
+  @ApiFindOneCompanyDocs()
   @Get(':id')
-  @ApiOperation({
-    summary: 'Search for a company by Id',
-  })
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return await this.companyService.idPicker(id);
   }
