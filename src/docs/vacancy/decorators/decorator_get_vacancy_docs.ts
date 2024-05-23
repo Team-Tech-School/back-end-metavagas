@@ -6,7 +6,7 @@ export function ApiGetVacanciesDocs() {
   return applyDecorators(
     ApiOperation({
       summary:
-        'Search all vacancies with companies, advertisers and related technologies',
+        'Return to the last vacancies containing, company, advertisers, and related technologies',
     }),
     ApiResponse({
       type: vacancyTechnologyDtoDocs,

@@ -69,8 +69,8 @@ export class VacancyController {
       maxSalary,
       vacancyType,
       location,
-      limit,
       page,
+      limit,
     );
   }
 

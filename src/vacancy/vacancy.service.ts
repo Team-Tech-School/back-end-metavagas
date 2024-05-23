@@ -147,11 +147,13 @@ export class VacancyService {
     limit?: number,
   ): Promise<{
     vacancies: Vacancy[];
-    page: number;
     pageSize: number;
+    page: number;
     total: number;
   }> {
-    const query = this.vacancyRepository.createQueryBuilder('vacancy');
+    const query = this.vacancyRepository
+      .createQueryBuilder('vacancy')
+      .orderBy('vacancy.createAt', 'DESC');
 
     query
       .leftJoinAndSelect('vacancy.technologies', 'technology')
@@ -227,14 +229,14 @@ export class VacancyService {
     });
 
     return {
+      vacancies: vacancies,
       page: +page,
       pageSize: +limit,
-      vacancies: vacancies,
       total: total,
     };
   }
   async getAllVacanciesPublic(page?: number, limit?: number) {
-    const vacancy = this.searchVacancies(
+    const vacancy = await this.searchVacancies(
       null,
       null,
       null,
@@ -246,9 +248,10 @@ export class VacancyService {
       limit,
     );
     return {
-      vacancies: (await vacancy).vacancies,
-      page: +page,
-      pageSize: +limit,
+      vacancies: vacancy.vacancies,
+      page: page ? +page : 1,
+      pageSize: limit ? +limit : vacancy.total,
+      total: vacancy.total,
     };
   }
 }
