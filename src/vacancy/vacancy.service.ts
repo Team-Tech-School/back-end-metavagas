@@ -145,7 +145,12 @@ export class VacancyService {
     location?: string,
     page?: number,
     limit?: number,
-  ): Promise<{ vacancies: Vacancy[]; total: number }> {
+  ): Promise<{
+    vacancies: Vacancy[];
+    page: number;
+    pageSize: number;
+    total: number;
+  }> {
     const query = this.vacancyRepository.createQueryBuilder('vacancy');
 
     query
@@ -221,10 +226,29 @@ export class VacancyService {
       return { ...vacancy, technologies: mappedTechnologies };
     });
 
-    return { vacancies, total };
+    return {
+      page: +page,
+      pageSize: +limit,
+      vacancies: vacancies,
+      total: total,
+    };
   }
-  getAllVacanciesPublic() {
-    const vacancy = this.searchVacancies();
-    return vacancy;
+  async getAllVacanciesPublic(page?: number, limit?: number) {
+    const vacancy = this.searchVacancies(
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      page,
+      limit,
+    );
+    return {
+      vacancies: (await vacancy).vacancies,
+      page: +page,
+      pageSize: +limit,
+    };
   }
 }

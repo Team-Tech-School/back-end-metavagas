@@ -38,8 +38,11 @@ export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
   @ApiGetVacanciesDocs()
   @Get()
-  async getAllVacanciesPublic() {
-    return await this.vacancyService.getAllVacanciesPublic();
+  async getAllVacanciesPublic(
+    @Query('page') page = 1,
+    @Query('limit') limit = 4,
+  ) {
+    return await this.vacancyService.getAllVacanciesPublic(page, limit);
   }
 
   @ApiBearerAuth()
@@ -55,8 +58,8 @@ export class VacancyController {
     @Query('maxSalary') maxSalary?: number,
     @Query('vacancyType') vacancyType?: string,
     @Query('location') location?: string,
-    @Query('page') page?: number,
-    @Query('limit') limit?: number,
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
   ) {
     return await this.vacancyService.searchVacancies(
       tecName,
@@ -66,8 +69,8 @@ export class VacancyController {
       maxSalary,
       vacancyType,
       location,
-      page,
       limit,
+      page,
     );
   }
 
