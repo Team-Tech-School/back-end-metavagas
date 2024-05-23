@@ -39,9 +39,14 @@ export class VacancyController {
   @Get()
   async getAllVacanciesPublic(
     @Query('page') page = 1,
-    @Query('limit') limit = 4,
+    @Query('limit') limit = 10,
+    @Query('tecName') tecName?: string,
   ) {
-    return await this.vacancyService.getAllVacanciesPublic(page, limit);
+    return await this.vacancyService.getAllVacanciesPublic(
+      tecName,
+      page,
+      limit,
+    );
   }
 
   @ApiBearerAuth()

@@ -235,9 +235,9 @@ export class VacancyService {
       total: total,
     };
   }
-  async getAllVacanciesPublic(page?: number, limit?: number) {
+  async getAllVacanciesPublic(tecName?: string, page?: number, limit?: number) {
     const vacancy = await this.searchVacancies(
-      null,
+      tecName,
       null,
       null,
       null,
