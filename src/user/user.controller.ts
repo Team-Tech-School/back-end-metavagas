@@ -9,7 +9,6 @@ import {
   ParseIntPipe,
   Patch,
   UseGuards,
-  Request,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -25,8 +24,8 @@ import { Roles } from '../auth/config/decorators/roles.decorator';
 import { CreateUserDoc, UserCreatedDoc } from '../docs';
 import { User } from '../database/entities/index';
 import { CurrentUser } from '../auth/config/decorators/current-user.decorator';
-import { CurrentUserDto } from 'src/auth/config';
-import { DeletedDto } from 'src/docs';
+import { CurrentUserDto } from '../../src/auth/config';
+import { DeletedDto } from '../docs';
 
 @ApiBearerAuth()
 @ApiTags('User')

@@ -171,6 +171,11 @@ export class VacancyService {
       });
       console.log(vacancyRole);
     }
+    if (level) {
+      query.andWhere('vacancy.level ILIKE :level', {
+        level: `%${level}%`,
+      });
+    }
 
     if (level) {
       query.andWhere('vacancy.level ILIKE :level', {
