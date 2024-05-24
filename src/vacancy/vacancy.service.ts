@@ -163,12 +163,13 @@ export class VacancyService {
     const technologies = await this.technologyService.findAll();
 
     if (tecName) {
+      const lowerTecName = tecName.toLowerCase();
       query.where(
-        '(vacancy.vacancyRole REGEXP :tecName OR vacancy.vacancyDescription REGEXP :tecName)',
-        { tecName: `(^|\\s)${tecName}(\\s|$)` },
+        'LOWER(vacancy.vacancyRole) LIKE :lowerTecName OR LOWER(vacancy.vacancyDescription) LIKE :lowerTecName',
+        { lowerTecName: `%${lowerTecName}%` },
       );
-      query.orWhere('technology.tecName REGEXP :tecName', {
-        tecName: `(^|\\s)${tecName}(\\s|$)`,
+      query.orWhere('LOWER(technology.tecName) LIKE :lowerTecName', {
+        lowerTecName: `%${lowerTecName}%`,
       });
     }
 
