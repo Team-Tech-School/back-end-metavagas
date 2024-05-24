@@ -19,7 +19,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, configSwagger);
   SwaggerModule.setup('v1/docs', app, document);
 
-  app.setGlobalPrefix('v1/');
+  app.setGlobalPrefix('/v1');
   app.use(cors());
   app.enableCors({
     origin: 'http://localhost:5173',
