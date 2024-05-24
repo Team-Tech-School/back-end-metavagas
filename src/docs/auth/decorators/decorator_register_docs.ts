@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { CreateUserDoc, UserCreatedDoc } from 'src/docs/users';
+import { CreateUserDoc, UserCreatedDoc } from '../../users';
 
 export function ApiRegisterDocs() {
   return applyDecorators(

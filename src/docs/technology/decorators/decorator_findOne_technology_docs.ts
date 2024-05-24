@@ -1,7 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { TechnologyExtendsDtoDocs } from '../dto';
-import { CreateTechnologyDto } from 'src/auth/config';
+import { CreateTechnologyDto } from '../../../auth/config';
 
 export function ApiFindOneTechnologyDocs() {
   return applyDecorators(

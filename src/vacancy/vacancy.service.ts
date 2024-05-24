@@ -164,11 +164,11 @@ export class VacancyService {
 
     if (tecName) {
       query.where(
-        'vacancy.vacancyRole || vacancy.vacancyDescription ILIKE :tecName',
-        { tecName: `%${tecName}%` },
+        '(vacancy.vacancyRole REGEXP :tecName OR vacancy.vacancyDescription REGEXP :tecName)',
+        { tecName: `(^|\\s)${tecName}(\\s|$)` },
       );
-      query.orWhere('technology.tecName ILIKE :tecName', {
-        tecName: `%${tecName}%`,
+      query.orWhere('technology.tecName REGEXP :tecName', {
+        tecName: `(^|\\s)${tecName}(\\s|$)`,
       });
     }
 
@@ -218,9 +218,15 @@ export class VacancyService {
 
     vacancies = vacancies.map((vacancy) => {
       const mappedTechnologies: Technology[] = [];
+      const lowerVacancyDescription = vacancy.vacancyDescription.toLowerCase();
+      const lowerVacancyRole = vacancy.vacancyRole.toLowerCase();
 
       technologies.forEach((technology) => {
-        if (vacancy.vacancyDescription.includes(technology.tecName)) {
+        const lowerTechName = technology.tecName.toLowerCase();
+        if (
+          lowerVacancyDescription.includes(lowerTechName) ||
+          lowerVacancyRole.includes(lowerTechName)
+        ) {
           mappedTechnologies.push(technology);
         }
       });

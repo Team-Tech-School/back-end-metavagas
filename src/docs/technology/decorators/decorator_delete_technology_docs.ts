@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { DeletedDto } from 'src/docs';
+import { DeletedDto } from '../../../docs';
 
 export function ApiDeleteTechnologyDocs() {
   return applyDecorators(
