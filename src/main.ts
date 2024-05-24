@@ -9,6 +9,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
+  app.setGlobalPrefix('/v1');
+
   const configSwagger = new DocumentBuilder()
     .setTitle('Metavagas - API')
     .setDescription(
@@ -19,7 +21,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, configSwagger);
   SwaggerModule.setup('v1/docs', app, document);
 
-  app.setGlobalPrefix('/v1');
   app.use(cors());
   app.enableCors({
     origin: 'http://localhost:5173',
