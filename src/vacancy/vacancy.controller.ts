@@ -36,6 +36,7 @@ import {
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
   @ApiGetVacanciesDocs()
+  @ApiQueryVacanciesDocs()
   @Get()
   async getAllVacanciesPublic(
     @Query('tecName') tecName?: string,
