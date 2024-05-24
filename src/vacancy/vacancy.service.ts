@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import {
   BadRequestException,
   HttpException,
@@ -153,35 +154,21 @@ export class VacancyService {
   }> {
     const query = this.vacancyRepository
       .createQueryBuilder('vacancy')
-      .orderBy('vacancy.createAt', 'DESC');
-
-    query
-      .leftJoinAndSelect('vacancy.technologies', 'technology')
+      .orderBy('vacancy.createAt', 'DESC')
       .leftJoinAndSelect('vacancy.company', 'company')
       .leftJoinAndSelect('vacancy.advertiser', 'advertiser');
 
-    const technologies = await this.technologyService.findAll();
-
     if (tecName) {
       const lowerTecName = tecName.toLowerCase();
-      query.where(
-        'LOWER(vacancy.vacancyRole) LIKE :lowerTecName OR LOWER(vacancy.vacancyDescription) LIKE :lowerTecName',
+      query.andWhere(
+        '(LOWER(vacancy.vacancyRole) LIKE :lowerTecName OR LOWER(vacancy.vacancyDescription) LIKE :lowerTecName)',
         { lowerTecName: `%${lowerTecName}%` },
       );
-      query.orWhere('LOWER(technology.tecName) LIKE :lowerTecName', {
-        lowerTecName: `%${lowerTecName}%`,
-      });
     }
 
     if (vacancyRole) {
       query.andWhere('vacancy.vacancyRole ILIKE :vacancyRole', {
         vacancyRole: `%${vacancyRole}%`,
-      });
-      console.log(vacancyRole);
-    }
-    if (level) {
-      query.andWhere('vacancy.level ILIKE :level', {
-        level: `%${level}%`,
       });
     }
 
@@ -211,12 +198,17 @@ export class VacancyService {
       });
     }
 
-    // eslint-disable-next-line prefer-const
+    // Carregar todas as tecnologias
+    const technologies = await this.technologyService.findAll();
+
+    // Executar a consulta para obter as vagas
+
     let [vacancies, total] = await query
       .skip((page - 1) * limit)
       .take(limit)
       .getManyAndCount();
 
+    // Mapear as tecnologias para cada vaga
     vacancies = vacancies.map((vacancy) => {
       const mappedTechnologies: Technology[] = [];
       const lowerVacancyDescription = vacancy.vacancyDescription.toLowerCase();
@@ -224,9 +216,11 @@ export class VacancyService {
 
       technologies.forEach((technology) => {
         const lowerTechName = technology.tecName.toLowerCase();
+        const regex = new RegExp(`\\b${lowerTechName}\\b`, 'i'); // Cria uma regex para buscar a tecnologia como palavra completa
+
         if (
-          lowerVacancyDescription.includes(lowerTechName) ||
-          lowerVacancyRole.includes(lowerTechName)
+          regex.test(lowerVacancyDescription) ||
+          regex.test(lowerVacancyRole)
         ) {
           mappedTechnologies.push(technology);
         }
@@ -240,25 +234,6 @@ export class VacancyService {
       page: +page,
       pageSize: +limit,
       total: total,
-    };
-  }
-  async getAllVacanciesPublic(tecName?: string, page?: number, limit?: number) {
-    const vacancy = await this.searchVacancies(
-      tecName,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      page,
-      limit,
-    );
-    return {
-      vacancies: vacancy.vacancies,
-      page: page ? +page : 1,
-      pageSize: limit ? +limit : vacancy.total,
-      total: vacancy.total,
     };
   }
 }

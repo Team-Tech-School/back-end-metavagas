@@ -38,12 +38,24 @@ export class VacancyController {
   @ApiGetVacanciesDocs()
   @Get()
   async getAllVacanciesPublic(
+    @Query('tecName') tecName?: string,
+    @Query('vacancyRole') vacancyRole?: string,
+    @Query('level') level?: string,
+    @Query('minSalary') minSalary?: number,
+    @Query('maxSalary') maxSalary?: number,
+    @Query('vacancyType') vacancyType?: string,
+    @Query('location') location?: string,
     @Query('page') page = 1,
     @Query('limit') limit = 10,
-    @Query('tecName') tecName?: string,
   ) {
-    return await this.vacancyService.getAllVacanciesPublic(
+    return await this.vacancyService.searchVacancies(
       tecName,
+      vacancyRole,
+      level,
+      minSalary,
+      maxSalary,
+      vacancyType,
+      location,
       page,
       limit,
     );
