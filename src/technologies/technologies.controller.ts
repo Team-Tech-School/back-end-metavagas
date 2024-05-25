@@ -30,7 +30,7 @@ import {
 } from 'src/docs';
 
 @ApiBearerAuth()
-@ApiTags('Technology')
+@ApiTags('Technologies')
 @Controller('technology')
 @UseGuards(AuthGuard)
 export class TechnologyController {

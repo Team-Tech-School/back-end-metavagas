@@ -44,4 +44,12 @@ describe('CompanyService', () => {
       expect(companies).toEqual(CompanyMock);
     });
   });
+
+  describe('Find One', () => {
+    it('Should return a company', async () => {
+      const company = await companyService.idPicker(1);
+
+      expect(company).toEqual(CompanyMock);
+    });
+  });
 });

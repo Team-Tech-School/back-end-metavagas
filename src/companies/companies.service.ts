@@ -67,7 +67,6 @@ export class CompanyService {
         relations: { vacancy: true },
       });
     } catch (error) {
-      console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
@@ -85,7 +84,6 @@ export class CompanyService {
 
       return company;
     } catch (error) {
-      console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
