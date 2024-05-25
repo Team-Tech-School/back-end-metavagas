@@ -1,3 +1,5 @@
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { VacancyService } from './vacancy.service';
 import {
   Controller,
   Get,
@@ -11,11 +13,7 @@ import {
   Delete,
   Query,
   UseGuards,
-  HttpException,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-
-import { VacancyService } from './vacancy.service';
 import {
   AuthGuard,
   CreateVacancyDto,
@@ -24,22 +22,88 @@ import {
   UpdateVacancyDto,
   UserRoleEnum,
 } from '../auth/config';
+import {
+  ApiCreateVacanciesDocs,
+  ApiDeleteVacanciesDocs,
+  ApiGetByIdVacanciesDocs,
+  ApiGetVacanciesDocs,
+  ApiPathVacanciesDocs,
+  ApiQueryVacanciesDocs,
+} from 'src/docs';
 
-@ApiBearerAuth()
 @ApiTags('Vacancy')
 @Controller('vacancy')
-@UseGuards(AuthGuard)
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
-  @UseGuards(RoleGuard)
+  @ApiGetVacanciesDocs()
+  @ApiQueryVacanciesDocs()
+  @Get('/public')
+  async getAllVacanciesPublic(
+    @Query('tecName') tecName?: string,
+    @Query('vacancyRole') vacancyRole?: string,
+    @Query('level') level?: string,
+    @Query('minSalary') minSalary?: number,
+    @Query('maxSalary') maxSalary?: number,
+    @Query('vacancyType') vacancyType?: string,
+    @Query('location') location?: string,
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ) {
+    return await this.vacancyService.searchVacancies(
+      tecName,
+      vacancyRole,
+      level,
+      minSalary,
+      maxSalary,
+      vacancyType,
+      location,
+      page,
+      limit,
+    );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @ApiGetVacanciesDocs()
+  @ApiQueryVacanciesDocs()
+  @Get('/private')
+  async findAllVacancies(
+    @Query('tecName') tecName?: string,
+    @Query('vacancyRole') vacancyRole?: string,
+    @Query('level') level?: string,
+    @Query('minSalary') minSalary?: number,
+    @Query('maxSalary') maxSalary?: number,
+    @Query('vacancyType') vacancyType?: string,
+    @Query('location') location?: string,
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ) {
+    return await this.vacancyService.searchVacancies(
+      tecName,
+      vacancyRole,
+      level,
+      minSalary,
+      maxSalary,
+      vacancyType,
+      location,
+      page,
+      limit,
+    );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRoleEnum.advertiser)
+  @ApiCreateVacanciesDocs()
   @Post('create')
   async create(@Body() createVacancyDto: CreateVacancyDto) {
     return this.vacancyService.createVacancy(createVacancyDto);
   }
 
-  @UseGuards(RoleGuard)
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
   @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)
+  @ApiPathVacanciesDocs()
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -48,33 +112,17 @@ export class VacancyController {
     return this.vacancyService.update(+id, updateVacancyDto);
   }
 
-  @Get()
-  async findAllVacancies(
-    @Query('tecName') tecName?: string,
-    @Query('vacancyRole') vacancyRole?: string,
-    @Query('minSalary') minSalary?: number,
-    @Query('maxSalary') maxSalary?: number,
-    @Query('vacancyType') vacancyType?: string,
-    @Query('location') location?: string,
-  ) {
-    return await this.vacancyService.searchVacancies(
-      tecName,
-      vacancyRole,
-      minSalary,
-      maxSalary,
-      vacancyType,
-      location,
-    );
-  }
-
-  @ApiResponse({
-    type: CreateVacancyDto,
-  })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @ApiGetByIdVacanciesDocs()
   @Get(':id')
   async getByVacancyId(@Param('id', ParseIntPipe) id: number) {
     return await this.vacancyService.getVacancyById(id);
   }
-  @UseGuards(RoleGuard)
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @ApiDeleteVacanciesDocs()
   @Roles(UserRoleEnum.admin, UserRoleEnum.advertiser)
   @HttpCode(HttpStatus.ACCEPTED)
   @Delete(':id')

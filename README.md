@@ -1,4 +1,4 @@
-![logo](./img//capa_metavagas.jpeg)
+![capa_metavagas](https://github.com/Team-Tech-School/back-end-metavagas/assets/127049907/61acaf23-7b23-47e6-8a1a-2dc48ebaa908)
 
 <h1 align="center" style="color:#7f5cd1; font-size:45px;">Metavagas – Projeto Fullstack</h1>
 
@@ -127,14 +127,14 @@ Metavagas é um projeto fullstack que visa criar um front-end e uma API para a p
 
 <h2 style="color:#7f5cd1; font-size:20px;">Links Úteis</h2>
 
-- [Documentação adicional](https://drive.google.com/file/d/1Nk7m-U-1q4g2fZOHsmoUFRJbxC375ZMm/view)
+- [DIAGRAMA](https://drive.google.com/file/d/1Nk7m-U-1q4g2fZOHsmoUFRJbxC375ZMm/view)
 
 <h2 style="color:#7f5cd1; font-size:26px">Como Rodar a Aplicação</h2>
 
 ### Clone o Repositório
 
 ```bash
-git clone https://github.com/seu-usuario/metavagas-backend.git
+git clone https://github.com/Team-Tech-School/front-end-metavagas.git
 ```
 
 ### Instalação de dependências

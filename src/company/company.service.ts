@@ -7,9 +7,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { CreateCompanyDto } from '../auth/config';
-import { Company } from 'src/database/entities';
+import { Company } from '../database/entities';
 import { UpdateCompanyDto } from '../auth/config';
 
 @Injectable()
@@ -19,7 +18,7 @@ export class CompanyService {
     private readonly companyRepository: Repository<Company>,
   ) {}
 
-  async create(payload: CreateCompanyDto) {
+  async create(payload: CreateCompanyDto): Promise<Company> {
     try {
       await this.findAll(payload.name);
       try {

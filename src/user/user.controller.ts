@@ -1,3 +1,6 @@
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { UsersService } from './user.service';
+import { User } from '../database/entities/index';
 import {
   Body,
   Controller,
@@ -10,15 +13,21 @@ import {
   Patch,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-
-import { UsersService } from './user.service';
-import { UserRoleEnum, AuthGuard, RoleGuard } from '../auth/config';
-import { Roles } from '../auth/config/decorators/roles.decorator';
-import { UserCreatedDoc } from '../docs';
-import { User } from '../database/entities/index';
-import { CurrentUser } from '../auth/config/decorators/current-user.decorator';
-import { CurrentUserDto } from 'src/auth/config';
+import {
+  UserRoleEnum,
+  AuthGuard,
+  RoleGuard,
+  CurrentUser,
+  CurrentUserDto,
+  Roles,
+} from '../auth/config';
+import {
+  ApiDeleteUserDocs,
+  ApiFindAllUserDocs,
+  ApiFindOneUserDocs,
+  ApiProfileUserDocs,
+  ApiUpdateUserDocs,
+} from '../docs';
 
 @ApiBearerAuth()
 @ApiTags('User')
@@ -30,6 +39,7 @@ export class UsersController {
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
+  @ApiUpdateUserDocs()
   @Patch(':id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
@@ -38,34 +48,34 @@ export class UsersController {
     return this.userService.updateUserById(id, userData);
   }
 
-  @ApiResponse({
-    type: UserCreatedDoc,
-    isArray: true,
-  })
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
+  @ApiFindAllUserDocs()
   @Get()
   async list() {
     return await this.userService.listUsers();
   }
+
+  @ApiProfileUserDocs()
   @Get('profile')
   profile(@CurrentUser() user: CurrentUserDto) {
     console.log('user', user);
     return this.userService.profile(user.userId);
   }
-  @ApiResponse({
-    type: UserCreatedDoc,
-  })
+
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
+  @ApiFindOneUserDocs()
   @Get(':id')
   async show(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.getUserById(id);
   }
+
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
+  @ApiDeleteUserDocs()
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
     return await this.userService.delete(id);

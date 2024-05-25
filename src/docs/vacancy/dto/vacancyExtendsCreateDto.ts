@@ -1,12 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { CreateVacancyDtoDocs } from './create-dto-docs';
 
-import { CreateUserDoc } from './create-user.docs';
-
-export class UserCreatedDoc extends CreateUserDoc {
+export class vacancyDtoDocs extends CreateVacancyDtoDocs {
   @ApiProperty({
     type: Number,
     example: 1,
-    description: 'Users unique identifier.',
+    description: 'vacancy unique identifier.',
   })
   id: number;
 

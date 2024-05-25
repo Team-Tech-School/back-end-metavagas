@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import {
   BadRequestException,
   HttpException,
@@ -95,7 +96,6 @@ export class VacancyService {
         vacancyType: true,
         vacancyDescription: true,
         level: true,
-        companyId: false,
       },
       relations: ['company', 'advertiser'],
     });
@@ -108,16 +108,16 @@ export class VacancyService {
       if (!vacancy) {
         throw new NotFoundException(`Vacancy with ID ${id} not found.`);
       }
-
-      if (vacancy && vacancy.company) {
-        return {
-          ...vacancy,
-          companyName: vacancy.company.name,
-          advertiser: vacancy.advertiser.name,
-        };
-      }
-
-      return vacancy;
+      const data = await this.vacancyRepository
+        .createQueryBuilder('vacancy')
+        .leftJoinAndSelect('vacancy.company', 'company')
+        .leftJoinAndSelect('vacancy.advertiser', 'advertiser')
+        .getOne();
+      return {
+        ...vacancy,
+        company: data.company.name,
+        advertiser: data.advertiser.name,
+      };
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
@@ -140,37 +140,43 @@ export class VacancyService {
   async searchVacancies(
     tecName?: string,
     vacancyRole?: string,
+    level?: string,
     minSalary?: number,
     maxSalary?: number,
     vacancyType?: string,
     location?: string,
-    page = 1,
-    limit = 10,
-  ): Promise<{ vacancies: Vacancy[]; total: number }> {
-    const query = this.vacancyRepository.createQueryBuilder('vacancy');
-
-    query
-      .leftJoinAndSelect('vacancy.technologies', 'technology')
+    page?: number,
+    limit?: number,
+  ): Promise<{
+    vacancies: Vacancy[];
+    pageSize: number;
+    page: number;
+    total: number;
+  }> {
+    const query = this.vacancyRepository
+      .createQueryBuilder('vacancy')
+      .orderBy('vacancy.createAt', 'DESC')
       .leftJoinAndSelect('vacancy.company', 'company')
       .leftJoinAndSelect('vacancy.advertiser', 'advertiser');
 
-    const technologies = await this.technologyService.findAll();
-
     if (tecName) {
-      query.where(
-        'vacancy.vacancyRole || vacancy.vacancyDescription ILIKE :tecName',
-        { tecName: `%${tecName}%` },
+      const lowerTecName = tecName.toLowerCase();
+      query.andWhere(
+        '(LOWER(vacancy.vacancyRole) LIKE :lowerTecName OR LOWER(vacancy.vacancyDescription) LIKE :lowerTecName)',
+        { lowerTecName: `%${lowerTecName}%` },
       );
-      query.orWhere('technology.tecName ILIKE :tecName', {
-        tecName: `%${tecName}%`,
-      });
     }
 
     if (vacancyRole) {
       query.andWhere('vacancy.vacancyRole ILIKE :vacancyRole', {
         vacancyRole: `%${vacancyRole}%`,
       });
-      console.log(vacancyRole);
+    }
+
+    if (level) {
+      query.andWhere('vacancy.level ILIKE :level', {
+        level: `%${level}%`,
+      });
     }
 
     if (minSalary) {
@@ -193,17 +199,30 @@ export class VacancyService {
       });
     }
 
-    // eslint-disable-next-line prefer-const
+    // Carregar todas as tecnologias
+    const technologies = await this.technologyService.findAll();
+
+    // Executar a consulta para obter as vagas
+
     let [vacancies, total] = await query
       .skip((page - 1) * limit)
       .take(limit)
       .getManyAndCount();
 
+    // Mapear as tecnologias para cada vaga
     vacancies = vacancies.map((vacancy) => {
       const mappedTechnologies: Technology[] = [];
+      const lowerVacancyDescription = vacancy.vacancyDescription.toLowerCase();
+      const lowerVacancyRole = vacancy.vacancyRole.toLowerCase();
 
       technologies.forEach((technology) => {
-        if (vacancy.vacancyDescription.includes(technology.tecName)) {
+        const lowerTechName = technology.tecName.toLowerCase();
+        const regex = new RegExp(`\\b${lowerTechName}\\b`, 'i'); // Cria uma regex para buscar a tecnologia como palavra completa
+
+        if (
+          regex.test(lowerVacancyDescription) ||
+          regex.test(lowerVacancyRole)
+        ) {
           mappedTechnologies.push(technology);
         }
       });
@@ -211,6 +230,11 @@ export class VacancyService {
       return { ...vacancy, technologies: mappedTechnologies };
     });
 
-    return { vacancies, total };
+    return {
+      vacancies: vacancies,
+      page: +page,
+      pageSize: +limit,
+      total: total,
+    };
   }
 }

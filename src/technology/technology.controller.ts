@@ -1,3 +1,6 @@
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { TechnologysService } from './technology.service';
+import { Technology } from '../database/entities';
 import {
   Controller,
   Post,
@@ -11,13 +14,20 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-
-import { TechnologysService } from './technology.service';
-import { CreateTechnologyDto } from '../auth/config/dtos';
-import { Roles } from '../auth/config/decorators/roles.decorator';
-import { AuthGuard, RoleGuard, UserRoleEnum } from '../auth/config';
-import { Technology } from '../database/entities';
+import {
+  AuthGuard,
+  RoleGuard,
+  UserRoleEnum,
+  Roles,
+  CreateTechnologyDto,
+} from '../auth/config';
+import {
+  ApiCreateTechnologyDocs,
+  ApiDeleteTechnologyDocs,
+  ApiFindAllTechnologyDocs,
+  ApiFindOneTechnologyDocs,
+  ApiUpdateTechnologyDocs,
+} from 'src/docs';
 
 @ApiBearerAuth()
 @ApiTags('Technology')
@@ -25,25 +35,24 @@ import { Technology } from '../database/entities';
 @UseGuards(AuthGuard)
 export class TechnologyController {
   constructor(private technologyService: TechnologysService) {}
-
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
+  @ApiCreateTechnologyDocs()
   @Post()
   async create(@Body() payload: CreateTechnologyDto) {
     return await this.technologyService.create(payload);
   }
 
   @HttpCode(HttpStatus.ACCEPTED)
+  @ApiFindAllTechnologyDocs()
   @Get()
   async findAll() {
     return await this.technologyService.findAll();
   }
 
-  @ApiResponse({
-    type: CreateTechnologyDto,
-  })
   @HttpCode(HttpStatus.ACCEPTED)
+  @ApiFindOneTechnologyDocs()
   @Get(':id')
   async getByTechnologyId(@Param('id', ParseIntPipe) id: number) {
     return await this.technologyService.getTechnologyById(id);
@@ -52,6 +61,7 @@ export class TechnologyController {
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
+  @ApiUpdateTechnologyDocs()
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -63,6 +73,7 @@ export class TechnologyController {
   @UseGuards(RoleGuard)
   @Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
+  @ApiDeleteTechnologyDocs()
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
     return await this.technologyService.delete(id);
