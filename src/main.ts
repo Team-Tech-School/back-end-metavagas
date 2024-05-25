@@ -7,6 +7,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('v1/');
   const configService = app.get(ConfigService);
 
   app.setGlobalPrefix('/v1');
