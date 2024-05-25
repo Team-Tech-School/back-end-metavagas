@@ -7,6 +7,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('v1/');
   const configService = app.get(ConfigService);
 
   const configSwagger = new DocumentBuilder()
@@ -19,7 +20,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, configSwagger);
   SwaggerModule.setup('v1/docs', app, document);
 
-  app.setGlobalPrefix('v1/');
   app.use(cors());
   app.enableCors({
     origin: 'http://localhost:5173',
