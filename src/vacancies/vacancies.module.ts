@@ -1,8 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
-import { VacancyService } from './vacancy.service';
-import { VacancyController } from './vacancy.controller';
+import { VacancyService } from './vacancies.service';
+import { VacancyController } from './vacancies.controller';
 import { Vacancy } from '../database/entities';
 
 @Global()

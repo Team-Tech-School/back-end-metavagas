@@ -4,7 +4,6 @@ import {
   TypeOrmModuleOptions,
 } from '@nestjs/typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-
 import { User, Vacancy, Technology, Company } from './entities';
 
 export default <TypeOrmModuleAsyncOptions>{

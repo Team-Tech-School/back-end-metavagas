@@ -11,9 +11,9 @@ import { Repository } from 'typeorm';
 
 import { Technology, Vacancy } from '../database/entities';
 import { CreateVacancyDto } from '../auth/config';
-import { CompanyService } from '../company/company.service';
-import { UsersService } from '../user';
-import { TechnologysService } from '../technology/technology.service';
+import { CompanyService } from '../companies/companies.service';
+import { UsersService } from '../users';
+import { TechnologysService } from '../technologies/technologies.service';
 
 @Injectable()
 export class VacancyService {

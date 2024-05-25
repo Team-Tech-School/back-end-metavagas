@@ -1,5 +1,5 @@
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { VacancyService } from './vacancy.service';
+import { VacancyService } from './vacancies.service';
 import {
   Controller,
   Get,
@@ -31,7 +31,7 @@ import {
   ApiQueryVacanciesDocs,
 } from 'src/docs';
 
-@ApiTags('Vacancy')
+@ApiTags('Vacancies')
 @Controller('vacancy')
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}

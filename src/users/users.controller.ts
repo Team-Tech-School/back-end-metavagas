@@ -1,5 +1,5 @@
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { UsersService } from './user.service';
+import { UsersService } from './users.service';
 import { User } from '../database/entities/index';
 import {
   Body,
@@ -30,7 +30,7 @@ import {
 } from '../docs';
 
 @ApiBearerAuth()
-@ApiTags('User')
+@ApiTags('Users')
 @Controller('user')
 @UseGuards(AuthGuard)
 export class UsersController {

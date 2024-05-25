@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { CompanyService } from './company.service';
+import { CompanyService } from './companies.service';
 import {
   CompanyMock,
   CreateCompanyMock,
