@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { Technology, Vacancy } from '../database/entities';
 import { CreateVacancyDto } from '../auth/config';
 import { CompanyService } from '../companies/companies.service';
@@ -118,7 +117,6 @@ export class VacancyService {
         advertiser: data.advertiser.name,
       };
     } catch (error) {
-      console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
