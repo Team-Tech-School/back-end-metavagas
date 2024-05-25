@@ -1,5 +1,5 @@
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { TechnologysService } from './technology.service';
+import { TechnologysService } from './technologies.service';
 import { Technology } from '../database/entities';
 import {
   Controller,

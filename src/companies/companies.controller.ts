@@ -1,5 +1,5 @@
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CompanyService } from './company.service';
+import { CompanyService } from './companies.service';
 import {
   Controller,
   Post,
@@ -29,7 +29,7 @@ import {
 } from '../docs';
 
 @ApiBearerAuth()
-@ApiTags('Company')
+@ApiTags('Companies')
 @Controller('company')
 @UseGuards(AuthGuard)
 export class CompanyController {

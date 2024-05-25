@@ -1,5 +1,5 @@
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { VacancyService } from './vacancy.service';
+import { VacancyService } from './vacancies.service';
 import {
   Controller,
   Get,
@@ -31,13 +31,13 @@ import {
   ApiQueryVacanciesDocs,
 } from 'src/docs';
 
-@ApiTags('Vacancy')
+@ApiTags('Vacancies')
 @Controller('vacancy')
 export class VacancyController {
   constructor(private readonly vacancyService: VacancyService) {}
   @ApiGetVacanciesDocs()
   @ApiQueryVacanciesDocs()
-  @Get()
+  @Get('/public')
   async getAllVacanciesPublic(
     @Query('tecName') tecName?: string,
     @Query('vacancyRole') vacancyRole?: string,
@@ -66,7 +66,7 @@ export class VacancyController {
   @UseGuards(AuthGuard)
   @ApiGetVacanciesDocs()
   @ApiQueryVacanciesDocs()
-  @Get('vacancies')
+  @Get('/private')
   async findAllVacancies(
     @Query('tecName') tecName?: string,
     @Query('vacancyRole') vacancyRole?: string,

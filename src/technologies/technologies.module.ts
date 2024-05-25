@@ -1,8 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { TechnologysService } from './technology.service';
-import { TechnologyController } from './technology.controller';
+import { TechnologysService } from './technologies.service';
+import { TechnologyController } from './technologies.controller';
 import { Technology } from '../database/entities';
 
 @Global()
