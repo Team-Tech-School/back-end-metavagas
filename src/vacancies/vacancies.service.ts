@@ -31,28 +31,29 @@ export class VacancyService {
           `A vacancy with this name: ${data.vacancyRole} already exists.`,
         );
       }
+      const company = await this.companyService.idPicker(+data.companyId);
+      const advertiser = await this.advertiserService.getUserById(
+        +data.advertiserId,
+      );
 
-      try {
-        await this.companyService.idPicker(+data.companyId);
-      } catch (error) {
-        throw new BadRequestException(
-          `A company with this id: ${data.companyId} does not exist.`,
-        );
+      if (!company || !advertiser) {
+        throw new Error('Invalid company or advertiser');
       }
 
-      try {
-        await this.advertiserService.getUserById(+data.advertiserId);
-      } catch (error) {
-        throw new BadRequestException(
-          `ID: ${data.advertiserId} advertiser does not exist.`,
-        );
-      }
-
-      const newVacancy = this.vacancyRepository.create(data);
+      const newVacancy = this.vacancyRepository.create({
+        vacancyRole: data.vacancyRole,
+        wage: data.wage,
+        location: data.location,
+        vacancyType: data.vacancyType,
+        vacancyDescription: data.vacancyDescription,
+        level: data.level,
+        company: company,
+        advertiser: advertiser,
+      });
 
       await this.vacancyRepository.save(newVacancy);
 
-      return newVacancy;
+      return await this.getVacancyById(newVacancy.id);
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, error.status);
@@ -84,24 +85,28 @@ export class VacancyService {
     }
   }
 
-  async getVacancyRelations(id: number): Promise<Vacancy> {
-    return await this.vacancyRepository.findOne({
-      where: { id },
-      select: {
-        id: true,
-        vacancyRole: true,
-        wage: true,
-        location: true,
-        vacancyType: true,
-        vacancyDescription: true,
-        level: true,
-      },
-      relations: ['company', 'advertiser'],
-    });
+  async getVacancyRelationsName(id: number) {
+    const data = await this.getVacanciesRelations(id);
+
+    return {
+      id: data.id,
+      vacancyRole: data.vacancyRole,
+      wage: data.wage,
+      location: data.location,
+      vacancyType: data.vacancyType,
+      vacancyDescription: data.vacancyDescription,
+      level: data.level,
+      createAt: data.createAt,
+      updateAt: data.updateAt,
+      deleteAt: data.deleteAt,
+      company: data.company.name,
+      advertiser: data.advertiser.name,
+    };
   }
-  async getVacancyById(id: number) {
+
+  async getVacanciesRelations(id: number) {
     try {
-      const vacancy = await this.getVacancyRelations(id);
+      const vacancy = await this.getVacancyById(id);
 
       if (!vacancy) {
         throw new NotFoundException(`vacancy not located.`);
@@ -113,12 +118,21 @@ export class VacancyService {
         .getOne();
       return {
         ...vacancy,
-        company: data.company.name,
-        advertiser: data.advertiser.name,
+        company: data.company,
+        advertiser: data.advertiser,
       };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+  async getVacancyById(id: number) {
+    return await this.vacancyRepository.findOne({
+      where: { id },
+      relations: {
+        company: true,
+        advertiser: true,
+      },
+    });
   }
 
   async delete(id: number) {
@@ -202,6 +216,7 @@ export class VacancyService {
     // Executar a consulta para obter as vagas
 
     let [vacancies, total] = await query
+
       .skip((page - 1) * limit)
       .take(limit)
       .getManyAndCount();
@@ -224,7 +239,10 @@ export class VacancyService {
         }
       });
 
-      return { ...vacancy, technologies: mappedTechnologies };
+      return {
+        ...vacancy,
+        technologies: mappedTechnologies,
+      };
     });
 
     return {

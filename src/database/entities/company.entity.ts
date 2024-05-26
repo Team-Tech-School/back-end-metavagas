@@ -47,8 +47,7 @@ export class Company {
   deleteAt: Date;
 
   @OneToMany(() => Vacancy, (vacancy) => vacancy.company)
-  @JoinColumn()
-  vacancy: Vacancy;
+  vacancies: Vacancy[];
 
   @BeforeInsert()
   @BeforeUpdate()

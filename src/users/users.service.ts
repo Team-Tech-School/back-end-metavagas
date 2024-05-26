@@ -126,7 +126,7 @@ export class UsersService {
           password: false,
         },
         relations: {
-          vacancy: true,
+          vacancies: true,
         },
       });
 
