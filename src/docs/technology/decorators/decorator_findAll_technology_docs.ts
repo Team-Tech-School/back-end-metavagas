@@ -6,7 +6,7 @@ export function ApiFindAllTechnologyDocs() {
   return applyDecorators(
     ApiResponse({
       type: TechnologyExtendsDtoDocs,
-      status: 201,
+      status: 200,
       description: 'Get a technology with success.',
       isArray: true,
     }),

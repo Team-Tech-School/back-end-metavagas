@@ -9,7 +9,7 @@ export function ApiUpdateCompanyDocs() {
     }),
     ApiResponse({
       type: CompanyDtoDoc,
-      status: 201,
+      status: 200,
       description: 'Successfully Update Company.',
     }),
     ApiResponse({

@@ -6,7 +6,7 @@ export function ApiFindAllUserDocs() {
   return applyDecorators(
     ApiResponse({
       type: UserCreatedDoc,
-      status: 201,
+      status: 200,
       description: 'Acessed successfully.',
       isArray: true,
     }),

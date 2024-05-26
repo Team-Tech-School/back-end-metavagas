@@ -6,7 +6,7 @@ export function ApiFindAllCompanyDocs() {
   return applyDecorators(
     ApiResponse({
       type: CompanyDtoDoc,
-      status: 201,
+      status: 200,
       description: 'Get All Companies.',
     }),
     ApiOperation({
