@@ -1,11 +1,11 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { vacancyTechnologyDtoDocs } from '../dto';
+import { getIdvacacyDto } from '../dto';
 
 export function ApiGetByIdVacanciesDocs() {
   return applyDecorators(
     ApiResponse({
-      type: vacancyTechnologyDtoDocs,
+      type: getIdvacacyDto,
       status: 200,
       description: 'Get vacancy Successfully.',
       isArray: true,
