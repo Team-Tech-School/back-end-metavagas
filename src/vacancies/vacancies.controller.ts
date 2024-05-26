@@ -117,7 +117,7 @@ export class VacancyController {
   @ApiGetByIdVacanciesDocs()
   @Get(':id')
   async getByVacancyId(@Param('id', ParseIntPipe) id: number) {
-    return await this.vacancyService.getVacancyById(id);
+    return await this.vacancyService.getVacancyRelationsName(id);
   }
 
   @ApiBearerAuth()

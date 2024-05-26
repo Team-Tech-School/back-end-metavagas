@@ -7,7 +7,7 @@ export function ApiFindOneUserDocs() {
     ApiResponse({
       type: UserCreatedDoc,
       isArray: true,
-      status: 201,
+      status: 200,
       description: 'Acessed successfully.',
     }),
     ApiResponse({

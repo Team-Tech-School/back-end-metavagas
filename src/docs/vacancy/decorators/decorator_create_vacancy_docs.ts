@@ -10,7 +10,7 @@ export function ApiCreateVacanciesDocs() {
     }),
     ApiResponse({
       type: vacancyDtoDocs,
-      status: 201,
+      status: 200,
       description: 'Created vacancy Successfully.',
       isArray: true,
     }),

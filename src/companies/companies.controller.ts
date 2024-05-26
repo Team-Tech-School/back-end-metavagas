@@ -36,7 +36,7 @@ export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @UseGuards(RoleGuard)
-  @Roles(UserRoleEnum.admin)
+  // @Roles(UserRoleEnum.admin)@Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiCreateCompanyDocs()
   @Post()

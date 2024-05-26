@@ -9,7 +9,7 @@ export function ApiPathVacanciesDocs() {
     }),
     ApiResponse({
       type: vacancyDtoDocs,
-      status: 201,
+      status: 200,
       description: 'Updated vacancy Successfully.',
       isArray: true,
     }),

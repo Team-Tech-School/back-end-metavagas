@@ -9,7 +9,7 @@ export function ApiUpdateUserDocs() {
     }),
     ApiResponse({
       type: UserCreatedDoc,
-      status: 201,
+      status: 200,
       isArray: true,
       description: 'User successfully updated.',
     }),

@@ -59,15 +59,14 @@ export class CompanyService {
       if (name) {
         return await this.companyRepository.find({
           where: { name },
-          relations: { vacancy: true },
+          relations: { vacancies: true },
         });
       }
 
       return await this.companyRepository.find({
-        relations: { vacancy: true },
+        relations: { vacancies: true },
       });
     } catch (error) {
-      console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
@@ -76,7 +75,7 @@ export class CompanyService {
     try {
       const company = await this.companyRepository.findOne({
         where: { id },
-        relations: { vacancy: true },
+        relations: { vacancies: true },
       });
 
       if (!company) {
@@ -85,7 +84,6 @@ export class CompanyService {
 
       return company;
     } catch (error) {
-      console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }

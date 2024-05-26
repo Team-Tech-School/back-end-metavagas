@@ -7,9 +7,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
-import { CreateTechnologyDto } from '../auth/config/dtos/technologies/create-technology.dto';
-import { Technology } from 'src/database/entities';
+import { CreateTechnologyDto } from '../auth/config';
+import { Technology } from '../database/entities';
 
 @Injectable()
 export class TechnologysService {

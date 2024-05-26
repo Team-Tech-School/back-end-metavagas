@@ -10,7 +10,7 @@ export function ApiGetVacanciesDocs() {
     }),
     ApiResponse({
       type: vacancyTechnologyDtoDocs,
-      status: 201,
+      status: 200,
       description: 'Get all Successfully.',
       isArray: true,
     }),

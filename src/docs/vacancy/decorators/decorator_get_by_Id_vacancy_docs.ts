@@ -6,7 +6,7 @@ export function ApiGetByIdVacanciesDocs() {
   return applyDecorators(
     ApiResponse({
       type: vacancyTechnologyDtoDocs,
-      status: 201,
+      status: 200,
       description: 'Get vacancy Successfully.',
       isArray: true,
     }),

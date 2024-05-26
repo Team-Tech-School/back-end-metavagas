@@ -69,7 +69,7 @@ export class CreateVacancyDtoDocs {
     },
     description: 'Vacancy company id.',
   })
-  companyId: string;
+  company: string;
 
   @ApiProperty({
     type: UserCreatedDoc,
@@ -86,5 +86,5 @@ export class CreateVacancyDtoDocs {
     },
     description: 'Vacancy advertiser id.',
   })
-  advertiserId: string;
+  advertiser: string;
 }
