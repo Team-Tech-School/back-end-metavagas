@@ -63,7 +63,7 @@ describe('VacancyService', () => {
   describe('getVacancyRelations', () => {
     it('should return a vacancy', async () => {
       // act
-      const vacancy = await service.getVacancyRelations(1);
+      const vacancy = await service.getVacanciesRelations(1);
 
       // assert
       expect(vacancy).toEqual(VacancyMock);
