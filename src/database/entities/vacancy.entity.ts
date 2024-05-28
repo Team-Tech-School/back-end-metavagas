@@ -54,6 +54,6 @@ export class Vacancy {
   advertiser: User;
 
   @ManyToMany(() => Technology, (technology) => technology.vacancies)
-  @JoinTable()
+  @JoinTable({ name: 'vacancies_technologies' })
   technologies: Technology[];
 }
