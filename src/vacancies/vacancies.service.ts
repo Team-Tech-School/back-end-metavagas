@@ -172,15 +172,6 @@ export class VacancyService {
       .leftJoinAndSelect('vacancy.company', 'company')
       .leftJoinAndSelect('vacancy.advertiser', 'advertiser');
 
-    const hasFilters =
-      tecName ||
-      vacancyRole ||
-      level ||
-      minSalary ||
-      maxSalary ||
-      vacancyType ||
-      location;
-
     if (vacancyRole) {
       query.andWhere('vacancy.vacancyRole ILIKE :vacancyRole', {
         vacancyRole: `%${vacancyRole}%`,
@@ -217,9 +208,7 @@ export class VacancyService {
     let technologies: Technology[] = [];
     if (tecName) {
       technologies = await this.technologyService.getTecnologies(tecName);
-    }
-
-    if (!hasFilters) {
+    } else {
       technologies = await this.technologyService.findAll();
     }
 

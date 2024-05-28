@@ -98,7 +98,7 @@ export class TechnologysService {
   }
 
   async getTecnologies(tecName: string): Promise<Technology[]> {
-    const tecArray = tecName.split('&').map((name) => name.trim());
+    const tecArray = tecName.split(',').map((name) => name.trim());
     const tech = await this.technologyRepository.find();
     const resultados = tech.filter((tec) =>
       tecArray.some(
