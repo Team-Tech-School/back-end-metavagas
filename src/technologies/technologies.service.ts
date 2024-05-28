@@ -97,4 +97,15 @@ export class TechnologysService {
       throw new HttpException(error.message, error.status);
     }
   }
+
+  async getTecnologies(tecName: string): Promise<Technology[]> {
+    const tecArray = tecName.split('&');
+    const tech = await this.technologyRepository.find();
+    const resultados = tech.filter((tec) =>
+      tecArray.some(
+        (tecName) => tec.tecName.toLowerCase() === tecName.toLowerCase(),
+      ),
+    );
+    return resultados;
+  }
 }

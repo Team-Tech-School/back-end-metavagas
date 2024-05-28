@@ -170,13 +170,14 @@ export class VacancyService {
       .leftJoinAndSelect('vacancy.company', 'company')
       .leftJoinAndSelect('vacancy.advertiser', 'advertiser');
 
-    if (tecName) {
-      const lowerTecName = tecName.toLowerCase();
-      query.andWhere(
-        '(LOWER(vacancy.vacancyRole) LIKE :lowerTecName OR LOWER(vacancy.vacancyDescription) LIKE :lowerTecName)',
-        { lowerTecName: `%${lowerTecName}%` },
-      );
-    }
+    const hasFilters =
+      tecName ||
+      vacancyRole ||
+      level ||
+      minSalary ||
+      maxSalary ||
+      vacancyType ||
+      location;
 
     if (vacancyRole) {
       query.andWhere('vacancy.vacancyRole ILIKE :vacancyRole', {
@@ -210,16 +211,33 @@ export class VacancyService {
       });
     }
 
-    // Carregar todas as tecnologias
-    const technologies = await this.technologyService.findAll();
+    // Obter as tecnologias com base no tecName, se fornecido
+    let technologies: Technology[] = [];
+    if (tecName) {
+      technologies = await this.technologyService.getTecnologies(tecName);
+    }
+
+    if (technologies.length > 0) {
+      const techFilters = technologies
+        .map((technology) => {
+          const lowerTecName = technology.tecName.toLowerCase();
+          return `(LOWER(vacancy.vacancyRole) LIKE '%${lowerTecName}%' OR LOWER(vacancy.vacancyDescription) LIKE '%${lowerTecName}%')`;
+        })
+        .join(' OR ');
+
+      query.andWhere(`(${techFilters})`);
+    }
 
     // Executar a consulta para obter as vagas
-
     let [vacancies, total] = await query
-
       .skip((page - 1) * limit)
       .take(limit)
       .getManyAndCount();
+
+    // Se nenhum filtro foi aplicado, carregar todas as tecnologias
+    if (!hasFilters) {
+      technologies = await this.technologyService.findAll();
+    }
 
     // Mapear as tecnologias para cada vaga
     vacancies = vacancies.map((vacancy) => {
