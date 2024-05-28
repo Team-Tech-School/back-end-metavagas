@@ -35,7 +35,6 @@ export class TechnologysService {
     try {
       return await this.technologyRepository.find();
     } catch (error) {
-      console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
@@ -99,13 +98,39 @@ export class TechnologysService {
   }
 
   async getTecnologies(tecName: string): Promise<Technology[]> {
-    const tecArray = tecName.split('&');
+    const tecArray = tecName.split('&').map((name) => name.trim());
     const tech = await this.technologyRepository.find();
     const resultados = tech.filter((tec) =>
       tecArray.some(
         (tecName) => tec.tecName.toLowerCase() === tecName.toLowerCase(),
       ),
     );
+    console.log(resultados);
     return resultados;
   }
+
+  // async getTecnologies(tecNames: string[]): Promise<Technology[]> {
+  //   const tech = await this.technologyRepository.find();
+  //   const resultados = tech.filter((tec) =>
+  //     tecNames.some((name) =>
+  //       tec.tecName.toLowerCase().includes(name.toLowerCase()),
+  //     ),
+  //   );
+  //   return resultados;
+  // }
+
+  // async getTecnologies(tecName: string | string[]): Promise<Technology[]> {
+  //   // Converter para array se for uma string
+  //   const tecArray = Array.isArray(tecName)
+  //     ? tecName
+  //     : tecName.split(',').map((name) => name.trim());
+
+  //   const tech = await this.technologyRepository.find();
+  //   const resultados = tech.filter((tec) =>
+  //     tecArray.some((name) => tec.tecName.toLowerCase() === name.toLowerCase()),
+  //   );
+  //   console.log(resultados);
+
+  //   return resultados;
+  // }
 }
