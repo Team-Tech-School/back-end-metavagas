@@ -6,6 +6,7 @@ import {
   companyServiceMock,
   technologyRepositoryMock,
   usersServiceMock,
+  vacanciesListMock,
   vacancyRepositoryMock,
 } from '../../testing';
 import { TechnologysService } from '../technologies/technologies.service';
@@ -19,8 +20,8 @@ describe('VacancyService', () => {
         VacancyService,
         TechnologysService,
         vacancyRepositoryMock,
-        companyServiceMock,
         usersServiceMock,
+        companyServiceMock,
         technologyRepositoryMock,
       ],
     }).compile();

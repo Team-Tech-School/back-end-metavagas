@@ -13,7 +13,6 @@ import { CreateVacancyDto } from '../auth/config';
 import { CompanyService } from '../companies/companies.service';
 import { UsersService } from '../users';
 import { TechnologysService } from '../technologies/technologies.service';
-import { vacanciesListMock } from '../../testing';
 
 @Injectable()
 export class VacancyService {
@@ -165,8 +164,6 @@ export class VacancyService {
     page: number;
     total: number;
   }> {
-    console.log(tecName);
-
     const query = this.vacancyRepository
       .createQueryBuilder('vacancy')
       .orderBy('vacancy.createAt', 'DESC')
@@ -216,7 +213,6 @@ export class VacancyService {
     if (technologies.length > 0) {
       const techFilters = technologies
         .map((technology) => {
-          console.log('tecName:', technology);
           const lowerTecName = technology.tecName.toLowerCase();
           return `(LOWER(vacancy.vacancyRole) LIKE '%${lowerTecName}%' OR LOWER(vacancy.vacancyDescription) LIKE '%${lowerTecName}%')`;
         })
@@ -224,15 +220,11 @@ export class VacancyService {
 
       query.andWhere(`(${techFilters})`);
     }
-    console.log('console:', vacanciesListMock);
     // Executar a consulta para obter as vagas
     let [vacancies, total] = await query
       .skip((page - 1) * limit)
       .take(limit)
       .getManyAndCount();
-
-    console.log('console:', vacancies);
-    console.log('console:', total);
 
     // Filtrar vagas para garantir que contenham as tecnologias especificadas
     vacancies = vacancies.filter((vacancy) => {

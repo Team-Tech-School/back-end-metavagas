@@ -17,7 +17,6 @@ export const VacancyMock = {
       updateAt: new Date('2024-05-25T05:47:00.812Z'),
       deleteAt: null,
     },
-    { tecName: 'typescript' },
   ],
   createdAt: new Date(),
   updatedAt: new Date(),
