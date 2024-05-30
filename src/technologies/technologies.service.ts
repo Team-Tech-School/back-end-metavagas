@@ -17,17 +17,20 @@ export class TechnologysService {
     private readonly technologyRepository: Repository<Technology>,
   ) {}
 
-  async create(payload: CreateTechnologyDto) {
+  async create(payload: CreateTechnologyDto): Promise<Technology> {
     try {
+      if (await this.getByName(payload.tecName)) {
+        throw new BadRequestException(
+          `A technology with this name: ${payload.tecName} already exists.`,
+        );
+      }
       const newTechnology = this.technologyRepository.create(payload);
-
+      console.log('teste:', newTechnology);
       await this.technologyRepository.save(newTechnology);
 
-      return newTechnology;
+      return await this.getTechnologyById(newTechnology.id);
     } catch (error) {
-      throw new BadRequestException(
-        `A technology with this name: ${payload.tecName} already exists.`,
-      );
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -105,32 +108,6 @@ export class TechnologysService {
         (tecName) => tec.tecName.toLowerCase() === tecName.toLowerCase(),
       ),
     );
-    console.log(resultados);
     return resultados;
   }
-
-  // async getTecnologies(tecNames: string[]): Promise<Technology[]> {
-  //   const tech = await this.technologyRepository.find();
-  //   const resultados = tech.filter((tec) =>
-  //     tecNames.some((name) =>
-  //       tec.tecName.toLowerCase().includes(name.toLowerCase()),
-  //     ),
-  //   );
-  //   return resultados;
-  // }
-
-  // async getTecnologies(tecName: string | string[]): Promise<Technology[]> {
-  //   // Converter para array se for uma string
-  //   const tecArray = Array.isArray(tecName)
-  //     ? tecName
-  //     : tecName.split(',').map((name) => name.trim());
-
-  //   const tech = await this.technologyRepository.find();
-  //   const resultados = tech.filter((tec) =>
-  //     tecArray.some((name) => tec.tecName.toLowerCase() === name.toLowerCase()),
-  //   );
-  //   console.log(resultados);
-
-  //   return resultados;
-  // }
 }

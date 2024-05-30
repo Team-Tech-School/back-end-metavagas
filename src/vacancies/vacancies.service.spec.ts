@@ -4,9 +4,8 @@ import {
   CreateVacancyMock,
   VacancyMock,
   companyServiceMock,
-  mockTechnologyRepository,
+  technologyRepositoryMock,
   usersServiceMock,
-  vacanciesListMock,
   vacancyRepositoryMock,
 } from '../../testing';
 import { TechnologysService } from '../technologies/technologies.service';
@@ -22,7 +21,7 @@ describe('VacancyService', () => {
         vacancyRepositoryMock,
         companyServiceMock,
         usersServiceMock,
-        mockTechnologyRepository,
+        technologyRepositoryMock,
       ],
     }).compile();
 
@@ -101,12 +100,22 @@ describe('VacancyService', () => {
   });
 
   describe('searchVacancies', () => {
-    it('should list all vacancies', async () => {
+    it('should list all vacancies by technology', async () => {
       // act
-      const vacancies = await service.searchVacancies();
+      const vacancies = await service.searchVacancies(
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        1,
+        10,
+      );
 
       // assert
-      expect(vacancies).toEqual(vacanciesListMock);
+      expect(vacancies.vacancies).toEqual([VacancyMock]);
     });
   });
 });

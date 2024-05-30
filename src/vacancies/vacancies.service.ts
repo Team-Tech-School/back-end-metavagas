@@ -13,6 +13,7 @@ import { CreateVacancyDto } from '../auth/config';
 import { CompanyService } from '../companies/companies.service';
 import { UsersService } from '../users';
 import { TechnologysService } from '../technologies/technologies.service';
+import { vacanciesListMock } from '../../testing';
 
 @Injectable()
 export class VacancyService {
@@ -215,6 +216,7 @@ export class VacancyService {
     if (technologies.length > 0) {
       const techFilters = technologies
         .map((technology) => {
+          console.log('tecName:', technology);
           const lowerTecName = technology.tecName.toLowerCase();
           return `(LOWER(vacancy.vacancyRole) LIKE '%${lowerTecName}%' OR LOWER(vacancy.vacancyDescription) LIKE '%${lowerTecName}%')`;
         })
@@ -222,12 +224,15 @@ export class VacancyService {
 
       query.andWhere(`(${techFilters})`);
     }
-
+    console.log('console:', vacanciesListMock);
     // Executar a consulta para obter as vagas
     let [vacancies, total] = await query
       .skip((page - 1) * limit)
       .take(limit)
       .getManyAndCount();
+
+    console.log('console:', vacancies);
+    console.log('console:', total);
 
     // Filtrar vagas para garantir que contenham as tecnologias especificadas
     vacancies = vacancies.filter((vacancy) => {
@@ -274,131 +279,4 @@ export class VacancyService {
       total: total,
     };
   }
-
-  // async searchVacancies(
-  //   tecName?: string | string[], // Pode ser string ou array de strings
-  //   vacancyRole?: string,
-  //   level?: string,
-  //   minSalary?: number,
-  //   maxSalary?: number,
-  //   vacancyType?: string,
-  //   location?: string,
-  //   page: number = 1,
-  //   limit: number = 10,
-  // ): Promise<{
-  //   vacancies: Vacancy[];
-  //   pageSize: number;
-  //   page: number;
-  //   total: number;
-  // }> {
-  //   const query = this.vacancyRepository
-  //     .createQueryBuilder('vacancy')
-  //     .orderBy('vacancy.createAt', 'DESC')
-  //     .leftJoinAndSelect('vacancy.company', 'company')
-  //     .leftJoinAndSelect('vacancy.advertiser', 'advertiser');
-
-  // const hasFilters =
-  //   tecName ||
-  //   vacancyRole ||
-  //   level ||
-  //   minSalary ||
-  //   maxSalary ||
-  //   vacancyType ||
-  //   location;
-
-  //   if (vacancyRole) {
-  //     query.andWhere('vacancy.vacancyRole ILIKE :vacancyRole', {
-  //       vacancyRole: `%${vacancyRole}%`,
-  //     });
-  //   }
-
-  //   if (level) {
-  //     query.andWhere('vacancy.level ILIKE :level', {
-  //       level: `%${level}%`,
-  //     });
-  //   }
-
-  //   if (minSalary) {
-  //     query.andWhere('vacancy.wage >= :minSalary', { minSalary });
-  //   }
-
-  //   if (maxSalary) {
-  //     query.andWhere('vacancy.wage <= :maxSalary', { maxSalary });
-  //   }
-
-  //   if (vacancyType) {
-  //     query.andWhere('vacancy.vacancyType LIKE :vacancyType', {
-  //       vacancyType: `%${vacancyType}%`,
-  //     });
-  //   }
-
-  //   if (location) {
-  //     query.andWhere('vacancy.location ILIKE :location', {
-  //       location: `%${location}%`,
-  //     });
-  //   }
-
-  //   // Obter as tecnologias com base no tecName, se fornecido
-  //   // Obter as tecnologias com base no tecName, se fornecido
-  //   // Obter as tecnologias com base no tecName, se fornecido
-  //   let technologies: Technology[] = [];
-  //   if (tecName) {
-  //     // Garantir que tecName seja um array
-  //     const tecNamesArray = Array.isArray(tecName) ? tecName : [tecName];
-  //     technologies = await this.technologyService.getTecnologies(tecNamesArray);
-  //   }
-
-  //   if (technologies.length > 0) {
-  //     const techFilters = technologies
-  //       .map((technology) => {
-  //         const lowerTecName = technology.tecName.toLowerCase();
-  //         return `(LOWER(vacancy.vacancyRole) LIKE '%${lowerTecName}%' OR LOWER(vacancy.vacancyDescription) LIKE '%${lowerTecName}%')`;
-  //       })
-  //       .join(' OR ');
-
-  //     query.andWhere(`(${techFilters})`);
-  //   }
-
-  //   // Executar a consulta para obter as vagas
-  //   let [vacancies, total] = await query
-  //     .skip((page - 1) * limit)
-  //     .take(limit)
-  //     .getManyAndCount();
-
-  //   // Se nenhum filtro foi aplicado, carregar todas as tecnologias
-  // if (!hasFilters) {
-  //   technologies = await this.technologyService.findAll();
-  // }
-
-  //   // Mapear as tecnologias para cada vaga
-  //   vacancies = vacancies.map((vacancy) => {
-  //     const mappedTechnologies: Technology[] = [];
-  //     const lowerVacancyDescription = vacancy.vacancyDescription.toLowerCase();
-  //     const lowerVacancyRole = vacancy.vacancyRole.toLowerCase();
-
-  //     technologies.forEach((technology) => {
-  //       const lowerTechName = technology.tecName.toLowerCase();
-  //       const regex = new RegExp(`\\b${lowerTechName}\\b`, 'i'); // Cria uma regex para buscar a tecnologia como palavra completa
-
-  //       if (
-  //         regex.test(lowerVacancyDescription) ||
-  //         regex.test(lowerVacancyRole)
-  //       ) {
-  //         mappedTechnologies.push(technology);
-  //       }
-  //     });
-
-  //     return {
-  //       ...vacancy,
-  //       technologies: mappedTechnologies,
-  //     };
-  //   });
-
-  //   return {
-  //     vacancies: vacancies,
-  //     page: +page,
-  //     pageSize: +limit,
-  //     total: total,
-  //   };
-  // }
 }

@@ -6,7 +6,7 @@ export const userRepositoryMock = {
   provide: getRepositoryToken(User),
   useValue: {
     exists: jest.fn().mockResolvedValue(false),
-    create: jest.fn().mockResolvedValue(userMock),
+    create: jest.fn().mockReturnValue(userMock),
     save: jest.fn(),
     findOne: jest.fn().mockResolvedValue(userMock),
     findOneOrFail: jest.fn().mockResolvedValue(userMock),
