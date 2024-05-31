@@ -36,12 +36,6 @@ export class Vacancy {
   @Column({ type: 'varchar', length: 64, nullable: false })
   level: string;
 
-  @Column({ nullable: false })
-  companyId: string;
-
-  @Column({ nullable: false })
-  advertiserId: string;
-
   @CreateDateColumn({ default: new Date() })
   createAt: Date;
 
@@ -51,15 +45,15 @@ export class Vacancy {
   @DeleteDateColumn()
   deleteAt: Date;
 
-  @ManyToOne(() => Company, (company) => company.vacancy)
-  @JoinColumn()
+  @ManyToOne(() => Company, (company) => company.vacancies, { nullable: false })
+  @JoinColumn({ name: 'companyId' })
   company: Company;
 
-  @ManyToOne(() => User, (user) => user.vacancy)
-  @JoinColumn()
+  @ManyToOne(() => User, (user) => user.vacancies, { nullable: false })
+  @JoinColumn({ name: 'advertiserId' })
   advertiser: User;
 
   @ManyToMany(() => Technology, (technology) => technology.vacancies)
-  @JoinTable()
+  @JoinTable({ name: 'vacancies_technologies' })
   technologies: Technology[];
 }

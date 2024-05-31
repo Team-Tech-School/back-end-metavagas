@@ -68,7 +68,7 @@ export class VacancyTechnologyDtoDocs {
     },
     description: 'Vacancy company id.',
   })
-  companyId: string;
+  company: string;
 
   @ApiProperty({
     type: UserCreatedDoc,
@@ -77,7 +77,6 @@ export class VacancyTechnologyDtoDocs {
       id: 1,
       name: 'Francisco',
       email: 'example@gmail.com',
-      password: '12345',
       role: 'advertiser',
       createdAt: '2024-05-17T02:27:38.736Z',
       updatedAt: '2024-05-17T02:27:38.736Z',
@@ -85,7 +84,7 @@ export class VacancyTechnologyDtoDocs {
     },
     description: 'Vacancy advertiser id.',
   })
-  advertiserId: string;
+  advertiser: string;
 
   @ApiProperty({
     type: UpdateTechnologyDto,
@@ -100,5 +99,5 @@ export class VacancyTechnologyDtoDocs {
     },
     description: 'Vacancy technology id.',
   })
-  technologyId: string;
+  technologies: string;
 }

@@ -125,11 +125,10 @@ export class UsersService {
           password: false,
         },
         relations: {
-          vacancy: true,
+          vacancies: true,
         },
       });
 
-      console.log(user);
       return user;
     } catch (error) {
       throw new HttpException(error.message, error.status);

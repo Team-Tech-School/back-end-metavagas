@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { UsersService } from './user.service';
+import { UsersService } from './users.service';
 import { createUserMock } from '../../testing';
 import { userMock } from '../../testing';
 import { userRepositoryMock } from '../../testing';

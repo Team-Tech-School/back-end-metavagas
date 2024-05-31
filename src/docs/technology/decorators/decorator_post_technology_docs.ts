@@ -9,7 +9,7 @@ export function ApiCreateTechnologyDocs() {
     }),
     ApiResponse({
       type: TechnologyExtendsDtoDocs,
-      status: 201,
+      status: 200,
       description: 'Successfully Created Technology.',
       isArray: true,
     }),

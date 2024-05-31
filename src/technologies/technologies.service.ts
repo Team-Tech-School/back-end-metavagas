@@ -7,9 +7,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
-import { CreateTechnologyDto } from '../auth/config/dtos/technologies/create-technology.dto';
-import { Technology } from 'src/database/entities';
+import { CreateTechnologyDto } from '../auth/config';
+import { Technology } from '../database/entities';
 
 @Injectable()
 export class TechnologysService {
@@ -18,17 +17,19 @@ export class TechnologysService {
     private readonly technologyRepository: Repository<Technology>,
   ) {}
 
-  async create(payload: CreateTechnologyDto) {
+  async create(payload: CreateTechnologyDto): Promise<Technology> {
     try {
+      if (await this.getByName(payload.tecName)) {
+        throw new BadRequestException(
+          `A technology with this name: ${payload.tecName} already exists.`,
+        );
+      }
       const newTechnology = this.technologyRepository.create(payload);
-
       await this.technologyRepository.save(newTechnology);
 
-      return newTechnology;
+      return await this.getTechnologyById(newTechnology.id);
     } catch (error) {
-      throw new BadRequestException(
-        `A technology with the name "${payload.tecName}" already exists.`,
-      );
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -36,7 +37,6 @@ export class TechnologysService {
     try {
       return await this.technologyRepository.find();
     } catch (error) {
-      console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
@@ -66,7 +66,6 @@ export class TechnologysService {
 
       return technology;
     } catch (error) {
-      console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
@@ -97,5 +96,16 @@ export class TechnologysService {
       console.log(error);
       throw new HttpException(error.message, error.status);
     }
+  }
+
+  async getTecnologies(tecName: string): Promise<Technology[]> {
+    const tecArray = tecName.split(',').map((name) => name.trim());
+    const tech = await this.technologyRepository.find();
+    const resultados = tech.filter((tec) =>
+      tecArray.some(
+        (tecName) => tec.tecName.toLowerCase() === tecName.toLowerCase(),
+      ),
+    );
+    return resultados;
   }
 }

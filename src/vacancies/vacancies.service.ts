@@ -8,12 +8,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { Technology, Vacancy } from '../database/entities';
 import { CreateVacancyDto } from '../auth/config';
-import { CompanyService } from '../company/company.service';
-import { UsersService } from '../user';
-import { TechnologysService } from '../technology/technology.service';
+import { CompanyService } from '../companies/companies.service';
+import { UsersService } from '../users';
+import { TechnologysService } from '../technologies/technologies.service';
 
 @Injectable()
 export class VacancyService {
@@ -32,7 +31,12 @@ export class VacancyService {
           `A vacancy with the role "${data.vacancyRole}" already exists.`,
         );
       }
+      const company = await this.companyService.idPicker(+data.companyId);
+      const advertiser = await this.advertiserService.getUserById(
+        +data.advertiserId,
+      );
 
+<<<<<<< HEAD:src/vacancy/vacancy.service.ts
       try {
         await this.companyService.idPicker(+data.companyId);
       } catch (error) {
@@ -50,10 +54,26 @@ export class VacancyService {
       }
 
       const newVacancy = this.vacancyRepository.create(data);
+=======
+      if (!company || !advertiser) {
+        throw new Error('Invalid company or advertiser');
+      }
+
+      const newVacancy = this.vacancyRepository.create({
+        vacancyRole: data.vacancyRole,
+        wage: data.wage,
+        location: data.location,
+        vacancyType: data.vacancyType,
+        vacancyDescription: data.vacancyDescription,
+        level: data.level,
+        company: company,
+        advertiser: advertiser,
+      });
+>>>>>>> feat/activities-anderson:src/vacancies/vacancies.service.ts
 
       await this.vacancyRepository.save(newVacancy);
 
-      return newVacancy;
+      return await this.getVacancyById(newVacancy.id);
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, error.status);
@@ -85,25 +105,32 @@ export class VacancyService {
     }
   }
 
-  async getVacancyRelations(id: number): Promise<Vacancy> {
-    return await this.vacancyRepository.findOne({
-      where: { id },
-      select: {
-        id: true,
-        vacancyRole: true,
-        wage: true,
-        location: true,
-        vacancyType: true,
-        vacancyDescription: true,
-        level: true,
-      },
-      relations: ['company', 'advertiser'],
-    });
+  async getVacancyRelationsName(id: number) {
+    const data = await this.getVacanciesRelations(id);
+
+    return {
+      id: data.id,
+      vacancyRole: data.vacancyRole,
+      wage: data.wage,
+      location: data.location,
+      vacancyType: data.vacancyType,
+      vacancyDescription: data.vacancyDescription,
+      level: data.level,
+      createAt: data.createAt,
+      updateAt: data.updateAt,
+      deleteAt: data.deleteAt,
+      company: data.company.name,
+      advertiser: data.advertiser.name,
+    };
   }
 
+<<<<<<< HEAD:src/vacancy/vacancy.service.ts
   async getVacancyById(id: number) {
+=======
+  async getVacanciesRelations(id: number) {
+>>>>>>> feat/activities-anderson:src/vacancies/vacancies.service.ts
     try {
-      const vacancy = await this.getVacancyRelations(id);
+      const vacancy = await this.getVacancyById(id);
 
       if (!vacancy) {
         throw new NotFoundException(`Vacancy with ID ${id} not found.`);
@@ -115,13 +142,21 @@ export class VacancyService {
         .getOne();
       return {
         ...vacancy,
-        company: data.company.name,
-        advertiser: data.advertiser.name,
+        company: data.company,
+        advertiser: data.advertiser,
       };
     } catch (error) {
-      console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+  async getVacancyById(id: number) {
+    return await this.vacancyRepository.findOne({
+      where: { id },
+      relations: {
+        company: true,
+        advertiser: true,
+      },
+    });
   }
 
   async delete(id: number) {
@@ -159,14 +194,6 @@ export class VacancyService {
       .leftJoinAndSelect('vacancy.company', 'company')
       .leftJoinAndSelect('vacancy.advertiser', 'advertiser');
 
-    if (tecName) {
-      const lowerTecName = tecName.toLowerCase();
-      query.andWhere(
-        '(LOWER(vacancy.vacancyRole) LIKE :lowerTecName OR LOWER(vacancy.vacancyDescription) LIKE :lowerTecName)',
-        { lowerTecName: `%${lowerTecName}%` },
-      );
-    }
-
     if (vacancyRole) {
       query.andWhere('vacancy.vacancyRole ILIKE :vacancyRole', {
         vacancyRole: `%${vacancyRole}%`,
@@ -199,15 +226,43 @@ export class VacancyService {
       });
     }
 
-    // Carregar todas as tecnologias
-    const technologies = await this.technologyService.findAll();
+    // Obter as tecnologias com base no tecName
+    let technologies: Technology[] = [];
+    if (tecName) {
+      technologies = await this.technologyService.getTecnologies(tecName);
+    } else {
+      technologies = await this.technologyService.findAll();
+    }
 
+    if (technologies.length > 0) {
+      const techFilters = technologies
+        .map((technology) => {
+          const lowerTecName = technology.tecName.toLowerCase();
+          return `(LOWER(vacancy.vacancyRole) LIKE '%${lowerTecName}%' OR LOWER(vacancy.vacancyDescription) LIKE '%${lowerTecName}%')`;
+        })
+        .join(' OR ');
+
+      query.andWhere(`(${techFilters})`);
+    }
     // Executar a consulta para obter as vagas
-
     let [vacancies, total] = await query
       .skip((page - 1) * limit)
       .take(limit)
       .getManyAndCount();
+
+    // Filtrar vagas para garantir que contenham as tecnologias especificadas
+    vacancies = vacancies.filter((vacancy) => {
+      const lowerVacancyDescription = vacancy.vacancyDescription.toLowerCase();
+      const lowerVacancyRole = vacancy.vacancyRole.toLowerCase();
+
+      return technologies.some((technology) => {
+        const lowerTechName = technology.tecName.toLowerCase();
+        const regex = new RegExp(`\\b${lowerTechName}\\b`, 'i');
+        return (
+          regex.test(lowerVacancyDescription) || regex.test(lowerVacancyRole)
+        );
+      });
+    });
 
     // Mapear as tecnologias para cada vaga
     vacancies = vacancies.map((vacancy) => {
@@ -227,7 +282,10 @@ export class VacancyService {
         }
       });
 
-      return { ...vacancy, technologies: mappedTechnologies };
+      return {
+        ...vacancy,
+        technologies: mappedTechnologies,
+      };
     });
 
     return {

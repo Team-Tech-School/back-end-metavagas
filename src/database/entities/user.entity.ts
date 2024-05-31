@@ -48,7 +48,7 @@ export class User {
 
   @OneToMany(() => Vacancy, (vacancy) => vacancy.advertiser)
   @JoinColumn()
-  vacancy: Vacancy;
+  vacancies: Vacancy[];
 
   @BeforeInsert()
   @BeforeUpdate()

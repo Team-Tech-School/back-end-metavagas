@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { CompanyService } from './company.service';
+import { CompanyService } from './companies.service';
 import {
   CompanyMock,
   CreateCompanyMock,
@@ -42,6 +42,14 @@ describe('CompanyService', () => {
       const companies = await companyService.findAll();
 
       expect(companies).toEqual(CompanyMock);
+    });
+  });
+
+  describe('Find One', () => {
+    it('Should return a company', async () => {
+      const company = await companyService.idPicker(1);
+
+      expect(company).toEqual(CompanyMock);
     });
   });
 });

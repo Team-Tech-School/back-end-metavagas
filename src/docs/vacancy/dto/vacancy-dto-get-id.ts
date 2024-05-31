@@ -1,8 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserCreatedDoc } from '../../users/dto';
-import { CompanyDtoDoc } from '../../company/dto';
 
-export class CreateVacancyDtoDocs {
+export class getIdvacacyDto {
+  @ApiProperty({
+    type: Number,
+    example: 1,
+    description: 'vacancy unique identifier.',
+  })
+  id: number;
+
   @ApiProperty({
     type: String,
     example: 'Developer front-end',
@@ -53,38 +58,37 @@ export class CreateVacancyDtoDocs {
   level: string;
 
   @ApiProperty({
-    type: CompanyDtoDoc,
-    required: true,
+    type: Date,
+    example: new Date(),
+    description: 'Date when user was created.',
+  })
+  createdAt: Date;
+
+  @ApiProperty({
+    type: Date,
+    example: new Date(),
+    description: 'Date when user was updated.',
+  })
+  updatedAt: Date;
+
+  @ApiProperty({
+    type: Date,
+    example: null,
+    description: 'Date when user was deleted.',
+  })
+  deletedAt?: Date;
+
+  @ApiProperty({
     example: {
       name: 'Arnia',
-      city: 'Campinas',
-      state: 'SP or São paulo',
-      address: 'Avenida Ranulfo Barbosa dos Santos - Jardim Camburi',
-      foundedAt: '1982-05-26T03:00:00.000Z',
-      description: 'Francisco',
-      id: 2,
-      createdAt: '2024-05-17T02:22:02.659Z',
-      updatedAt: '2024-05-17T02:22:02.659Z',
-      deletedAt: null,
     },
-    description: 'Vacancy company id.',
   })
   company: string;
 
   @ApiProperty({
-    type: UserCreatedDoc,
-    required: true,
     example: {
       name: 'Francisco',
-      email: 'example@gmail.com',
-      password: '12345',
-      role: 'advertiser',
-      id: 1,
-      createdAt: '2024-05-17T02:27:38.736Z',
-      updatedAt: '2024-05-17T02:27:38.736Z',
-      deletedAt: null,
     },
-    description: 'Vacancy advertiser id.',
   })
   advertiser: string;
 }

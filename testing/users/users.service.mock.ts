@@ -1,4 +1,4 @@
-import { UsersService } from '../../src/user/user.service';
+import { UsersService } from '../../src/users/users.service';
 import { usersListMock } from './users-list.mock';
 
 export const usersServiceMock = {

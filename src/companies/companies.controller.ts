@@ -1,5 +1,5 @@
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CompanyService } from './company.service';
+import { CompanyService } from './companies.service';
 import {
   Controller,
   Post,
@@ -29,14 +29,14 @@ import {
 } from '../docs';
 
 @ApiBearerAuth()
-@ApiTags('Company')
+@ApiTags('Companies')
 @Controller('company')
 @UseGuards(AuthGuard)
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 
   @UseGuards(RoleGuard)
-  @Roles(UserRoleEnum.admin)
+  // @Roles(UserRoleEnum.admin)@Roles(UserRoleEnum.admin)
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiCreateCompanyDocs()
   @Post()
