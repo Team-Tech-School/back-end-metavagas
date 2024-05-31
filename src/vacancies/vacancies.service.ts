@@ -35,26 +35,6 @@ export class VacancyService {
       const advertiser = await this.advertiserService.getUserById(
         +data.advertiserId,
       );
-
-<<<<<<< HEAD:src/vacancy/vacancy.service.ts
-      try {
-        await this.companyService.idPicker(+data.companyId);
-      } catch (error) {
-        throw new BadRequestException(
-          `No company found with ID: ${data.companyId}.`,
-        );
-      }
-
-      try {
-        await this.advertiserService.getUserById(+data.advertiserId);
-      } catch (error) {
-        throw new BadRequestException(
-          `No advertiser found with ID: ${data.advertiserId}.`,
-        );
-      }
-
-      const newVacancy = this.vacancyRepository.create(data);
-=======
       if (!company || !advertiser) {
         throw new Error('Invalid company or advertiser');
       }
@@ -69,13 +49,11 @@ export class VacancyService {
         company: company,
         advertiser: advertiser,
       });
->>>>>>> feat/activities-anderson:src/vacancies/vacancies.service.ts
 
       await this.vacancyRepository.save(newVacancy);
 
       return await this.getVacancyById(newVacancy.id);
     } catch (error) {
-      console.log(error);
       throw new HttpException(error.message, error.status);
     }
   }
@@ -123,12 +101,7 @@ export class VacancyService {
       advertiser: data.advertiser.name,
     };
   }
-
-<<<<<<< HEAD:src/vacancy/vacancy.service.ts
-  async getVacancyById(id: number) {
-=======
   async getVacanciesRelations(id: number) {
->>>>>>> feat/activities-anderson:src/vacancies/vacancies.service.ts
     try {
       const vacancy = await this.getVacancyById(id);
 

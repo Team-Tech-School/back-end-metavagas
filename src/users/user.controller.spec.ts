@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { UsersController } from './user.controller';
-import { UsersService } from './user.service';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
 import {
   userRepositoryMock,
   authGuardMock,
@@ -10,7 +10,7 @@ import {
   currentUserMock,
 } from '../../testing';
 import { AuthGuard } from '../auth/config/guards/auth.guard';
-import { CurrentUserDto } from 'src/auth/config';
+import { CurrentUserDto } from '../auth/config';
 
 describe('UsersController', () => {
   let usersController: UsersController;

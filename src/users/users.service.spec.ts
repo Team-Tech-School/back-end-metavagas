@@ -87,7 +87,7 @@ describe('UsersService', () => {
       const user = await userService.delete(userMock.id);
 
       // assert
-      expect(user).toEqual({ response: 'User deleted with success.' });
+      expect(user).toEqual({ response: 'User deleted successfully.' });
     });
   });
 
