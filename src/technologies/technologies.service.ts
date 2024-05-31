@@ -25,7 +25,6 @@ export class TechnologysService {
         );
       }
       const newTechnology = this.technologyRepository.create(payload);
-      console.log('teste:', newTechnology);
       await this.technologyRepository.save(newTechnology);
 
       return await this.getTechnologyById(newTechnology.id);
@@ -67,7 +66,6 @@ export class TechnologysService {
 
       return technology;
     } catch (error) {
-      console.log(error);
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
