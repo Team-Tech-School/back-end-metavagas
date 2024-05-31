@@ -21,7 +21,7 @@ async function bootstrap() {
 
   app.use(cors());
   app.enableCors({
-    origin: 'https://meta-vagas.netlify.app/',
+    origin: 'https://meta-vagas.netlify.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
