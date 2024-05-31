@@ -28,14 +28,13 @@ export class VacancyService {
     try {
       if (await this.vacancyExists(data.vacancyRole)) {
         throw new BadRequestException(
-          `A vacancy with this name: ${data.vacancyRole} already exists.`,
+          `A vacancy with the role "${data.vacancyRole}" already exists.`,
         );
       }
       const company = await this.companyService.idPicker(+data.companyId);
       const advertiser = await this.advertiserService.getUserById(
         +data.advertiserId,
       );
-
       if (!company || !advertiser) {
         throw new Error('Invalid company or advertiser');
       }
@@ -55,7 +54,6 @@ export class VacancyService {
 
       return await this.getVacancyById(newVacancy.id);
     } catch (error) {
-      console.log(error);
       throw new HttpException(error.message, error.status);
     }
   }
@@ -103,13 +101,12 @@ export class VacancyService {
       advertiser: data.advertiser.name,
     };
   }
-
   async getVacanciesRelations(id: number) {
     try {
       const vacancy = await this.getVacancyById(id);
 
       if (!vacancy) {
-        throw new NotFoundException(`vacancy not located.`);
+        throw new NotFoundException(`Vacancy with ID ${id} not found.`);
       }
       const data = await this.vacancyRepository
         .createQueryBuilder('vacancy')
@@ -141,7 +138,7 @@ export class VacancyService {
 
       await this.vacancyRepository.softDelete(id);
 
-      return { response: 'Vacancy deleted with success.' };
+      return { response: 'Vacancy deleted successfully.' };
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, error.status);

@@ -1,4 +1,4 @@
-import { UserRoleEnum } from '../../src/auth/config/enums/user.roleEnum';
+import { UserRoleEnum } from '../../src/auth/config/enums/userRoleEnum';
 
 export const createUserMock = {
   name: 'fabin',

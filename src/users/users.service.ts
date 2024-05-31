@@ -29,9 +29,7 @@ export class UsersService {
 
         return newUser;
       } catch (error) {
-        throw new BadRequestException(
-          `An user with this email: ${payload.email} already exists.`,
-        );
+        throw new BadRequestException(`A user with this email already exists.`);
       }
     } catch (error) {
       console.log(error);
@@ -74,7 +72,7 @@ export class UsersService {
       const user = await this.userRepository.findOne({ where: { id } });
 
       if (!user) {
-        throw new NotFoundException(`user not located.`);
+        throw new NotFoundException(`User with ID ${id} not found.`);
       }
 
       return user;
@@ -83,6 +81,7 @@ export class UsersService {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
+
   async updateUserById(userId: number, userData: Partial<User>): Promise<User> {
     try {
       await this.getUserById;
@@ -102,7 +101,7 @@ export class UsersService {
 
       await this.userRepository.softDelete(id);
 
-      return { response: 'User deleted with success.' };
+      return { response: 'User deleted successfully.' };
     } catch (error) {
       console.log(error);
       throw new HttpException(error.message, error.status);

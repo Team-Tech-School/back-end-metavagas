@@ -96,7 +96,7 @@ describe('VacancyService', () => {
       const vacancy = await service.delete(1);
 
       // assert
-      expect(vacancy).toEqual({ response: 'Vacancy deleted with success.' });
+      expect(vacancy).toEqual({ response: 'Vacancy deleted successfully.' });
     });
   });
 

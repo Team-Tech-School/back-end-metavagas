@@ -81,7 +81,6 @@ export class TechnologysService {
 
       return await this.getTechnologyById(technologyId);
     } catch (error) {
-      console.log(error);
       throw new HttpException(error.message, error.status);
     }
   }
