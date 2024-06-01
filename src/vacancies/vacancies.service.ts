@@ -245,8 +245,8 @@ export class VacancyService {
 
       technologies.forEach((technology) => {
         const lowerTechName = technology.tecName.toLowerCase();
-        const escapedTechName = escapeRegExp(lowerTechName);
-const regex = new RegExp(`\\b${escapedTechName}\\b`, 'i'); // Cria uma regex para buscar a tecnologia como palavra completa
+        const escapedTechName = this.escapeRegExp(lowerTechName);
+        const regex = new RegExp(`\\b${escapedTechName}\\b`, 'i'); // Cria uma regex para buscar a tecnologia como palavra completa
 
         if (
           regex.test(lowerVacancyDescription) ||
@@ -270,8 +270,7 @@ const regex = new RegExp(`\\b${escapedTechName}\\b`, 'i'); // Cria uma regex par
     };
   }
 
-async escapeRegExp(string: string): string {
+  async escapeRegExp(string: string): Promise<string> {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
+  }
 }
