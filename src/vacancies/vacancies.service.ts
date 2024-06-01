@@ -153,8 +153,8 @@ export class VacancyService {
     maxSalary?: number,
     vacancyType?: string,
     location?: string,
-    page?: number,
-    limit?: number,
+    page = 1,
+    limit = 10,
   ): Promise<{
     vacancies: Vacancy[];
     pageSize: number;
@@ -167,69 +167,57 @@ export class VacancyService {
       .leftJoinAndSelect('vacancy.company', 'company')
       .leftJoinAndSelect('vacancy.advertiser', 'advertiser');
 
-    if (vacancyRole) {
+    // Adicionando filtros dinâmicos
+    if (vacancyRole)
       query.andWhere('vacancy.vacancyRole ILIKE :vacancyRole', {
         vacancyRole: `%${vacancyRole}%`,
       });
-    }
-
-    if (level) {
-      query.andWhere('vacancy.level ILIKE :level', {
-        level: `%${level}%`,
-      });
-    }
-
-    if (minSalary) {
-      query.andWhere('vacancy.wage >= :minSalary', { minSalary });
-    }
-
-    if (maxSalary) {
-      query.andWhere('vacancy.wage <= :maxSalary', { maxSalary });
-    }
-
-    if (vacancyType) {
+    if (level)
+      query.andWhere('vacancy.level ILIKE :level', { level: `%${level}%` });
+    if (minSalary) query.andWhere('vacancy.wage >= :minSalary', { minSalary });
+    if (maxSalary) query.andWhere('vacancy.wage <= :maxSalary', { maxSalary });
+    if (vacancyType)
       query.andWhere('vacancy.vacancyType LIKE :vacancyType', {
         vacancyType: `%${vacancyType}%`,
       });
-    }
-
-    if (location) {
+    if (location)
       query.andWhere('vacancy.location ILIKE :location', {
         location: `%${location}%`,
       });
-    }
 
     // Obter as tecnologias com base no tecName
-    let technologies: Technology[] = [];
-    if (tecName) {
-      technologies = await this.technologyService.getTecnologies(tecName);
-    } else {
-      technologies = await this.technologyService.findAll();
-    }
+    const technologies = tecName
+      ? await this.technologyService.getTecnologies(tecName)
+      : await this.technologyService.findAll();
 
     if (technologies.length > 0) {
       const techFilters = technologies
-        .map((technology) => {
-          const lowerTecName = technology.tecName.toLowerCase();
-          return `(LOWER(vacancy.vacancyRole) LIKE '%${lowerTecName}%' OR LOWER(vacancy.vacancyDescription) LIKE '%${lowerTecName}%')`;
-        })
+        .map(
+          ({ tecName }) =>
+            `(LOWER(vacancy.vacancyRole) LIKE '%${tecName.toLowerCase()}%' OR LOWER(vacancy.vacancyDescription) LIKE '%${tecName.toLowerCase()}%')`,
+        )
         .join(' OR ');
 
       query.andWhere(`(${techFilters})`);
     }
+
     // Executar a consulta para obter as vagas
     let [vacancies, total] = await query
       .skip((page - 1) * limit)
       .take(limit)
       .getManyAndCount();
 
+    // Função para escapar caracteres especiais em regex
+    const escapeRegExp = (string: string) =>
+      string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
     // Filtrar vagas para garantir que contenham as tecnologias especificadas
     vacancies = vacancies.filter((vacancy) => {
       const lowerVacancyDescription = vacancy.vacancyDescription.toLowerCase();
       const lowerVacancyRole = vacancy.vacancyRole.toLowerCase();
 
-      return technologies.some((technology) => {
-        const lowerTechName = technology.tecName.toLowerCase();
+      return technologies.some(({ tecName }) => {
+        const lowerTechName = escapeRegExp(tecName.toLowerCase());
         const regex = new RegExp(`\\b${lowerTechName}\\b`, 'i');
         return (
           regex.test(lowerVacancyDescription) || regex.test(lowerVacancyRole)
@@ -239,38 +227,29 @@ export class VacancyService {
 
     // Mapear as tecnologias para cada vaga
     vacancies = vacancies.map((vacancy) => {
-      const mappedTechnologies: Technology[] = [];
       const lowerVacancyDescription = vacancy.vacancyDescription.toLowerCase();
       const lowerVacancyRole = vacancy.vacancyRole.toLowerCase();
 
-      technologies.forEach((technology) => {
-        const lowerTechName = technology.tecName.toLowerCase();
-        const escapedTechName = this.escapeRegExp(lowerTechName);
-        const regex = new RegExp(`\\b${escapedTechName}\\b`, 'i'); // Cria uma regex para buscar a tecnologia como palavra completa
-
-        if (
-          regex.test(lowerVacancyDescription) ||
-          regex.test(lowerVacancyRole)
-        ) {
-          mappedTechnologies.push(technology);
-        }
+      const matchedTechnologies = technologies.filter(({ tecName }) => {
+        const lowerTechName = escapeRegExp(tecName.toLowerCase());
+        const regex = new RegExp(`\\b${lowerTechName}\\b`, 'i');
+        return (
+          regex.test(lowerVacancyDescription) || regex.test(lowerVacancyRole)
+        );
       });
 
-      return {
-        ...vacancy,
-        technologies: mappedTechnologies,
-      };
+      return { ...vacancy, technologies: matchedTechnologies };
     });
 
     return {
-      vacancies: vacancies,
+      vacancies,
       page: +page,
       pageSize: +limit,
-      total: total,
+      total,
     };
   }
 
-  async escapeRegExp(string: string): Promise<string> {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  }
+  // async escapeRegExp(string: string): Promise<string> {
+  //   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  // }
 }
