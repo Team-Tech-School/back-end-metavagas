@@ -1,17 +1,26 @@
 export const vacanciesListMock = [
   {
     id: 1,
-    vacancyRole: 'desenvolvedor web front end',
+    vacancyRole: 'desenvolvedor web front end typescript',
     wage: 50000,
     location: 'são paulo',
     vacancyType: 'remoto',
     vacancyDescription: 'typescript',
     level: 'pleno',
-    company: [],
-    advertiser: [],
-    technologies: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    company: {},
+    advertiser: {},
+    technologies: [
+      {
+        id: 1,
+        tecName: 'typescript',
+        creatorsName: 'Creator 1',
+        createAt: new Date('2024-05-25T05:47:00.812Z'),
+        updateAt: new Date('2024-05-25T05:47:00.812Z'),
+        deleteAt: null,
+      },
+    ],
+    createdAt: new Date('2024-05-30T23:03:13.724Z'),
+    updatedAt: new Date('2024-05-30T23:03:13.724Z'),
     deleteAt: null,
   },
   {

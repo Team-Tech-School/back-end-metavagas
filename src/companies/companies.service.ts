@@ -30,7 +30,7 @@ export class CompanyService {
       } catch (error) {
         console.log(error);
         throw new BadRequestException(
-          `The company of the name: ${payload.name} already exists.`,
+          `A company with the name "${payload.name}" already exists.`,
         );
       }
     } catch (error) {
@@ -79,7 +79,7 @@ export class CompanyService {
       });
 
       if (!company) {
-        throw new NotFoundException(`The company not located.`);
+        throw new NotFoundException(`Company with ID ${id} not found.`);
       }
 
       return company;

@@ -32,7 +32,7 @@ export class AuthService {
       const user = await this.userService.getUserBy(data.email);
 
       if (!user || !(await bcrypt.compare(data.password, user.password))) {
-        throw new UnauthorizedException('Email or password wrong.');
+        throw new UnauthorizedException('Invalid email or password.');
       }
 
       const tokenPayload = {

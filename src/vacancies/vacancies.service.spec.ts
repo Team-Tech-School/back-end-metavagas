@@ -4,7 +4,7 @@ import {
   CreateVacancyMock,
   VacancyMock,
   companyServiceMock,
-  mockTechnologyRepository,
+  technologyRepositoryMock,
   usersServiceMock,
   vacanciesListMock,
   vacancyRepositoryMock,
@@ -20,9 +20,9 @@ describe('VacancyService', () => {
         VacancyService,
         TechnologysService,
         vacancyRepositoryMock,
-        companyServiceMock,
         usersServiceMock,
-        mockTechnologyRepository,
+        companyServiceMock,
+        technologyRepositoryMock,
       ],
     }).compile();
 
@@ -96,17 +96,27 @@ describe('VacancyService', () => {
       const vacancy = await service.delete(1);
 
       // assert
-      expect(vacancy).toEqual({ response: 'Vacancy deleted with success.' });
+      expect(vacancy).toEqual({ response: 'Vacancy deleted successfully.' });
     });
   });
 
   describe('searchVacancies', () => {
-    it('should list all vacancies', async () => {
+    it('should list all vacancies by technology', async () => {
       // act
-      const vacancies = await service.searchVacancies();
+      const vacancies = await service.searchVacancies(
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        1,
+        10,
+      );
 
       // assert
-      expect(vacancies).toEqual(vacanciesListMock);
+      expect(vacancies.vacancies).toEqual([VacancyMock]);
     });
   });
 });

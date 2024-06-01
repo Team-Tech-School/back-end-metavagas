@@ -1,7 +1,6 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Vacancy } from '../../src/database/entities';
 import { VacancyMock } from './vacancy.mock';
-import { vacanciesListMock } from '../../testing';
 
 export const vacancyRepositoryMock = {
   provide: getRepositoryToken(Vacancy),
@@ -15,9 +14,9 @@ export const vacancyRepositoryMock = {
       andWhere: jest.fn().mockReturnThis(),
       skip: jest.fn().mockReturnThis(),
       take: jest.fn().mockReturnThis(),
-      getManyAndCount: jest.fn().mockResolvedValue(vacanciesListMock),
+      getManyAndCount: jest.fn().mockResolvedValue([[VacancyMock], 1]),
       leftJoinAndSelect: jest.fn().mockReturnThis(),
-      query: jest.fn().mockReturnValue(vacanciesListMock),
+      query: jest.fn().mockReturnThis(),
       getOne: jest.fn().mockResolvedValue({
         company: {},
         advertiser: {},
