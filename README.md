@@ -16,9 +16,12 @@ Metavagas é um projeto fullstack que visa criar um front-end e uma API para a p
 
 ### Tecnologias Utilizadas;
 
-- **Back-end**: NestJS, TypeORM, PostgreSQL.
-- **Autenticação**: JWT (JSON Web Token).
-- **Documentação**: Swagger.
+- [Nest.js](https://docs.nestjs.com/)
+- [TypeORM](https://typeorm.io/)
+- [PostgreSQL](https://www.postgresqltutorial.com/postgresql-getting-started/)
+- [Swagger](https://swagger.io/docs/)
+- [JWT (Json Web Token](https://www.ibm.com/docs/pt-br/cics-ts/6.1?topic=cics-json-web-token-jwt)
+- [Jest](https://jestjs.io/pt-BR/docs/getting-started)
 
 <h2 style="color:#7f5cd1; font-size:20px;">Funcionalidades da API</h2>
 
@@ -134,7 +137,7 @@ Metavagas é um projeto fullstack que visa criar um front-end e uma API para a p
 ### Clone o Repositório
 
 ```bash
-git clone https://github.com/Team-Tech-School/front-end-metavagas.git
+git clone https://github.com/Team-Tech-School/back-end-metavagas.git
 ```
 
 ### Instalação de dependências
